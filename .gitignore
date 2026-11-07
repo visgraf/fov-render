@@ -1,0 +1,7 @@
+previews/
+visuals/
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+*.blend1

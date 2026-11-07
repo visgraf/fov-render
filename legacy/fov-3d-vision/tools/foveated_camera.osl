@@ -1,0 +1,43 @@
+/* Foveated custom camera for Cycles.
+ *
+ * Sample spacing grows linearly with eccentricity,  s(e) = s0 * (1 + e/E2),
+ * which integrates to a raster radius  w(e) = (E2/s0) * ln(1 + e/E2).
+ * Normalising by the rim value w(e_max) removes s0 from the shader entirely:
+ *
+ *     e(r) = E2 * ( (1 + e_max/E2)^r - 1 ),     r in [0,1] from centre to rim
+ *
+ * s0 is then set by the resolution you render at:
+ *     N = 2 * (E2/s0) * ln(1 + e_max/E2)        pixels across
+ * tools/render_foveated.py computes that for you.
+ *
+ * Camera frame here is +Z forward, +X right, +Y up (Cycles' own convention for
+ * camera shaders; the Blender camera object still looks along its local -Z).
+ *
+ * Notes, learned the hard way:
+ *   - `P` is a reserved global in OSL. Do not use it as a variable name.
+ *   - `hypot` does not exist in OSL.
+ *   - Zero throughput suppresses radiance and leaves the depth pass reading
+ *     background, but alpha stays 1. Mask samples with the analytic r <= 1 test,
+ *     not with alpha. Rim pixels are partly covered and pick up some radiance.
+ */
+
+shader foveated_camera(
+    float E2 = 2.0 [[ string label = "E2 (deg)", float min = 0.01, float sensitivity = 0.1 ]],
+    float e_max = 45.0 [[ string label = "max eccentricity (deg)", float min = 0.01, float sensitivity = 0.5 ]],
+    output point position = 0.0,
+    output vector direction = 0.0,
+    output color throughput = 1.0)
+{
+  point Praster = camera_shader_raster_position() - point(0.5);
+  float r = 2.0 * sqrt(Praster[0] * Praster[0] + Praster[1] * Praster[1]);
+
+  if (r > 1.0) {
+    throughput = 0.0;
+    direction = vector(0, 0, 1);
+    return;
+  }
+
+  float e = M_PI / 180.0 * E2 * (pow(1.0 + e_max / E2, r) - 1.0);
+  float phi = atan2(Praster[1], Praster[0]);
+  direction = vector(sin(e) * cos(phi), sin(e) * sin(phi), cos(e));
+}
