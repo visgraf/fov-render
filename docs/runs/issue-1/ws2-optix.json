@@ -1,0 +1,558 @@
+{
+ "blender": "5.2.1 LTS",
+ "commit": "46078d8dd837a8cef5a141d04977f70febaf89ac",
+ "created_utc": "2026-11-07T19:28:51+00:00",
+ "device": "OPTIX",
+ "failed": 0,
+ "host": "euclid",
+ "passed": 19,
+ "python": "3.13.12",
+ "results": [
+  {
+   "control_detected": true,
+   "detail": {
+    "files": 31,
+    "hash_mismatch": [],
+    "seconds": 0.0,
+    "sources": {
+     "f3d-vision": {
+      "commit": "bbee8ef0ffa95c0a37f66539117f8b59842960b6",
+      "ref": "main",
+      "url": "https://github.com/visgraf/f3d-vision"
+     },
+     "fov-3d-vision": {
+      "commit": "15eedee9c691af7a3fb9108d61ff643c60b7ffaa",
+      "ref": "main",
+      "url": "https://github.com/visgraf/fov-3d-vision"
+     }
+    },
+    "vendored_differs": []
+   },
+   "name": "legacy comparators and vendored files unchanged",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "0"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "control": "shader E2 = 2.04 while the record says 2.0",
+    "control_failures": [
+     "warp does not match the formula (p99.9 error 0.0806 deg)"
+    ],
+    "report": {
+     "checks_failed": [],
+     "depth_max_err_m": 6.318827079354605e-07,
+     "device": "OPTIX",
+     "e_at_rim_deg": 44.99229857610992,
+     "exit_code": 0,
+     "folder": "/home/lvelho/rd/fov-render/previews/ws2-optix/step1/new",
+     "outside_alpha_max": 1.0,
+     "outside_depth_finite_frac": 0.0,
+     "raster": [
+      126,
+      126
+     ],
+     "ray_saving": 50.7,
+     "render_seconds": 0.2927,
+     "samples_inside_disc": 12492,
+     "spp": 16,
+     "uniform_at_s0_same_field": 633354,
+     "warp_max_err_deg": 0.002426585900855399,
+     "warp_p999_err_deg": 0.001624773048542852
+    },
+    "seconds": 1.42
+   },
+   "name": "legacy check_foveated on a fov_render fixation",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "1"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "backends": [
+     "CPU",
+     "CPU",
+     "CPU",
+     "CPU"
+    ],
+    "channels": [
+     "ViewLayer.Combined",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X",
+     "ViewLayer.Position.Y",
+     "ViewLayer.Position.Z"
+    ],
+    "control_seed1_max_diff": {
+     "ViewLayer.Combined": 0.9482702910900116,
+     "ViewLayer.Depth.Z": 0.0,
+     "ViewLayer.Normal.X": 0.25,
+     "ViewLayer.Normal.Y": 0.19151121377944946,
+     "ViewLayer.Normal.Z": 0.2792404592037201,
+     "ViewLayer.Position.X": 0.0,
+     "ViewLayer.Position.Y": 0.0,
+     "ViewLayer.Position.Z": 0.0
+    },
+    "device": "CPU",
+    "gaze": [
+     20.0,
+     -5.0
+    ],
+    "max_abs_diff_legacy_pose": {
+     "ViewLayer.Combined": 0.0,
+     "ViewLayer.Depth.Z": 0.0,
+     "ViewLayer.Normal.X": 0.0,
+     "ViewLayer.Normal.Y": 0.0,
+     "ViewLayer.Normal.Z": 0.0,
+     "ViewLayer.Position.X": 0.0,
+     "ViewLayer.Position.Y": 0.0,
+     "ViewLayer.Position.Z": 0.0
+    },
+    "max_abs_diff_own_float64_pose": {
+     "ViewLayer.Combined": 0.0159304141998291,
+     "ViewLayer.Depth.Z": 8.58306884765625e-06,
+     "ViewLayer.Normal.X": 1.1920928955078125e-07,
+     "ViewLayer.Normal.Y": 1.1920928955078125e-07,
+     "ViewLayer.Normal.Z": 1.1920928955078125e-07,
+     "ViewLayer.Position.X": 2.6226043701171875e-06,
+     "ViewLayer.Position.Y": 8.344650268554688e-06,
+     "ViewLayer.Position.Z": 1.9073486328125e-06
+    },
+    "pose_diff_float32_vs_float64": 3.465783899314623e-07,
+    "requested_device": "OPTIX",
+    "seconds": 1.0,
+    "spp": 16
+   },
+   "name": "fov_render fixation equals legacy fixation (bitwise with the legacy pose)",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "1"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "consistency": {
+     "hits": 12492,
+     "max_angle_deg": 0.01983782505969816,
+     "p999_angle_deg": 0.01982844960596274
+    },
+    "control_mirrored_pose": {
+     "hits": 12492,
+     "max_angle_deg": 40.00117396575971,
+     "p999_angle_deg": 40.000653075701706
+    },
+    "hits": 12492,
+    "n_samples": 12492,
+    "position_vs_depth_max_m": 6.318827079354605e-07,
+    "rays_per_eye": 12492,
+    "rim_spacing_deg": 2.3552225364135766,
+    "seconds": 0.33
+   },
+   "name": "SampleRecord from a foveated render agrees with Position and Depth",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "1"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "control": "E2 perturbed by 1% inside legacy warp",
+    "failures": {
+     "fsg_geometry": [],
+     "rig": [],
+     "warp": []
+    },
+    "seconds": 0.08
+   },
+   "name": "legacy self-tests (warp, rig, fsg_geometry)",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "2"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "max_abs_diff": 0.0,
+    "raster_sizes": {
+     "full": [
+      253,
+      253
+     ],
+     "small": [
+      126,
+      126
+     ]
+    },
+    "seconds": 0.05
+   },
+   "name": "new warp equals legacy warp (directions, footprints, mask, inverse)",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "2"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "gazes": 231,
+    "mathutils": true,
+    "max_abs_diff": {
+     "fsg_geometry.camera_rotation_h": 0.0,
+     "render_foveated.gaze_matrix": 3.4363720027852374e-07,
+     "rig.gaze_rotation": 2.220446049250313e-16
+    },
+    "seconds": 0.02,
+    "tolerance": {
+     "fsg_geometry.camera_rotation_h": 1e-12,
+     "render_foveated.gaze_matrix": 1e-06,
+     "rig.gaze_rotation": 1e-12
+    }
+   },
+   "name": "pose agreement, upright roll, 3 legacy formulas",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "2"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "control": "upright roll at (179.9, -89.9) points image +X against the baseline",
+    "eyes_compared": 22,
+    "max_abs_diff": 2.220446049250313e-16,
+    "seconds": 0.0
+   },
+   "name": "rig reproduces f3d-vision calibrations (R_hc, centres), both rolls",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "2"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "control_panorama_without_cos_over_4pi": 1.5707963267948966,
+    "foveated_full_analytic_over_numeric_sum": 0.9999660959722078,
+    "foveated_full_analytic_vs_numeric_max_rel": 0.01241348317249058,
+    "foveated_full_analytic_vs_numeric_p99_rel": 0.00013033292207251357,
+    "foveated_full_over_cap": 0.9998103468056984,
+    "foveated_small_analytic_over_numeric_sum": 0.9998637851464832,
+    "foveated_small_analytic_vs_numeric_max_rel": 0.0030196568760832987,
+    "foveated_small_analytic_vs_numeric_p99_rel": 0.0005239770361814333,
+    "foveated_small_over_cap": 1.0059028912800512,
+    "panorama_3600_over_4pi": 1.0000001269239363,
+    "panorama_720_over_4pi": 1.0000031731051708,
+    "perspective_full_over_closed_form": 1.0000001447115252,
+    "reference_view_over_closed_form": 1.0000028932148217,
+    "seconds": 0.35
+   },
+   "name": "footprints sum to the field's solid angle",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "2"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "max_px_err": {
+     "foveated": 7.069900220812997e-12,
+     "panorama": 3.0127011996228248e-12,
+     "perspective": 5.684341886080802e-14,
+     "reference_view": 2.842170943040401e-14
+    },
+    "seconds": 0.04
+   },
+   "name": "pixel_of inverts rays for every sensor",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "2"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "as_raster": true,
+    "consistency_deg": 1.2074182697257333e-06,
+    "distance_err": 8.881784197001252e-16,
+    "gap_m": 1.8184139026960957e-14,
+    "midpoint_err_m": 7.871916963752095e-13,
+    "n_samples": 3228,
+    "oracle_gate_raises": true,
+    "round_trip": true,
+    "seconds": 0.01,
+    "sine_rule_err_m": 1.3766765505351941e-14,
+    "vs_legacy_triangulate_m": 0.0
+   },
+   "name": "record round trip, access gate, triangulation",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "2"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "control_detected": {
+     "ab1a": true,
+     "ab1a [all passes on]": true,
+     "breadth1": true,
+     "breadth1 [all passes on]": true,
+     "fov_fixation": true,
+     "fov_fixation [all passes on]": true,
+     "fsg": true,
+     "oracle1": true,
+     "oracle1 [all passes on]": true,
+     "preview360": true,
+     "preview360 [all passes on]": true,
+     "reference_view": true,
+     "reference_view [all passes on]": true
+    },
+    "differences": {
+     "ab1a": [],
+     "ab1a [all passes on]": [],
+     "breadth1": [],
+     "breadth1 [all passes on]": [],
+     "fov_fixation": [],
+     "fov_fixation [all passes on]": [],
+     "fsg": [],
+     "oracle1": [],
+     "oracle1 [all passes on]": [],
+     "preview360": [],
+     "preview360 [all passes on]": [],
+     "reference_view": [],
+     "reference_view [all passes on]": []
+    },
+    "note": "ab1a compared with its spec's OPTIX replaced by CPU here; its OPTIX spec is gate 3.C (classroom)",
+    "seconds": 1.24
+   },
+   "name": "presets reproduce the legacy settings (13 comparisons, 7 paths)",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "3"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "animation_removed": [
+     "fcurve on cycles.samples in action 'SceneAction', keys [(1.0, 3.0)]"
+    ],
+    "expected_ratio": 4.0,
+    "noise_std": {
+     "2": 0.2276986539363861,
+     "32": 0.053684450685977936
+    },
+    "ratio_2_vs_32_spp": 4.241426540215297,
+    "seconds": 0.36
+   },
+   "name": "render_once: spp change takes effect; animated settings are caught",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "3"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "R_diff": 5.960464477539063e-08,
+    "control": "an explicit head yawed 10 deg differs",
+    "eye_note": "EYE object",
+    "origin_diff": 2.3841857821338408e-08,
+    "seconds": 0.13,
+    "vs_legacy": 0.0
+   },
+   "name": "head pose from EYE (known answer and legacy readers)",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "4"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "audit_complete": {
+     "ids": {
+      "Cutout": 1,
+      "Floor": 2,
+      "Fog": 3,
+      "Glass": 4,
+      "Lamp": 5,
+      "Prop": 6
+     },
+     "via": [
+      {
+       "id": 6,
+       "name": "Prop",
+       "renumbered": true,
+       "type": "MESH",
+       "via_instance_of": "PropsA"
+      }
+     ]
+    },
+    "audit_legacy": {
+     "collisions": [
+      {
+       "id": 2,
+       "name": "Prop",
+       "same_id_as": "Floor"
+      }
+     ],
+     "ids": {
+      "Cutout": 1,
+      "Floor": 2,
+      "Fog": 3,
+      "Glass": 4,
+      "Lamp": 5,
+      "Prop": 2
+     },
+     "legacy_live": {
+      "Cutout": 1,
+      "Floor": 2,
+      "Fog": 3,
+      "Glass": 4,
+      "Lamp": 5,
+      "Prop": 2
+     }
+    },
+    "calib_room_count": 101,
+    "controls": {
+     "complete_differs_from_legacy": true,
+     "renamed_detected": true
+    },
+    "equal_to_legacy": true,
+    "seconds": 0.09,
+    "stable": true,
+    "unknown_mode_refused": true
+   },
+   "name": "instance catalogue (legacy and complete numbering, stable, collection instances)",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "4"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "backface_fraction": 0.0,
+    "consistency": {
+     "hits": 259200,
+     "max_angle_deg": 0.019785639175278365,
+     "p999_angle_deg": 0.01978505789939001
+    },
+    "control_no_ceiling_hole_fraction": 0.281124240314362,
+    "device": "GPU",
+    "hole_fraction": 0.0,
+    "nadir_depth_m": 1.600137196777307,
+    "render_seconds": 0.185,
+    "seconds": 0.64,
+    "spp": 4,
+    "width": 720,
+    "zenith_depth_m": 1.6001370163373818
+   },
+   "name": "calibration room sanity (holes, back-faces, nadir, zenith)",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "4"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "column_shift_px": 0,
+    "control_shift_px": 64,
+    "expected_control_shift_px": 64,
+    "hole_fraction": 1.0,
+    "rel_err_median": 0.00019056282367442803,
+    "rel_err_p99": 0.05943401614014966,
+    "seconds": 1.19
+   },
+   "name": "world-only HDRI scene reproduces its source",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "4"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "animation_removed": [
+     "fcurve on cycles.seed in action 'SceneAction', keys [(1.0, 7.0)]",
+     "fcurve on view_settings.exposure in action 'SceneAction', keys [(1.0, 0.5)]"
+    ],
+    "calib_room_flagged": {},
+    "expected": {
+     "Cutout": [
+      "alpha"
+     ],
+     "Fog": [
+      "volume"
+     ],
+     "Glass": [
+      "transmission"
+     ],
+     "Lamp": [
+      "emission"
+     ]
+    },
+    "flagged": {
+     "Cutout": [
+      "alpha"
+     ],
+     "Fog": [
+      "volume"
+     ],
+     "Glass": [
+      "transmission"
+     ],
+     "Lamp": [
+      "emission"
+     ]
+    },
+    "seconds": 0.28
+   },
+   "name": "material audit and setting animation",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "4"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "agree_fraction": 1.0,
+    "control_renumbered_floor_mismatches": 196,
+    "floor_id": 2,
+    "ids_seen": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "mismatches_first": [],
+    "note": "pixels at object edges can disagree: the pass is one sample at spp 1, the ray cast goes through the pixel centre",
+    "sampled_hits": 209,
+    "seconds": 0.26
+   },
+   "name": "Object Index equals the ray-cast object (complete numbering, instances included)",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "4"
+  }
+ ],
+ "schema": "fov-render-checks-v1",
+ "skipped": 0
+}

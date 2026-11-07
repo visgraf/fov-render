@@ -2,7 +2,8 @@
 
 Code, 2026-11-07. Every number here is **measured on the workstation** (`euclid`) at commit
 `2641260` on branch `issue-1-workstation-gates`, unless it is labelled "Chat sandbox" (those come
-from [`docs/phase-1-report.md`](../../phase-1-report.md)).
+from [`docs/phase-1-report.md`](../../phase-1-report.md)). The re-run after Chat's review
+(D10–D12, commit `46078d8`) is the [last section](#re-run-after-chats-review-46078d8): all PASS.
 
 **Machine.** NVIDIA GeForce RTX 4090 (24 GB), driver 595.99.02, CUDA 13.2; Intel Core i9-14900KF;
 Linux 7.0.0-42-generic. Blender 5.2.1 LTS binary (`/usr/local/bin/blender`, build `9e2066aef7ef`,
@@ -103,3 +104,35 @@ added to `seeds.json` all four FAIL (exit 1).
 4. **Set-up.** The shell's default `python3` here is 3.10 (conda `world2018`); `pyproject` needs
    ≥ 3.11 and the wheel 3.13, so `.venv` is built from miniconda's 3.13. `build/lib/` (a copy of
    `fov_render/` from an install) is tracked in git since `c52c731` and not in `.gitignore`.
+
+## Re-run after Chat's review (`46078d8`)
+
+Chat's changes: gate 1.2 on CPU whatever `--device` says (D10); both instance numberings,
+`open_scene(instance_ids="legacy"|"complete")`, legacy the default (D11); checks with the wheel
+(D12); the `ab1a` preset sets its passes exactly; step 3 also on an all-passes copy of the room;
+3.C also gates the preset on the raw Classroom file. Same machine and versions as above.
+
+```
+python -m fov_render.checks --device CPU   --work previews/ws2-cpu
+python -m fov_render.checks --device OPTIX --work previews/ws2-optix
+python -m fov_render.checks --steps 1 2 3 4 classroom --device OPTIX --work previews/ws2-all
+```
+
+| Run | Result | Exit | Wall time |
+|---|---|---|---|
+| [`ws2-cpu`](ws2-cpu.json) | 19 / 19 PASS | 0 | 4.6 s |
+| [`ws2-optix`](ws2-optix.json) | 19 / 19 PASS | 0 | 8.0 s |
+| [`ws2-all`](ws2-all.json) | 23 / 23 PASS (integrity + 22) | 0 | 10.7 s |
+
+- **1.2** under `--device OPTIX`: `requested_device` OPTIX, all four renders on CPU, legacy pose
+  bitwise equal (0.0), own pose Combined 0.0159 (limit 0.0474).
+- **3.1**: 13 comparisons (7 paths, 6 also on the all-passes room), 0 differences, every control caught.
+- **3.C**: `preset_on_raw_file_differences: []`, through the scene layer `[]`, against the
+  accepted record `[]`; both back-ends OPTIX.
+- **4.C2** legacy: `via_id_zero` 112, `via_nonzero_ids` [2, 10, 20] (as in
+  [`linked-ids.json`](linked-ids.json)), 4 collisions (e.g. `ChamferBox01 [lib.003]` id 20 =
+  `Cube.016`). Independent count on the raw file after the legacy `_assign_instance_ids`: 116
+  collection-instance objects, pass indices {0: 112, 2: 1, 10: 2, 20: 1}, 4 equal to a direct id;
+  the 117th linked object is a light (`Point.001 [lib]`). Complete: `count` 350, ids 235–350 with
+  no gaps, no collisions. Controls: one entry dropped, one object hidden, complete ≠ legacy: all caught.
+- **4.2** audit scene: legacy `Prop` = 2 collides with `Floor`; complete `Prop` = 6; controls caught.
