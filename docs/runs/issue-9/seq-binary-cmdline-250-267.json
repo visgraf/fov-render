@@ -1,0 +1,250 @@
+{
+ "schema": "fov-render-issue9-sequence-v1",
+ "mode": "cmdline",
+ "session": "in_process",
+ "launcher": {
+  "kind": "in_process"
+ },
+ "device": "OPTIX",
+ "spp": 64,
+ "first": 250,
+ "last": 267,
+ "ready_opened": "already loaded",
+ "close_rc": 0,
+ "rows": [
+  {
+   "n": 250,
+   "kind": "local",
+   "calibration_equal": true,
+   "eyes": {
+    "L": {
+     "image_mean": 0.04270556588171816
+    },
+    "R": {
+     "image_mean": 0.04204176337120983
+    }
+   }
+  },
+  {
+   "n": 251,
+   "kind": "local",
+   "calibration_equal": true,
+   "eyes": {
+    "L": {
+     "image_mean": 0.054243390561271476
+    },
+    "R": {
+     "image_mean": 0.053007029361725785
+    }
+   }
+  },
+  {
+   "n": 252,
+   "kind": "local",
+   "calibration_equal": true,
+   "eyes": {
+    "L": {
+     "image_mean": 0.054145588262206286
+    },
+    "R": {
+     "image_mean": 0.05384757491805597
+    }
+   }
+  },
+  {
+   "n": 253,
+   "kind": "local",
+   "calibration_equal": true,
+   "eyes": {
+    "L": {
+     "image_mean": 0.04527859022564536
+    },
+    "R": {
+     "image_mean": 0.04632080955744051
+    }
+   }
+  },
+  {
+   "n": 254,
+   "kind": "global",
+   "calibration_equal": true,
+   "eyes": {
+    "L": {
+     "image_mean": 0.18119631004071995
+    },
+    "R": {
+     "image_mean": 0.18134987900198746
+    }
+   }
+  },
+  {
+   "n": 255,
+   "kind": "local",
+   "calibration_equal": true,
+   "eyes": {
+    "L": {
+     "image_mean": 0.16714429079606796
+    },
+    "R": {
+     "image_mean": 0.168253410293671
+    }
+   }
+  },
+  {
+   "n": 256,
+   "kind": "local",
+   "calibration_equal": true,
+   "eyes": {
+    "L": {
+     "image_mean": 0.16896115997760938
+    },
+    "R": {
+     "image_mean": 0.16910471710139197
+    }
+   }
+  },
+  {
+   "n": 257,
+   "kind": "local",
+   "calibration_equal": true,
+   "eyes": {
+    "L": {
+     "image_mean": 0.15688190283460937
+    },
+    "R": {
+     "image_mean": 0.15694791430506694
+    }
+   }
+  },
+  {
+   "n": 258,
+   "kind": "local",
+   "calibration_equal": true,
+   "eyes": {
+    "L": {
+     "image_mean": 0.15663587729320574
+    },
+    "R": {
+     "image_mean": 0.15631592782746448
+    }
+   }
+  },
+  {
+   "n": 259,
+   "kind": "local",
+   "calibration_equal": true,
+   "eyes": {
+    "L": {
+     "image_mean": 0.14626604216044042
+    },
+    "R": {
+     "image_mean": 0.14581448121524096
+    }
+   }
+  },
+  {
+   "n": 260,
+   "kind": "local",
+   "calibration_equal": true,
+   "eyes": {
+    "L": {
+     "image_mean": 0.16314415765361248
+    },
+    "R": {
+     "image_mean": 0.1635045858219736
+    }
+   }
+  },
+  {
+   "n": 261,
+   "kind": "local",
+   "calibration_equal": true,
+   "eyes": {
+    "L": {
+     "image_mean": 0.13032948309021905
+    },
+    "R": {
+     "image_mean": 0.13230614447846104
+    }
+   }
+  },
+  {
+   "n": 262,
+   "kind": "local",
+   "calibration_equal": true,
+   "eyes": {
+    "L": {
+     "image_mean": 0.2262306181773753
+    },
+    "R": {
+     "image_mean": 0.22772033725259627
+    }
+   }
+  },
+  {
+   "n": 263,
+   "kind": "local",
+   "calibration_equal": true,
+   "eyes": {
+    "L": {
+     "image_mean": 0.19936586969532935
+    },
+    "R": {
+     "image_mean": 0.20046602364855245
+    }
+   }
+  },
+  {
+   "n": 264,
+   "kind": "local",
+   "calibration_equal": true,
+   "eyes": {
+    "L": {
+     "image_mean": 0.13258907550772114
+    },
+    "R": {
+     "image_mean": 0.13490564065938565
+    }
+   }
+  },
+  {
+   "n": 265,
+   "kind": "local",
+   "calibration_equal": true,
+   "eyes": {
+    "L": {
+     "image_mean": 0.08524430887954906
+    },
+    "R": {
+     "image_mean": 0.0871036464456008
+    }
+   }
+  },
+  {
+   "n": 266,
+   "kind": "local",
+   "calibration_equal": true,
+   "eyes": {
+    "L": {
+     "image_mean": 0.07640972040327826
+    },
+    "R": {
+     "image_mean": 0.07774147723591372
+    }
+   }
+  },
+  {
+   "n": 267,
+   "kind": "local",
+   "calibration_equal": true,
+   "eyes": {
+    "L": {
+     "image_mean": 0.07354805343531595
+    },
+    "R": {
+     "image_mean": 0.07478087260476059
+    }
+   }
+  }
+ ]
+}
