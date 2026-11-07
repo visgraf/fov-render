@@ -1,7 +1,7 @@
 {
  "blender": "5.2.1 LTS",
- "commit": "b4c5a101e2c1ce2c0b441f1ac49d00f6291b4a02",
- "created_utc": "2026-11-07T20:04:25+00:00",
+ "commit": "1fe65cb9ee15283648f5a943a769af28fc88055a",
+ "created_utc": "2026-11-07T20:07:51+00:00",
  "device": "CPU",
  "failed": 0,
  "host": "vm",
@@ -47,7 +47,7 @@
      "device": "CPU",
      "e_at_rim_deg": 44.992299362781864,
      "exit_code": 0,
-     "folder": "/tmp/wfull/step1/new",
+     "folder": "/tmp/wfin/step1/new",
      "outside_alpha_max": 1.0,
      "outside_depth_finite_frac": 0.0,
      "raster": [
@@ -55,14 +55,14 @@
       126
      ],
      "ray_saving": 50.7,
-     "render_seconds": 0.5374,
+     "render_seconds": 0.5375,
      "samples_inside_disc": 12492,
      "spp": 16,
      "uniform_at_s0_same_field": 633354,
      "warp_max_err_deg": 0.002423993174886868,
      "warp_p999_err_deg": 0.0016291961429027774
     },
-    "seconds": 1.89
+    "seconds": 1.87
    },
    "name": "legacy check_foveated on a fov_render fixation",
    "ok": true,
@@ -126,7 +126,7 @@
     },
     "pose_diff_float32_vs_float64": 3.465783899314623e-07,
     "requested_device": "CPU",
-    "seconds": 2.12,
+    "seconds": 2.14,
     "spp": 16
    },
    "name": "fov_render fixation equals legacy fixation (bitwise with the legacy pose)",
@@ -153,7 +153,7 @@
     "position_vs_depth_max_m": 6.270408166031416e-07,
     "rays_per_eye": 12492,
     "rim_spacing_deg": 2.3552225364135766,
-    "seconds": 0.58
+    "seconds": 0.56
    },
    "name": "SampleRecord from a foveated render agrees with Position and Depth",
    "ok": true,
@@ -170,7 +170,7 @@
      "rig": [],
      "warp": []
     },
-    "seconds": 0.1
+    "seconds": 0.12
    },
    "name": "legacy self-tests (warp, rig, fsg_geometry)",
    "ok": true,
@@ -229,7 +229,7 @@
     "control": "upright roll at (179.9, -89.9) points image +X against the baseline",
     "eyes_compared": 22,
     "max_abs_diff": 0.0,
-    "seconds": 0.0
+    "seconds": 0.01
    },
    "name": "rig reproduces f3d-vision calibrations (R_hc, centres), both rolls",
    "ok": true,
@@ -253,7 +253,7 @@
     "panorama_720_over_4pi": 1.0000031731051708,
     "perspective_full_over_closed_form": 1.0000001447115252,
     "reference_view_over_closed_form": 1.0000028932148217,
-    "seconds": 0.54
+    "seconds": 0.55
    },
    "name": "footprints sum to the field's solid angle",
    "ok": true,
@@ -333,7 +333,7 @@
      "reference_view [all passes on]": []
     },
     "note": "ab1a compared with its spec's OPTIX replaced by CPU here; its OPTIX spec is gate 3.C (classroom)",
-    "seconds": 1.41
+    "seconds": 1.45
    },
    "name": "presets reproduce the legacy settings (13 comparisons, 7 paths)",
    "ok": true,
@@ -353,7 +353,7 @@
      "32": 0.05369185283780098
     },
     "ratio_2_vs_32_spp": 4.2411995395480835,
-    "seconds": 0.79
+    "seconds": 0.81
    },
    "name": "render_once: spp change takes effect; animated settings are caught",
    "ok": true,
@@ -430,7 +430,7 @@
      "renamed_detected": true
     },
     "equal_to_legacy": true,
-    "seconds": 0.14,
+    "seconds": 0.15,
     "stable": true,
     "unknown_mode_refused": true
    },
@@ -453,8 +453,8 @@
     "device": "CPU",
     "hole_fraction": 0.0,
     "nadir_depth_m": 1.6001371983158315,
-    "render_seconds": 2.252,
-    "seconds": 3.76,
+    "render_seconds": 2.289,
+    "seconds": 3.85,
     "spp": 4,
     "width": 720,
     "zenith_depth_m": 1.600137021338612
@@ -474,7 +474,7 @@
     "hole_fraction": 1.0,
     "rel_err_median": 0.000190667867207228,
     "rel_err_p99": 0.05952477946478968,
-    "seconds": 2.5
+    "seconds": 2.41
    },
    "name": "world-only HDRI scene reproduces its source",
    "ok": true,
@@ -616,7 +616,7 @@
     },
     "grid": 243,
     "heads": 3,
-    "seconds": 1.9
+    "seconds": 1.95
    },
    "name": "5.2 f3d calibrations byte-identical, eye matrices bitwise (gaze grid, both rolls)",
    "ok": true,
@@ -683,7 +683,7 @@
       "settings_equal": true
      }
     },
-    "seconds": 56.81,
+    "seconds": 57.05,
     "server_exit": 0,
     "server_vs_legacy": {
      "calibration_not_identical": [],
@@ -703,7 +703,7 @@
   {
    "control_detected": true,
    "detail": {
-    "bad_session": "the render server died at start (exit 1); see /tmp/wfull/step5/5.4/q2/server.log",
+    "bad_session": "the render server died at start (exit 1); see /tmp/wfin/step5/5.4/q2/server.log",
     "bad_spp": [
      "spp: must be a positive integer or null, got -1"
     ],
@@ -716,7 +716,7 @@
      "outputs: must be a non-empty list from ['exr', 'records'], got None"
     ],
     "render_failure": "render failed:",
-    "seconds": 1.47,
+    "seconds": 1.51,
     "served_after_refusals": true
    },
    "name": "5.4 server protocol: refusals keep it serving, a failed render exits 1, a bad session fails",
@@ -742,7 +742,7 @@
      55416,
      60932
     ],
-    "seconds": 9.34,
+    "seconds": 9.38,
     "server_exit": 0,
     "server_record": {
      "device": "CPU",
