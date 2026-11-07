@@ -103,10 +103,17 @@ class HeadPose:
     R_wh: np.ndarray
     origin_w: np.ndarray
 
+    @staticmethod
+    def valid_rotation(r) -> bool:
+        r = np.asarray(r, dtype=np.float64)
+        return r.shape == (3, 3) and bool(np.allclose(r.T @ r, np.eye(3), atol=1e-7)) and \
+            bool(np.isclose(np.linalg.det(r), 1.0, atol=1e-7))
+
     def __post_init__(self):
         r = np.asarray(self.R_wh, dtype=np.float64)
-        if r.shape != (3, 3) or not np.allclose(r.T @ r, np.eye(3), atol=1e-7) or not np.isclose(np.linalg.det(r), 1.0, atol=1e-7):
-            raise ValueError("head rotation must be proper orthonormal")
+        if not HeadPose.valid_rotation(r):
+            raise ValueError("head rotation must be proper orthonormal (fov_render.bl.scene.orthonormalise "
+                             "makes a float32 camera's rotation one)")
         object.__setattr__(self, "R_wh", r)
         object.__setattr__(self, "origin_w", np.asarray(self.origin_w, dtype=np.float64).reshape(3))
 

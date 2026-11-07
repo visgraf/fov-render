@@ -1,0 +1,35 @@
+{
+ "schema": "fov-render-scene-spec-v1",
+ "name": "barbershop",
+ "source": {
+  "title": "Agent 327 Barbershop (Cycles benchmark: barbershop_interior.blend)",
+  "author": "Blender Studio",
+  "licence": "CC-BY",
+  "attribution": "Agent 327 Barbershop by the Blender Studio, CC-BY (blender.org demo files)",
+  "url": "https://svn.blender.org/svnroot/bf-blender/trunk/lib/benchmarks/cycles/barbershop_interior/barbershop_interior.blend",
+  "bytes": 287574804,
+  "sha256": "95972b56180462cac47ec82f3a755bd9111ec18ca37a6196a319c013db994130",
+  "triage": "issue #4 part A, docs/runs/issue-4/ on branch issue-4-scene-triage"
+ },
+ "derived": {
+  "file": "barbershop_eye.blend (next to the source, outside the repo)",
+  "tool": "tools/make_eye_scene.py -- --blend barbershop_interior.blend --out barbershop_eye.blend --from-camera Camera --forward-m 1.5",
+  "why": "the scene camera stands 0.53 m behind the shop's wall (issue #4 part A); the EYE goes 1.5 m along its view, level (pitch 0, roll 0), with its yaw",
+  "sidecar": "docs/scenes/barbershop_eye.json (the tool's .json, copied here)"
+ },
+ "expect": {
+  "max_hole_fraction": 0.001,
+  "backface_allowed": ["GEO-barbershop_walls", "wall_panels"],
+  "max_backface_fraction_other": 0.001,
+  "min_clearance_m": 0.25,
+  "missing_images": ["agent_face_bruises_color", "agent_face_bump", "agent_face_color", "agent_face_spec",
+                     "generic_scratches.png", "Dirt_Patch_512.png", "guilder_ornament.png"],
+  "gazes": [[0.0, 0.0], [35.0, -10.0], [-70.0, 8.0]],
+  "spp": 16,
+  "panorama_width": 720
+ },
+ "notes": {
+  "backface_allowed": "the set walls were built to be seen from outside the room; from inside they show back-faces (13.7 % of the sphere from the provisional head). Accepted as the scene is, not edited",
+  "missing_images": "the triage's 7 images that do not load (files absent from the benchmark folder); Cycles renders them magenta. The image audit lists only images used by rendered objects, so this list may shrink: if S1 differs only by images no rendered object uses, the spec is corrected, not the code"
+ }
+}

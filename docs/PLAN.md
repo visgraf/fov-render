@@ -67,4 +67,15 @@ Steps 1–4 of the migration plan, in Chat's sandbox with the `bpy` 5.2.1 wheel 
    coverage` with `Session(in_process=True)`; gate: checks (s)–(v) and the Phase C numbers within the
    spread of one repeated legacy run (to be measured first).
 5. **Step 7. A new scene** neither repository has used, through every sensor; gate: every check
-   passes and the material audit is reviewed.
+   passes and the material audit is reviewed. Scene (Luiz, #4): the Agent 327 Barbershop
+   (Blender Studio, CC-BY); the Barcelona Pavilion was triaged and discarded, and its triage found
+   four scene-layer bugs, fixed in #4 with gates 4.7–4.10: a float32 camera's rotation is made
+   orthonormal when needed; the view layer that renders gets the passes; particle instances of
+   sources outside the render are named (`complete`); the audits reach collection instances and
+   list missing images. The scene gate for any file is `python -m fov_render.checks.scene`
+   (S1–S6); the Barbershop's expectations are `docs/scenes/barbershop.json`, its head comes from
+   `tools/make_eye_scene.py`. Settled by Chat, at Luiz's request (#4): the EYE goes 1.5 m along
+   the shot camera's view, level, with its yaw (the camera stands behind a wall); the set walls'
+   back-faces are accepted as the scene is (allowed by name, any other back-face fails S2); the
+   missing images are listed and their objects' solid angle reported, the material audit by solid
+   angle from the head (S6) is reviewed with Luiz.

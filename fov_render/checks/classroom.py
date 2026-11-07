@@ -87,18 +87,19 @@ def _need(name: str):
 
 # ----------------------------------------------------------------------------- 1.C
 
-def _render_foveated(ctx, blend: Path, folder: Path, *, e2_shader: float = 2.0, profile: str = "small") -> Path:
+def _render_foveated(ctx, blend: Path, folder: Path, *, e2_shader: float = 2.0, profile: str = "small",
+                     gaze=GAZE) -> Path:
     """step1.render_new_foveated on another scene: one cyclopean fixation, fix.exr + meta.json in the
     format the legacy check_foveated reads."""
     from ..bl import cameras, config, engine, scene as S
-    h = S.open_scene(str(blend), keep_passes=("combined", "z", "normal", "position"))
+    h = S.open_scene(str(blend), keep_passes=("combined", "z", "normal", "position"), scale_length=None)
     cfg = config.preset("fov_fixation", profile=profile, device=ctx["device"], spp=SPP, seed=0)
     model = Foveated().model(profile)
     backend = config.apply(h.scene, cfg, model.width, model.height, h.view_layer)
     cam = cameras.build(h.scene, model, cfg)
     if e2_shader != model.e2:
         cam.data.cycles_custom["E2"] = e2_shader
-    pose = Rig().pose(h.head, Gaze.per_eye(C=GAZE), "C")
+    pose = Rig().pose(h.head, Gaze.per_eye(C=tuple(gaze)), "C")
     cameras.pose(cam, pose)
     folder.mkdir(parents=True, exist_ok=True)
     secs = engine.render_once(h.scene, SPP, 0, str(folder / "fix.exr"))
@@ -247,6 +248,17 @@ def _via_live_ids(scene) -> dict:
         for x in coll.all_objects:
             if x.type in S.RENDERABLE and not x.hide_render and x.name_full not in direct:
                 out.setdefault(x.name_full, int(x.pass_index))
+    # particle sources hidden from render (issue #4): their instances render, and read their number
+    for o in scene.objects:
+        for m in ([] if o.hide_render else o.modifiers):
+            if m.type != "PARTICLE_SYSTEM" or not m.show_render:
+                continue
+            st = m.particle_system.settings
+            srcs = [st.instance_object] if st.render_type == "OBJECT" and st.instance_object else \
+                (list(st.instance_collection.all_objects) if st.render_type == "COLLECTION" and st.instance_collection else [])
+            for x in srcs:
+                if x.type in S.RENDERABLE and (x.hide_render or x.name_full not in direct):
+                    out.setdefault(x.name_full, int(x.pass_index))
     return out
 
 
