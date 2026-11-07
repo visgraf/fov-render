@@ -23,7 +23,7 @@ BIG = 0.1
 
 
 def names() -> dict:
-    p = HERE.parents[2] / "previews" / "issue-9" / "cpu-binary-cmdline" / "catalog.json"
+    p = HERE / "catalog-classroom-legacy.json"       # render_cell.py's catalog.json (legacy numbering)
     if not p.is_file():
         return {}
     return {e["id"]: e["name"] for e in json.loads(p.read_text())["instances"] if e["via_instance_of"] is None}
