@@ -247,7 +247,7 @@ def validate_request(req) -> dict:
 # ----------------------------------------------------------------------------- the session
 
 def make_session(blend, cfg, rig: Rig, *, access="observation", head: HeadPose | None = None,
-                 instance_ids="legacy", prepare=None, formats=()) -> dict:
+                 instance_ids="complete", prepare=None, formats=()) -> dict:
     """prepare: a sensor to set up when the session opens, so the ready answer carries its
     settings (as a legacy server that configures its camera at start). formats: extra readbacks
     the handler also reports, e.g. ("f3d_ab1a",) (fov_render.compat)."""

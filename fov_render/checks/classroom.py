@@ -253,8 +253,7 @@ def _via_live_ids(scene) -> dict:
 def breadth1_catalog(ctx) -> Result:
     """Both numberings on the Classroom (PLAN D11). The Classroom's own renderable objects are 1..234
     exactly as the accepted Breadth-1 catalogue and the legacy _assign_instance_ids (names, ids,
-    order), in both modes. Objects reached only through collection instances: under "legacy" (the
-    default) every one keeps the pass index the legacy code leaves it, and the collisions with direct
+    order), in both modes. Objects reached only through collection instances: under "legacy" every one keeps the pass index the legacy code leaves it, and the collisions with direct
     ids are listed; under "complete" they are 235.. with no gaps. Controls: the accepted catalogue
     with one entry dropped, and the scene with one object hidden from render, must both disagree."""
     import bpy
@@ -273,14 +272,14 @@ def breadth1_catalog(ctx) -> Result:
         by_id, _by_name = co._assign_instance_ids()
     live = sorted(by_id.items())
     legacy_via = _via_live_ids(bpy.context.scene)
-    # fov_render, default (legacy)
-    h = S.open_scene(str(f["blend"]))
+    # fov_render, legacy (asked for explicitly since D13 made complete the default)
+    h = S.open_scene(str(f["blend"]), instance_ids="legacy")
     lg = h.catalog
     lg_direct = [(e["id"], e["name"]) for e in lg["instances"] if e["via_instance_of"] is None]
     lg_via = {e["name"]: e["id"] for e in lg["instances"] if e["via_instance_of"] is not None}
     lg_via_live = _via_live_ids(h.scene)
     # fov_render, complete
-    hc = S.open_scene(str(f["blend"]), instance_ids="complete")
+    hc = S.open_scene(str(f["blend"]))                       # the default: complete (D13)
     cp = hc.catalog
     cp_all = [(e["id"], e["name"]) for e in cp["instances"]]
     cp_via = [e for e in cp["instances"] if e["via_instance_of"] is not None]
@@ -289,7 +288,7 @@ def breadth1_catalog(ctx) -> Result:
                  and lg_via == legacy_via and lg_via_live == legacy_via)
     ok_complete = (cp_all[:n] == accepted and [i for i, _ in cp_all] == list(range(1, len(cp_all) + 1))
                    and all(e["id"] > n for e in cp_via) and cp_via_live == {e["name"]: e["id"] for e in cp_via}
-                   and cp["collisions"] == [] and set(lg_via) == {e["name"] for e in cp_via})
+                   and cp["collisions"] == [] and set(lg_via) == {e["name"] for e in cp_via} and cp["mode"] == "complete")
     # controls
     k = n // 2
     dropped = accepted[:k] + accepted[k + 1:]

@@ -121,18 +121,18 @@ def sanitise(scene, view_layer, keep_passes=("combined", "position", "object_ind
 INSTANCE_ID_MODES = ("legacy", "complete")
 
 
-def assign_instance_ids(scene, mode: str = "legacy") -> dict:
-    """Number every renderable object for the Object Index pass (PLAN D11).
+def assign_instance_ids(scene, mode: str = "complete") -> dict:
+    """Number every renderable object for the Object Index pass (PLAN D11, D13).
 
     Objects in the scene are numbered 1.. by sorted name_full, exactly as f3d-vision's
     _assign_instance_ids, in both modes. Objects reached only through collection instances (e.g.
     linked libraries) are catalogued in both modes too, sorted by name:
 
-    - "legacy" (the default until #2 passes): they keep the pass index their file gives them, as in
-      the legacy code. Often 0 (reads as a miss) or a library's own number, which can collide with a
-      direct object's id; collisions are listed in the catalogue.
-    - "complete": they are numbered after the direct objects, so none reads as a miss or as another
-      object.
+    - "complete" (the default, D13): they are numbered after the direct objects, so none reads as a
+      miss or as another object.
+    - "legacy": they keep the pass index their file gives them, as in the legacy code. Often 0
+      (reads as a miss) or a library's own number, which can collide with a direct object's id;
+      collisions are listed in the catalogue. Ask for it when comparing with f3d-vision.
 
     Several instances of one object share its number: the Object Index pass is per object
     datablock (a documented limit)."""
@@ -275,10 +275,10 @@ class SceneHandle:
 
 
 def open_scene(path: str | None, *, eye=None, scale_length: float | None = 1.0,
-               keep_passes=("combined", "position", "object_index"), instance_ids: str = "legacy") -> SceneHandle:
+               keep_passes=("combined", "position", "object_index"), instance_ids: str = "complete") -> SceneHandle:
     """Open a .blend (None: use the scene already loaded) and prepare it (see module docstring).
     scale_length: the unit scale the file must have; None accepts any (then it is recorded).
-    instance_ids: "legacy" or "complete", see assign_instance_ids (PLAN D11)."""
+    instance_ids: "complete" (default) or "legacy", see assign_instance_ids (PLAN D11, D13)."""
     import bpy
     if path is not None:
         bpy.ops.wm.open_mainfile(filepath=os.path.abspath(path))
