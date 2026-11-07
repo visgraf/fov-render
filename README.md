@@ -44,8 +44,8 @@ where there is an NVIDIA GPU). The numpy side needs Python 3.11 or later.
 from fov_render.bl import cameras, config, engine, scene
 
 h = scene.open_scene("room.blend")                      # head from EYE, sanitised, objects numbered
-# instance_ids="legacy" (default) or "complete": objects reached only through collection
-# instances keep their file's pass index, or are numbered after the scene's own (PLAN D11)
+# instance_ids="complete" (default) or "legacy": objects reached only through collection instances
+# are numbered after the scene's own, or keep their file's pass index as f3d-vision (PLAN D11, D13)
 cfg = config.RenderConfig(profile="small", device="OPTIX")
 config.apply(h.scene, cfg, m.width, m.height)
 cam = cameras.build(h.scene, m, cfg)

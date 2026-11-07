@@ -38,7 +38,7 @@ def head_pose(ctx) -> Result:
 
 
 def instance_catalog(ctx) -> Result:
-    """Both numberings (PLAN D11). Direct objects equal f3d-vision's _assign_instance_ids on the
+    """Both numberings (PLAN D11), complete the default (D13). Direct objects equal f3d-vision's _assign_instance_ids on the
     calibration room and are stable on reopening. On the audit scene, "legacy" leaves every pass index
     exactly where the legacy code leaves it (Prop keeps its own 2 and the collision with Floor is
     listed) and "complete" numbers Prop after the direct objects. Controls: one legacy name changed;
@@ -74,7 +74,7 @@ def instance_catalog(ctx) -> Result:
         refused = False
     except ValueError:
         refused = True
-    ok = (ours == dict(by_name) and ours == again and h.catalog["mode"] == "legacy"
+    ok = (ours == dict(by_name) and ours == again and h.catalog["mode"] == "complete"
           and lg_ids == legacy_live and lg_live == legacy_live
           and lg_ids["Prop"] == 2 and lg["collisions"] == [{"name": "Prop", "id": 2, "same_id_as": "Floor"}]
           and cp_ids == cp_live and [e["name"] for e in via_c] == ["Prop"] and via_c[0]["id"] == cp["direct"] + 1

@@ -88,7 +88,7 @@ class _Base:
 
 class Session(_Base):
     def __init__(self, blend, cfg: RenderConfig, rig: Rig | None = None, *, access: str = "observation",
-                 head=None, instance_ids: str = "legacy", prepare=None, formats=(), launcher: str = "auto",
+                 head=None, instance_ids: str = "complete", prepare=None, formats=(), launcher: str = "auto",
                  workdir=None, log=None, ready_timeout_s: float = 600.0, poll_s: float = 0.003):
         self.cfg, self.rig, self.access = cfg, rig or Rig(), access
         self.blend = None if blend is None else Path(blend).resolve()
@@ -210,7 +210,7 @@ class InProcessSession(_Base):
     """The same handler, called directly inside a Blender script (no second process)."""
 
     def __init__(self, blend, cfg: RenderConfig, rig: Rig | None = None, *, access: str = "observation", head=None,
-                 instance_ids: str = "legacy", prepare=None, formats=(), workdir=None):
+                 instance_ids: str = "complete", prepare=None, formats=(), workdir=None):
         from .bl.handler import Handler
         self.cfg, self.rig, self.access = cfg, rig or Rig(), access
         self.workdir = Path(workdir).resolve() if workdir else Path(tempfile.mkdtemp(prefix="fov-render-session-"))
