@@ -1,0 +1,2482 @@
+{
+ "schema": "fov-render-instance-catalog-v1",
+ "mode": "legacy",
+ "count": 350,
+ "direct": 234,
+ "via_instance": 116,
+ "via_id_zero": 112,
+ "collisions": [
+  {
+   "name": "ChamferBox01 [lib.003]",
+   "id": 20,
+   "same_id_as": "Cube.016"
+  },
+  {
+   "name": "Circle.003 [lib]",
+   "id": 10,
+   "same_id_as": "Cube.006"
+  },
+  {
+   "name": "Circle.006 [lib]",
+   "id": 10,
+   "same_id_as": "Cube.006"
+  },
+  {
+   "name": "crayonPapier [lib.010]",
+   "id": 2,
+   "same_id_as": "Box25.002"
+  }
+ ],
+ "instances": [
+  {
+   "id": 1,
+   "name": "Box25.001",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 2,
+   "name": "Box25.002",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 3,
+   "name": "Box309.002",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 4,
+   "name": "Cube.000",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 5,
+   "name": "Cube.001",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 6,
+   "name": "Cube.002",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 7,
+   "name": "Cube.003",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 8,
+   "name": "Cube.004",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 9,
+   "name": "Cube.005",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 10,
+   "name": "Cube.006",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 11,
+   "name": "Cube.007",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 12,
+   "name": "Cube.008",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 13,
+   "name": "Cube.009",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 14,
+   "name": "Cube.010",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 15,
+   "name": "Cube.011",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 16,
+   "name": "Cube.012",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 17,
+   "name": "Cube.013",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 18,
+   "name": "Cube.014",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 19,
+   "name": "Cube.015",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 20,
+   "name": "Cube.016",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 21,
+   "name": "Cube.017",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 22,
+   "name": "Cube.018",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 23,
+   "name": "Cube.019",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 24,
+   "name": "Cube.020",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 25,
+   "name": "Cube.021",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 26,
+   "name": "Cube.024",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 27,
+   "name": "Cube.025",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 28,
+   "name": "Cube.026",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 29,
+   "name": "Cube.027",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 30,
+   "name": "Cube.032",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 31,
+   "name": "Cube.034",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 32,
+   "name": "Cylinder.000",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 33,
+   "name": "Cylinder.001",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 34,
+   "name": "Cylinder.002",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 35,
+   "name": "Cylinder.003",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 36,
+   "name": "Cylinder.004",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 37,
+   "name": "Cylinder.005",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 38,
+   "name": "Cylinder.006",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 39,
+   "name": "Cylinder.007",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 40,
+   "name": "Cylinder.008",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 41,
+   "name": "Cylinder.009",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 42,
+   "name": "Cylinder.010",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 43,
+   "name": "Cylinder.011",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 44,
+   "name": "Cylinder.012",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 45,
+   "name": "Cylinder.013",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 46,
+   "name": "Cylinder.014",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 47,
+   "name": "Cylinder.015",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 48,
+   "name": "Cylinder.016",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 49,
+   "name": "Cylinder.017",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 50,
+   "name": "Cylinder.018",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 51,
+   "name": "Cylinder.019",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 52,
+   "name": "Cylinder.020",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 53,
+   "name": "Cylinder.021",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 54,
+   "name": "Cylinder.022",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 55,
+   "name": "Cylinder.023",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 56,
+   "name": "Cylinder.024",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 57,
+   "name": "Cylinder.025",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 58,
+   "name": "Cylinder.026",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 59,
+   "name": "Cylinder.027",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 60,
+   "name": "Cylinder.028",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 61,
+   "name": "Cylinder.029",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 62,
+   "name": "Cylinder.030",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 63,
+   "name": "Cylinder.031",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 64,
+   "name": "Cylinder.032",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 65,
+   "name": "Cylinder.033",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 66,
+   "name": "Cylinder.034",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 67,
+   "name": "Cylinder.035",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 68,
+   "name": "Cylinder.036",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 69,
+   "name": "Cylinder.037",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 70,
+   "name": "Cylinder.038",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 71,
+   "name": "Cylinder.039",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 72,
+   "name": "Cylinder.040",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 73,
+   "name": "Cylinder.041",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 74,
+   "name": "Cylinder.042",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 75,
+   "name": "Cylinder.043",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 76,
+   "name": "Cylinder.044",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 77,
+   "name": "Cylinder.045",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 78,
+   "name": "Cylinder.046",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 79,
+   "name": "Cylinder.047",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 80,
+   "name": "Cylinder.048",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 81,
+   "name": "Cylinder.049",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 82,
+   "name": "Cylinder.050",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 83,
+   "name": "Cylinder.051",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 84,
+   "name": "Cylinder.052",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 85,
+   "name": "Cylinder.053",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 86,
+   "name": "Cylinder.054",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 87,
+   "name": "Cylinder.055",
+   "type": "CURVE",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 88,
+   "name": "Line266",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 89,
+   "name": "Line267",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 90,
+   "name": "Line268",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 91,
+   "name": "Line269",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 92,
+   "name": "Line270",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 93,
+   "name": "Line271",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 94,
+   "name": "Line272",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 95,
+   "name": "Line273",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 96,
+   "name": "Line274",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 97,
+   "name": "Line291.002",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 98,
+   "name": "Line291.003",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 99,
+   "name": "Line291.004",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 100,
+   "name": "Line291.005",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 101,
+   "name": "Rectangle018.001",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 102,
+   "name": "Rectangle018.002",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 103,
+   "name": "Rectangle02.002",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 104,
+   "name": "Rectangle02.003",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 105,
+   "name": "Rectangle02.004",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 106,
+   "name": "Rectangle02.005",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 107,
+   "name": "Text",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 108,
+   "name": "Text.001",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 109,
+   "name": "alphabet",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 110,
+   "name": "beams",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 111,
+   "name": "blackBoard",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 112,
+   "name": "blackBoardLamp",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 113,
+   "name": "blackBoard_upPart",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 114,
+   "name": "blackboardLamp",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 115,
+   "name": "boardFrame",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 116,
+   "name": "ceiling",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 117,
+   "name": "ceilingAirVent",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 118,
+   "name": "ceilingAirVent.001",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 119,
+   "name": "ceilingAirVent.002",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 120,
+   "name": "ceilingAirVent.003",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 121,
+   "name": "ceilingAirVent.004",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 122,
+   "name": "ceilingAirVent.005",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 123,
+   "name": "ceilingMoulding",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 124,
+   "name": "ceiling_pipeHang",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 125,
+   "name": "ceiling_pipeHang.001",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 126,
+   "name": "ceiling_pipeHang.002",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 127,
+   "name": "ceiling_pipeHang.003",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 128,
+   "name": "ceiling_pipeHang.004",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 129,
+   "name": "ceiling_pipeHang.005",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 130,
+   "name": "ceiling_pipeHang.006",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 131,
+   "name": "ceiling_pipeHang.007",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 132,
+   "name": "ceiling_pipeHang.008",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 133,
+   "name": "ceiling_pipeHang.009",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 134,
+   "name": "ceiling_pipeHang.010",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 135,
+   "name": "ceiling_pipeHang.011",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 136,
+   "name": "ceiling_pipeHang.012",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 137,
+   "name": "ceiling_pipeHang.013",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 138,
+   "name": "ceiling_pipeHang.014",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 139,
+   "name": "ceiling_pipeHang.015",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 140,
+   "name": "coat 1",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 141,
+   "name": "corkboard",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 142,
+   "name": "corkboard.001",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 143,
+   "name": "doorFrame",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 144,
+   "name": "doorFrame.001",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 145,
+   "name": "door_window",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 146,
+   "name": "drawing",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 147,
+   "name": "drawing.001",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 148,
+   "name": "drawing.002",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 149,
+   "name": "drawing.003",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 150,
+   "name": "drawing.004",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 151,
+   "name": "drawing.005",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 152,
+   "name": "drawing.006",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 153,
+   "name": "drawing.007",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 154,
+   "name": "drawing.008",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 155,
+   "name": "drawing.009",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 156,
+   "name": "drawing.010",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 157,
+   "name": "drawing.011",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 158,
+   "name": "drawing.012",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 159,
+   "name": "drawing.013",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 160,
+   "name": "drawing.014",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 161,
+   "name": "drawing.015",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 162,
+   "name": "drawing.016",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 163,
+   "name": "drawing.017",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 164,
+   "name": "focus",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 165,
+   "name": "hallWindow",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 166,
+   "name": "lettersPlank",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 167,
+   "name": "lettersPlank.001",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 168,
+   "name": "lettersPlank.002",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 169,
+   "name": "paperClip",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 170,
+   "name": "paperClip.001",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 171,
+   "name": "paperClip.002",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 172,
+   "name": "pipe",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 173,
+   "name": "pipe.001",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 174,
+   "name": "plank",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 175,
+   "name": "porte",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 176,
+   "name": "porte.001",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 177,
+   "name": "post-it",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 178,
+   "name": "sol",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 179,
+   "name": "store_UpDown",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 180,
+   "name": "thumbtack.000",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 181,
+   "name": "thumbtack.001",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 182,
+   "name": "thumbtack.002",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 183,
+   "name": "thumbtack.003",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 184,
+   "name": "thumbtack.004",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 185,
+   "name": "thumbtack.005",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 186,
+   "name": "thumbtack.006",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 187,
+   "name": "thumbtack.007",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 188,
+   "name": "thumbtack.008",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 189,
+   "name": "thumbtack.009",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 190,
+   "name": "thumbtack.010",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 191,
+   "name": "thumbtack.011",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 192,
+   "name": "venetianBlind_rotation",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 193,
+   "name": "venitianBlind",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 194,
+   "name": "venitianBlind.001",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 195,
+   "name": "venitianBlind.002",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 196,
+   "name": "venitianBlind.003",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 197,
+   "name": "venitianBlind.004",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 198,
+   "name": "venitianBlind.005",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 199,
+   "name": "venitianBlind.006",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 200,
+   "name": "venitianBlind.007",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 201,
+   "name": "verticalPipe",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 202,
+   "name": "wall",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 203,
+   "name": "wall.001",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 204,
+   "name": "wall.002",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 205,
+   "name": "wall.003",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 206,
+   "name": "wall.004",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 207,
+   "name": "wall.005",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 208,
+   "name": "wall.006",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 209,
+   "name": "wall.007",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 210,
+   "name": "wall.008",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 211,
+   "name": "wall.009",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 212,
+   "name": "wall.010",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 213,
+   "name": "wall.011",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 214,
+   "name": "wall.012",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 215,
+   "name": "wallPlug",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 216,
+   "name": "wallPlug.001",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 217,
+   "name": "wallPlug.002",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 218,
+   "name": "wallSwitch",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 219,
+   "name": "whiteChalk",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 220,
+   "name": "whiteChalk.001",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 221,
+   "name": "whiteChalk.002",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 222,
+   "name": "whitePages",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 223,
+   "name": "windows",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 224,
+   "name": "woodBase",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 225,
+   "name": "woodBaseboard",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 226,
+   "name": "woodWindow",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 227,
+   "name": "woodWindow.001",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 228,
+   "name": "woodWindow.002",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 229,
+   "name": "woodWindow.003",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 230,
+   "name": "woodWindow.004",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 231,
+   "name": "woodWindow.005",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 232,
+   "name": "woodWindow.006",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 233,
+   "name": "woodWindow.007",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 234,
+   "name": "worldMap",
+   "type": "MESH",
+   "via_instance_of": null,
+   "renumbered": true
+  },
+  {
+   "id": 0,
+   "name": "Axe [lib.007]",
+   "type": "MESH",
+   "via_instance_of": "wallClock",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "BezierCurve.001 [lib]",
+   "type": "MESH",
+   "via_instance_of": "ceilingLamp",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Box013 [lib.009]",
+   "type": "MESH",
+   "via_instance_of": "leatherBook",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Box013.001 [lib.009]",
+   "type": "MESH",
+   "via_instance_of": "beigeBook",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Box280.002 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Box295.002 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Box296.002 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Box297.002 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Box298.002 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Box299.002 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "ChamferBo1 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "ChamferBox [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 20,
+   "name": "ChamferBox01 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "teacherDesk",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "ChamferBox01.001 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "teacherDesk",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "ChamferBox065.001 [lib.005]",
+   "type": "MESH",
+   "via_instance_of": "radiateur",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "ChamferCy1 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "ChamferCyl [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "ChamferCyl006.008 [lib.001]",
+   "type": "MESH",
+   "via_instance_of": "leatherChair.001",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "ChamferCyl006.009 [lib.001]",
+   "type": "MESH",
+   "via_instance_of": "leatherChair.001",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "ChamferCyl006.010 [lib.001]",
+   "type": "MESH",
+   "via_instance_of": "leatherChair.001",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "ChamferCyl006.011 [lib.001]",
+   "type": "MESH",
+   "via_instance_of": "leatherChair.001",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Circle.002 [lib]",
+   "type": "MESH",
+   "via_instance_of": "ceilingLamp",
+   "renumbered": false
+  },
+  {
+   "id": 10,
+   "name": "Circle.003 [lib]",
+   "type": "MESH",
+   "via_instance_of": "ceilingLamp",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Circle.004 [lib.002]",
+   "type": "MESH",
+   "via_instance_of": "coatRack",
+   "renumbered": false
+  },
+  {
+   "id": 10,
+   "name": "Circle.006 [lib]",
+   "type": "MESH",
+   "via_instance_of": "ceilingLamp",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cube.024 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cube.025 [lib.002]",
+   "type": "MESH",
+   "via_instance_of": "coatRack",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cube.026 [lib.002]",
+   "type": "MESH",
+   "via_instance_of": "coatRack",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cube.027 [lib.002]",
+   "type": "MESH",
+   "via_instance_of": "coatRack",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cube.028 [lib.002]",
+   "type": "MESH",
+   "via_instance_of": "coatRack",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cube.029 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cube.030 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cube.031 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cube.033 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cylinder [lib.004]",
+   "type": "MESH",
+   "via_instance_of": "dustBin",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cylinder.056 [lib.004]",
+   "type": "MESH",
+   "via_instance_of": "dustBin",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cylinder.057 [lib.004]",
+   "type": "MESH",
+   "via_instance_of": "dustBin",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cylinder025.000 [lib.010]",
+   "type": "MESH",
+   "via_instance_of": "plasticGoldPen",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cylinder025.001 [lib.010]",
+   "type": "MESH",
+   "via_instance_of": "plasticGoldPen",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cylinder025.002 [lib.010]",
+   "type": "MESH",
+   "via_instance_of": "plasticGoldPen",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cylinder025.003 [lib.010]",
+   "type": "MESH",
+   "via_instance_of": "plasticGoldPen",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cylinder04.002 [lib.010]",
+   "type": "MESH",
+   "via_instance_of": "plasticGoldPen",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cylinder04.003 [lib.010]",
+   "type": "MESH",
+   "via_instance_of": "plasticGoldPen",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cylinder04.004 [lib.010]",
+   "type": "MESH",
+   "via_instance_of": "plasticGoldPen",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cylinder04.005 [lib.010]",
+   "type": "MESH",
+   "via_instance_of": "plasticGoldPen",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cylinder813.000 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cylinder813.001 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cylinder813.003 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cylinder932.000 [lib]",
+   "type": "MESH",
+   "via_instance_of": "ceilingLamp",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cylinder935.000 [lib]",
+   "type": "MESH",
+   "via_instance_of": "ceilingLamp",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cylinder938.000 [lib]",
+   "type": "MESH",
+   "via_instance_of": "ceilingLamp",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cylinder939.000 [lib]",
+   "type": "MESH",
+   "via_instance_of": "ceilingLamp",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Cylinder941.000 [lib]",
+   "type": "MESH",
+   "via_instance_of": "ceilingLamp",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "KOFR_TEXT [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line03 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "teacherDesk",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line04 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "teacherDesk",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line121.002 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line122.002 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line13 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line136.002 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line137.002 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line14 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line15 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line16.001 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line18 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line18_Lin [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line192 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "teacherDesk",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line193 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "teacherDesk",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line194 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "teacherDesk",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line195 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "teacherDesk",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line196 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "teacherDesk",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line197 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "teacherDesk",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line263.002 [lib.001]",
+   "type": "MESH",
+   "via_instance_of": "leatherChair.001",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line264.002 [lib.001]",
+   "type": "MESH",
+   "via_instance_of": "leatherChair.001",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Line265.002 [lib.001]",
+   "type": "MESH",
+   "via_instance_of": "leatherChair.001",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Loft01 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Loft02 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Paper [lib.008]",
+   "type": "MESH",
+   "via_instance_of": "boulette_papier.012",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Plane.003 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Plane.004 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Plane.011 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Plane.012 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Plane.013 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Plane.014 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Plane.016 [lib.001]",
+   "type": "MESH",
+   "via_instance_of": "leatherChair.001",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Plane.017 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Plane.018 [lib.001]",
+   "type": "MESH",
+   "via_instance_of": "leatherChair.001",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Plane007.003 [lib.009]",
+   "type": "MESH",
+   "via_instance_of": "leatherBook",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Plane007.004 [lib.009]",
+   "type": "MESH",
+   "via_instance_of": "beigeBook",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Rectangl16.002 [lib.001]",
+   "type": "MESH",
+   "via_instance_of": "leatherChair.001",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Sphere03.001 [lib.010]",
+   "type": "MESH",
+   "via_instance_of": "rotring",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Sphere123.003 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Sphere123.004 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Sphere140.003 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Sphere140.004 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Sphere141.003 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "Sphere141.004 [lib.003]",
+   "type": "MESH",
+   "via_instance_of": "chair",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "background [lib.007]",
+   "type": "MESH",
+   "via_instance_of": "wallClock",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "bigHand [lib.007]",
+   "type": "MESH",
+   "via_instance_of": "wallClock",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "boiteLarge [lib.010]",
+   "type": "MESH",
+   "via_instance_of": "largeBox",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "clock_wood [lib.007]",
+   "type": "MESH",
+   "via_instance_of": "wallClock",
+   "renumbered": false
+  },
+  {
+   "id": 2,
+   "name": "crayonPapier [lib.010]",
+   "type": "MESH",
+   "via_instance_of": "pencil",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "glass [lib.007]",
+   "type": "MESH",
+   "via_instance_of": "wallClock",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "kofr03_kof.001 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "kolesa01_k [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "kolesa01_k.001 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "kolesa01_k.002 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "kolesa01_k.003 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "kolesa01_k.004 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "kolesa01_k.005 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "kolesa01_k.006 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "kolesa01_k.007 [lib.006]",
+   "type": "MESH",
+   "via_instance_of": "suitcase",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "number [lib.007]",
+   "type": "MESH",
+   "via_instance_of": "wallClock",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "pages [lib.009]",
+   "type": "MESH",
+   "via_instance_of": "zapBook",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "smallHand [lib.007]",
+   "type": "MESH",
+   "via_instance_of": "wallClock",
+   "renumbered": false
+  },
+  {
+   "id": 0,
+   "name": "zapBook [lib.009]",
+   "type": "MESH",
+   "via_instance_of": "zapBook",
+   "renumbered": false
+  }
+ ]
+}
