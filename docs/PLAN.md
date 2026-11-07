@@ -42,9 +42,11 @@ Steps 1–4 of the migration plan, in Chat's sandbox with the `bpy` 5.2.1 wheel 
 
 1. **Set up** (done, 2026-11-07). Create `visgraf/fov-render`, push `main`, create the labels `for-code`, `for-chat`,
    `for-luiz`; open one issue per step below.
-2. **Phase 1 on the workstation.** Code runs `tools/run_checks.py` with `--device OPTIX` and adds the
+2. **Phase 1 on the workstation** (done, 2026-11-07, #1). Code runs `tools/run_checks.py` with `--device OPTIX` and adds the
    Classroom gates deferred from steps 1 and 4: `check_foveated` on the Classroom, the Classroom head
    pose against the accepted AB1a record, the 234-entry catalogue of Breadth-1, AB1a's own OPTIX spec.
+   Result: 19/19 on CPU and OPTIX with the wheel, 23/23 with the Classroom gates; decisions D10–D12;
+   report [`docs/runs/issue-1/README.md`](runs/issue-1/README.md).
 3. **Step 5. Session, server and client** (report §8), then the greedy explorer through
    `client.Session`; gate: f3d-vision `check_equivalence.py` 23/23 against the frozen Playground-2 run.
 4. **Step 6. The foveated sensor in the same handler**: fov-3d-vision's `active_loop.py --policy
