@@ -1,0 +1,68 @@
+{
+ "schema": "fov-render-eye-scene-v1",
+ "source": "/home/lvelho/rd/scenes/barbershop/barbershop_interior.blend",
+ "source_sha256": "95972b56180462cac47ec82f3a755bd9111ec18ca37a6196a319c013db994130",
+ "out": "/home/lvelho/rd/scenes/barbershop/barbershop_eye.blend",
+ "out_sha256": "59d81b219fe7c31f85a074535143bd6634e3099606d8002a87ca0f70081e925c",
+ "eye": {
+  "position_m": [
+   2.54310941696167,
+   8.518610000610352,
+   1.4679419994354248
+  ],
+  "yaw_deg": 163.53023569867378,
+  "pitch_deg": 0.0,
+  "roll_deg": 0.0,
+  "matrix_world": [
+   [
+    -0.9589694738388062,
+    -9.82623138412464e-09,
+    0.28350937366485596,
+    2.54310941696167
+   ],
+   [
+    0.28350937366485596,
+    -7.582313799048279e-08,
+    0.9589694738388062,
+    8.518610000610352
+   ],
+   [
+    1.2073512856147772e-08,
+    1.0,
+    7.549790126404332e-08,
+    1.4679419994354248
+   ],
+   [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ]
+  ]
+ },
+ "placed": {
+  "from_camera": "Camera",
+  "camera_position_m": [
+   2.9678049087524414,
+   9.9551420211792,
+   1.545469045639038
+  ],
+  "camera_forward": [
+   -0.283130407333374,
+   -0.9576877951622009,
+   -0.051684729754924774
+  ],
+  "forward_m": 1.5
+ },
+ "argv": [
+  "--blend",
+  "/home/lvelho/rd/scenes/barbershop/barbershop_interior.blend",
+  "--out",
+  "/home/lvelho/rd/scenes/barbershop/barbershop_eye.blend",
+  "--from-camera",
+  "Camera",
+  "--forward-m",
+  "1.5"
+ ],
+ "blender": "5.2.1 LTS"
+}
