@@ -49,6 +49,17 @@ Steps 1–4 of the migration plan, in Chat's sandbox with the `bpy` 5.2.1 wheel 
    report [`docs/runs/issue-1/README.md`](runs/issue-1/README.md).
 3. **Step 5. Session, server and client** (report §8), then the greedy explorer through
    `client.Session`; gate: f3d-vision `check_equivalence.py` 23/23 against the frozen Playground-2 run.
+   Built in #2 (Chat): `request.py` (schemas `fov-render-session-v1`, `-request-v1`, `-response-v1`),
+   `bl/handler.py`, `server.py` (queue protocol of f3d-vision's greedy server), `session.py`
+   (`Session`, `Session.in_process`, `Look`), `compat.py` (f3d-vision's calibration, AB1a readback
+   and pass report, each checked bit for bit against the legacy function) and `tools/gfe_session.py`
+   (the explorer, unchanged, with `run.Server` replaced). Gates 5.1–5.5 (`--steps 5`). Changes on
+   the way: the rig computes poses in `make_calibration`'s order (numpy trigonometry, one
+   normalisation, an exact sign flip for the OpenCV ↔ Blender frames), so poses equal f3d-vision's bit
+   for bit, signed zeros included; before, 275 of 714 eye poses differed in the last bits. The
+   control for the gate is the IPD one ULP higher (`--control-ipd-ulp`): a seed changes only RGB,
+   which `check_equivalence` reports but does not compare. Not built: the `fov-render` command
+   line of report §8.6.
 4. **Step 6. The foveated sensor in the same handler**: fov-3d-vision's `active_loop.py --policy
    coverage` with `Session(in_process=True)`; gate: checks (s)–(v) and the Phase C numbers within the
    spread of one repeated legacy run (to be measured first).

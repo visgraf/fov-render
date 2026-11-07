@@ -15,8 +15,9 @@ It unifies the render support of [fov-3d-vision](https://github.com/visgraf/fov-
 technical report *Foveated Stereo Rendering in Blender: A Unified Sensor Framework*
 ([lvelho/fov-render-tr](https://github.com/lvelho/fov-render-tr)).
 
-**Status:** Phase 1 (migration steps 1–4) done in a CPU sandbox; Phase 2 (server, active loop, new
-scene, GPU) is next. See [`docs/STATUS.md`](docs/STATUS.md) and [`docs/PLAN.md`](docs/PLAN.md).
+**Status:** migration steps 1–4 done and accepted on the workstation (#1); step 5 (`Session`, the
+render server, JSON requests) is in #2. See [`docs/STATUS.md`](docs/STATUS.md) and
+[`docs/PLAN.md`](docs/PLAN.md).
 
 ## Use it as a submodule
 
@@ -52,8 +53,25 @@ cameras.pose(cam, Rig().pose(h.head, Gaze.yaw_pitch(0, 0), "C"))
 engine.render_once(h.scene, cfg.resolved_spp(), 0, "look/C.exr")
 ```
 
-`Session`, the persistent render server and the JSON requests of the report's §8 arrive in
-Phase 2.
+A `Session` opens the scene once and answers one look per request: in a background Blender (the
+persistent render server, `fov_render/server.py`) or, inside a Blender script, in the same process:
+
+```python
+from fov_render import Session, RenderConfig, Rig, Gaze, sensors
+
+with Session("room.blend", RenderConfig(profile="small", device="OPTIX"), rig=Rig(roll="baseline_projected"),
+             access="oracle") as s:                       # launcher="auto": $FOVRENDER_BLENDER, blender, or the wheel
+    look = s.look(sensors.Perspective(), eyes=("L", "R"), gaze=Gaze.yaw_pitch(10, -5, vergence_m=2.1),
+                  outputs=("exr", "records"))
+    L, R = look.records                                   # SampleRecord per eye; look.meta, look.exr
+
+s = Session.in_process(RenderConfig(...), rig=Rig(), blend=None)   # inside Blender: the loaded scene
+```
+
+Each look is a `fov-render-request-v1` JSON request (`fov_render/request.py`); its folder holds
+`request.json`, `raw_<eye>.exr`, `record_<eye>.npz` when asked, and `meta.json` (poses, the
+settings Cycles used, timings). A malformed request is refused with every reason, before anything
+renders. `tools/gfe_session.py` runs f3d-vision's greedy explorer unchanged on a Session.
 
 ## Checks
 
@@ -75,11 +93,14 @@ code in `legacy/` (provenance and hashes in `legacy/PROVENANCE.json`).
 ## Layout
 
 ```
-fov_render/            numpy side: profiles, warp, rig, geometry, sensors/, record, exr_lite
-fov_render/bl/         Blender side: env, config (RenderConfig, presets), engine, passes, cameras, scene
+fov_render/            numpy side: profiles, warp, rig, geometry, sensors/, record, exr_lite,
+                       request (JSON schemas), session (Session, Look), compat (f3d-vision formats)
+fov_render/server.py   the persistent render server (Blender side)
+fov_render/bl/         Blender side: env, config (RenderConfig, presets), engine, passes, cameras, scene, handler
 fov_render/checks/     the gates of the migration plan
 legacy/                comparators, never edited
 tools/run_checks.py    gates under the Blender binary
+tools/gfe_session.py   f3d-vision's greedy explorer (Playground-2) on a Session
 docs/                  PLAN, STATUS, reports
 ```
 
