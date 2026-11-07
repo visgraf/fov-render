@@ -24,6 +24,13 @@ import numpy as np
 from .profiles import DEFAULT_IPD_M
 
 CV_TO_BLENDER = np.diag([1.0, -1.0, -1.0])
+_CV_SIGNS = np.array([1.0, -1.0, -1.0])     # R @ CV_TO_BLENDER as an exact column sign flip: a matrix
+                                            # product would turn -0.0 into +0.0 (issue #2)
+
+
+def cv_to_blender(r) -> np.ndarray:
+    """R @ diag(1, -1, -1), exactly (its own inverse; keeps signed zeros)."""
+    return np.asarray(r, dtype=np.float64) * _CV_SIGNS
 ROLLS = ("upright", "baseline_projected")
 
 
@@ -36,9 +43,10 @@ def unit(x) -> np.ndarray:
 
 
 def gaze_direction(yaw_deg: float, pitch_deg: float) -> np.ndarray:
-    """Head-frame unit direction of a gaze (report eq. 2)."""
-    y, p = math.radians(yaw_deg), math.radians(pitch_deg)
-    return np.array([math.sin(y) * math.cos(p), math.sin(p), -math.cos(y) * math.cos(p)])
+    """Head-frame unit direction of a gaze (report eq. 2). numpy's radians, sin and cos, in
+    f3d-vision's order, so poses equal make_calibration's bit for bit (issue #2)."""
+    y, p = np.radians([yaw_deg, pitch_deg])
+    return np.array([np.sin(y) * np.cos(p), np.sin(p), -np.cos(y) * np.cos(p)])
 
 
 def gaze_angles(d) -> tuple[float, float]:
@@ -86,7 +94,7 @@ def camera_rotation(direction_h, roll: str = "upright", baseline_h=(1.0, 0.0, 0.
     x = unit(x)
     y = np.cross(z, x)
     r_hc = np.column_stack((x, y, z))
-    return r_hc @ CV_TO_BLENDER
+    return cv_to_blender(r_hc)
 
 
 @dataclass(frozen=True)
@@ -171,7 +179,7 @@ class EyePose:
     @property
     def R_hc(self) -> np.ndarray:
         """OpenCV camera -> head, as f3d-vision's calibrations store it."""
-        return self.R_hb @ CV_TO_BLENDER
+        return cv_to_blender(self.R_hb)
 
     def as_dict(self) -> dict:
         return {"eye": self.eye, "centre_h_m": self.centre_h.tolist(), "centre_w_m": self.centre_w.tolist(),
@@ -213,11 +221,13 @@ class Rig:
         raise ValueError(f"unknown gaze mode {gaze.mode!r}")
 
     def pose(self, head: HeadPose, gaze: Gaze, eye: str) -> EyePose:
-        d = unit(self.eye_direction_h(head, gaze, eye))
-        r_hb = camera_rotation(d, self.roll, self.baseline_h)
+        d = self.eye_direction_h(head, gaze, eye)
+        r_hb = camera_rotation(d, self.roll, self.baseline_h)    # normalises once, as make_calibration
         yaw, pitch = gaze_angles(d)
         c_h = self.centre_h(eye)
-        return EyePose(eye, c_h, head.to_world(c_h), r_hb, head.R_wh @ r_hb, yaw, pitch)
+        # R_WB = R_WH R_HC CV in f3d-vision's order (_eye_matrix), so world poses match bit for bit
+        r_wb = (head.R_wh @ cv_to_blender(r_hb)) @ CV_TO_BLENDER
+        return EyePose(eye, c_h, head.to_world(c_h), r_hb, r_wb, yaw, pitch)
 
     def fixed_pose(self, head: HeadPose, eye: str, yaw_offset_deg: float = 0.0) -> EyePose:
         """A camera whose axes are the head's (panoramas), optionally turned by yaw_offset_deg

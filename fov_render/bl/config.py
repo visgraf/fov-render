@@ -68,8 +68,21 @@ class RenderConfig:
 
     def as_dict(self) -> dict:
         d = asdict(self)
-        d["clip_m"], d["passes"] = list(self.clip_m), list(self.passes)
+        d["clip_m"] = list(self.clip_m)
+        d["passes"] = None if self.passes is None else list(self.passes)
         return d
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "RenderConfig":
+        """Inverse of as_dict (a session request carries the config as JSON)."""
+        kw = dict(d)
+        kw["clip_m"] = tuple(kw.get("clip_m", cls.clip_m))
+        if kw.get("passes") is not None:
+            kw["passes"] = tuple(kw["passes"])
+        unknown = set(kw) - {f for f in cls.__dataclass_fields__}
+        if unknown:
+            raise ValueError(f"unknown RenderConfig field(s) {sorted(unknown)}")
+        return cls(**kw)
 
 
 _PRESETS = {

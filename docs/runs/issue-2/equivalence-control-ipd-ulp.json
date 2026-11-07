@@ -1,0 +1,129 @@
+{
+ "all_pass": false,
+ "baseline": "/home/lvelho/rd/f3d-vision/previews/playground-sparse-lattice",
+ "checks": {
+  "DEPTH history 1..3 bitwise": {
+   "pass": true
+  },
+  "LOCAL / GLOBAL sequence 1..3": {
+   "pass": true
+  },
+  "SEEN history 1..3 bitwise": {
+   "pass": true
+  },
+  "calibration.json byte-identical 1..3": {
+   "detail": [
+    1,
+    2,
+    3
+   ],
+   "pass": false
+  },
+  "control process opened no Breadth-1 path (run)": {
+   "pass": true
+  },
+  "coverage state after fixation 3 bitwise": {
+   "pass": true
+  },
+  "coverage.npz row weights bitwise": {
+   "pass": true
+  },
+  "fixation directions in order 1..3": {
+   "pass": true
+  },
+  "per-fixation files present 1..3": {
+   "pass": true
+  },
+  "per-fixation records 1..3 (gaze, kind, decision, candidates, correspondence, fusion, coverage, SEEN / DEPTH, diagnostic error)": {
+   "detail": {
+    "1": [
+     "err_vs_left_position_mm_diagnostic"
+    ],
+    "2": [
+     "err_vs_left_position_mm_diagnostic",
+     "fusion"
+    ],
+    "3": [
+     "err_vs_left_position_mm_diagnostic"
+    ]
+   },
+   "pass": false
+  },
+  "points.npz xyz_h/instance_id_oracle/err_mm bitwise 1..3": {
+   "detail": {
+    "1": [
+     "err_mm"
+    ],
+    "2": [
+     "err_mm"
+    ],
+    "3": [
+     "err_mm"
+    ]
+   },
+   "pass": false
+  },
+  "policy decision states bitwise 1..2": {
+   "pass": true
+  },
+  "policy decision states present in both 1..2": {
+   "pass": true
+  },
+  "prefix: the run is not longer than the baseline": {
+   "detail": "3 vs 356",
+   "pass": true
+  },
+  "run products unchanged since its freeze": {
+   "pass": true
+  },
+  "run.py checks: all pass (run)": {
+   "pass": true
+  },
+  "trajectory summary fields (prefix set)": {
+   "pass": true
+  }
+ },
+ "code": "11bfbf6f5d0bc219eb244cbb3282fb12b1973256",
+ "known_answer": false,
+ "prefix": true,
+ "reported": {
+  "code": {
+   "baseline": {
+    "branch": "playground/sparse-lattice",
+    "head": "70d992ee9cc3843ebefd6ffc81cc2bef81a30bb3",
+    "tracked_dirty": []
+   },
+   "run": {
+    "branch": "main",
+    "head": "11bfbf6f5d0bc219eb244cbb3282fb12b1973256",
+    "tracked_dirty": []
+   }
+  },
+  "fixations": {
+   "baseline": 356,
+   "run": 3
+  },
+  "freeze_hashes_equal_to_baseline (informative; RGB and run metadata change some file bytes)": {
+   "coverage.npz": false,
+   "final-map-oracle-segmentation.ply": false,
+   "final-map.npz": false,
+   "final-map.ply": false,
+   "trajectory.json": false
+  },
+  "host_open_audit": {
+   "baseline": 2512,
+   "run": 41
+  },
+  "points_rgb_difference (presentation only, not compared)": {
+   "differing": 280914,
+   "max_abs": 0.001890016719698906,
+   "values": 585735
+  },
+  "wall_seconds": {
+   "baseline": 416.39766153297387,
+   "run": 4.343794465006795
+  }
+ },
+ "run": "/home/lvelho/rd/f3d-vision/previews/fr2-control",
+ "schema": "GFE-equivalence"
+}
