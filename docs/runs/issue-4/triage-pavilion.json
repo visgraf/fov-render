@@ -1,0 +1,253 @@
+{
+ "schema": "fov-render-issue4-triage-v1",
+ "device": "OPTIX",
+ "timings_s": {
+  "raw_open": 0.10409658297430724,
+  "open_scene": 0.22050475800642744,
+  "sanity": 1.087217743974179,
+  "looks": 4.513722694013268
+ },
+ "file": {
+  "path": "/home/lvelho/rd/scenes/pavilion/extracted/3d/pavillon_barcelone_v1.2.blend",
+  "size_bytes": 8485449,
+  "sha256": "92162db8cabcd03641c53df95554b604b494ba74a76a099c7e06637e9379120a",
+  "saved_with": "2.66.6",
+  "blender": "5.2.1 LTS",
+  "unit_system": "METRIC",
+  "scale_length": 1.0,
+  "length_unit": "METERS",
+  "frame_start": 1,
+  "frame_end": 374,
+  "frame_current": 1,
+  "render_engine_saved": "CYCLES",
+  "scenes": [
+   "1- time: midday",
+   "2- time: sunset",
+   "3- time: night",
+   "assets",
+   "CPU Benchmark",
+   "GPU Benchmark"
+  ],
+  "view_layers": [
+   "RenderLayer",
+   "RenderLayer.001"
+  ],
+  "cameras": [
+   "Camera.001",
+   "Camera.006",
+   "Camera.005",
+   "Camera.004",
+   "Camera.003",
+   "Camera.002",
+   "Camera"
+  ],
+  "scene_camera": "Camera",
+  "libraries": [],
+  "images": {
+   "count": 16,
+   "packed": 1,
+   "not_loading": [
+    {
+     "name": "Mies-BCN_M11.jpg",
+     "filepath": "//textures/water bump.jpg",
+     "exists": false,
+     "packed": false,
+     "source": "FILE",
+     "size": [
+      0,
+      0
+     ],
+     "has_data": false,
+     "colorspace": "sRGB"
+    }
+   ],
+   "missing_files": [
+    "Mies-BCN_M11.jpg"
+   ]
+  },
+  "scripts_not_run": {
+   "auto_run": false,
+   "registered_texts": [],
+   "scripted_drivers": [],
+   "scripted_driver_count": 0
+  },
+  "objects": {
+   "total": 102,
+   "by_type": {
+    "MESH": 90,
+    "CAMERA": 7,
+    "EMPTY": 4,
+    "LIGHT": 1
+   }
+  }
+ },
+ "open_scene_error": "ValueError: head rotation must be proper orthonormal",
+ "head_workaround": {
+  "why": "ValueError: head rotation must be proper orthonormal",
+  "camera": "Camera",
+  "max_abs_RtR_minus_I_before": 2.430655710039531e-07,
+  "det_before": 1.0000003269224758,
+  "max_abs_change": 1.1920947085020117e-07,
+  "max_abs_RtR_minus_I_after": 6.661338147750939e-16
+ },
+ "head": {
+  "eye_note": "explicit matrix",
+  "origin_w_m": [
+   -22.16685676574707,
+   -9.443976402282715,
+   1.9767204523086548
+  ],
+  "forward_w": [
+   0.955015142915155,
+   0.2965570380253753,
+   6.021496408992189e-07
+  ],
+  "pitch_deg": 3.450063305884543e-05,
+  "roll_deg": -1.418719293060544e-06,
+  "rays": 256,
+  "ray_hits": 194,
+  "ray_backface_first_hits": 0,
+  "nearest_hit_m": 0.6824603056146853,
+  "inside_geometry": false
+ },
+ "catalogue": {
+  "mode": "complete",
+  "count": 94,
+  "direct": 90,
+  "via_instance": 4,
+  "via_id_zero": 0
+ },
+ "unnamed": {
+  "unnumbered_types": [],
+  "particle_systems": [
+   {
+    "object": "lotus_scattering_plane",
+    "via": null,
+    "type": "EMITTER",
+    "render_as": "COLLECTION",
+    "count": 300,
+    "children": "NONE",
+    "instance": "lotus_plant"
+   },
+   {
+    "object": "pebbles_scatter",
+    "via": null,
+    "type": "EMITTER",
+    "render_as": "COLLECTION",
+    "count": 20000,
+    "children": "NONE",
+    "instance": "pebbles"
+   },
+   {
+    "object": "tree_scatter_plane",
+    "via": null,
+    "type": "EMITTER",
+    "render_as": "COLLECTION",
+    "count": 322,
+    "children": "NONE",
+    "instance": "tree"
+   }
+  ],
+  "geometry_nodes": [],
+  "vertex_face_instancers": [],
+  "depsgraph_instances": {
+   "object:MESH": 90,
+   "instance/EMPTY:MESH": 16,
+   "instance/MESH:MESH": 20622
+  },
+  "depsgraph_instances_pass_index_0": {
+   "instance/MESH:MESH": 20622
+  }
+ },
+ "audit": {
+  "flagged_count": 13,
+  "by_flag": {
+   "alpha": 12,
+   "emission": 6,
+   "transmission": 1
+  },
+  "flagged": {
+   "Cube.056": [
+    "alpha"
+   ],
+   "Cube.054": [
+    "alpha"
+   ],
+   "Cube.023": [
+    "alpha"
+   ],
+   "Cube.022": [
+    "alpha"
+   ],
+   "Cube.021": [
+    "alpha"
+   ],
+   "Cube.020": [
+    "alpha"
+   ],
+   "Circle.005": [
+    "alpha",
+    "emission"
+   ],
+   "Circle.004": [
+    "alpha",
+    "emission"
+   ],
+   "Circle.003": [
+    "alpha",
+    "emission"
+   ],
+   "Circle.002": [
+    "alpha",
+    "emission"
+   ],
+   "Circle.001": [
+    "alpha",
+    "emission"
+   ],
+   "Circle": [
+    "alpha",
+    "emission"
+   ],
+   "water_plane_still": [
+    "transmission"
+   ]
+  },
+  "world_volume": false,
+  "via_instance_flagged_count": 0,
+  "via_instance_by_flag": {},
+  "via_instance_flagged": {}
+ },
+ "animation": {
+  "removed": [],
+  "switched_off": [
+   "compositing",
+   "border"
+  ]
+ },
+ "sanity": {
+  "error": "KeyError: 'distance_m was not rendered for this look'",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/lvelho/rd/fov-render/docs/runs/issue-4/triage.py\", line 303, in main\n    chk = h.sanity(config.RenderConfig(device=a.device), width=720, spp=4, out_dir=str(out / \"sanity\"))\n  File \"/home/lvelho/rd/fov-render/fov_render/bl/scene.py\", line 273, in sanity\n    self.checks = sanity_checks(self, cfg, width, spp, backface, out_dir)\n                  ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/lvelho/rd/fov-render/fov_render/bl/scene.py\", line 330, in sanity_checks\n    hit = np.isfinite(rec.distance_m)\n                      ^^^^^^^^^^^^^^\n  File \"/home/lvelho/rd/fov-render/fov_render/record.py\", line 61, in <lambda>\n    distance_m = property(lambda self: self._oracle_field(\"distance_m\"))\n                                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\n  File \"/home/lvelho/rd/fov-render/fov_render/record.py\", line 57, in _oracle_field\n    raise KeyError(f\"{name} was not rendered for this look\")\nKeyError: 'distance_m was not rendered for this look'\n"
+ },
+ "looks": {
+  "session_open_s": 0.27050658903317526,
+  "foveated": {
+   "ok": false,
+   "wall_s": 1.0317065800190903,
+   "error": "KeyError: 'distance_m was not rendered for this look'",
+   "traceback": "Traceback (most recent call last):\n  File \"/home/lvelho/rd/fov-render/docs/runs/issue-4/triage.py\", line 231, in looks_report\n    hit = np.isfinite(rec.distance_m)\n                      ^^^^^^^^^^^^^^\n  File \"/home/lvelho/rd/fov-render/fov_render/record.py\", line 61, in <lambda>\n    distance_m = property(lambda self: self._oracle_field(\"distance_m\"))\n                                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\n  File \"/home/lvelho/rd/fov-render/fov_render/record.py\", line 57, in _oracle_field\n    raise KeyError(f\"{name} was not rendered for this look\")\nKeyError: 'distance_m was not rendered for this look'\n"
+  },
+  "perspective_pair": {
+   "ok": false,
+   "wall_s": 1.6498448650236242,
+   "error": "KeyError: 'distance_m was not rendered for this look'",
+   "traceback": "Traceback (most recent call last):\n  File \"/home/lvelho/rd/fov-render/docs/runs/issue-4/triage.py\", line 231, in looks_report\n    hit = np.isfinite(rec.distance_m)\n                      ^^^^^^^^^^^^^^\n  File \"/home/lvelho/rd/fov-render/fov_render/record.py\", line 61, in <lambda>\n    distance_m = property(lambda self: self._oracle_field(\"distance_m\"))\n                                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\n  File \"/home/lvelho/rd/fov-render/fov_render/record.py\", line 57, in _oracle_field\n    raise KeyError(f\"{name} was not rendered for this look\")\nKeyError: 'distance_m was not rendered for this look'\n"
+  },
+  "panorama_720": {
+   "ok": false,
+   "wall_s": 1.560683955962304,
+   "error": "KeyError: 'distance_m was not rendered for this look'",
+   "traceback": "Traceback (most recent call last):\n  File \"/home/lvelho/rd/fov-render/docs/runs/issue-4/triage.py\", line 231, in looks_report\n    hit = np.isfinite(rec.distance_m)\n                      ^^^^^^^^^^^^^^\n  File \"/home/lvelho/rd/fov-render/fov_render/record.py\", line 61, in <lambda>\n    distance_m = property(lambda self: self._oracle_field(\"distance_m\"))\n                                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\n  File \"/home/lvelho/rd/fov-render/fov_render/record.py\", line 57, in _oracle_field\n    raise KeyError(f\"{name} was not rendered for this look\")\nKeyError: 'distance_m was not rendered for this look'\n"
+  }
+ }
+}

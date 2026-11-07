@@ -38,10 +38,32 @@ def sha256(path: str) -> str:
 
 # ----------------------------------------------------------------------------- head
 
-def rigid4(matrix) -> np.ndarray:
+def orthonormalise(r) -> tuple[np.ndarray, float]:
+    """The rotation unchanged, bit for bit, when HeadPose accepts it; otherwise the nearest rotation
+    (polar decomposition). Returns (rotation, deviation max|R^T R - I| of the input). Blender's
+    float32 matrices sit up to ~3e-7 off orthonormal (issue #4: 5 of the Pavilion's 7 cameras)."""
+    r = np.asarray(r, dtype=np.float64)
+    dev = float(np.abs(r.T @ r - np.eye(3)).max())
+    if HeadPose.valid_rotation(r):
+        return r, dev
+    if dev > 1e-4:
+        raise ValueError(f"not a rotation (max|R^T R - I| = {dev:.2e}): scaled or sheared?")
+    u, _s, vt = np.linalg.svd(r)
+    q = u @ vt
+    if np.linalg.det(q) < 0:
+        raise ValueError("not a proper rotation (determinant -1)")
+    return q, dev
+
+
+def rigid4(matrix, report: dict | None = None) -> np.ndarray:
+    """A Blender world matrix as a rigid float64 4x4: scale dropped, the rotation made orthonormal
+    only when it has to be (orthonormalise); report, if given, records what was done."""
     loc, rot, _ = matrix.decompose()
+    r, dev = orthonormalise(np.array(rot.to_matrix(), dtype=np.float64))
+    if report is not None:
+        report.update({"rotation_deviation": dev, "orthonormalised": not HeadPose.valid_rotation(np.array(rot.to_matrix()))})
     m = np.eye(4)
-    m[:3, :3] = np.array(rot.to_matrix())
+    m[:3, :3] = r
     m[:3, 3] = np.array(loc)
     return m
 
@@ -59,13 +81,44 @@ def resolve_head(scene, eye_name: str = EYE_NAME, explicit=None) -> tuple[HeadPo
             return HeadPose.from_matrix(rigid4(m)), f"explicit position {list(pos)}, yaw {yaw}, pitch {pitch}"
         return HeadPose.from_matrix(np.asarray(explicit, float)), "explicit matrix"
     bpy.context.view_layer.update()
+
+    def note(base, rep):
+        return base + (f"; rotation made orthonormal (was off by {rep['rotation_deviation']:.1e})"
+                       if rep.get("orthonormalised") else "")
     eye = bpy.data.objects.get(eye_name)
     if eye is not None:
-        return HeadPose.from_matrix(rigid4(eye.matrix_world)), f"{eye_name} object"
+        rep = {}
+        return HeadPose.from_matrix(rigid4(eye.matrix_world, rep)), note(f"{eye_name} object", rep)
     if scene.camera is not None:
-        return HeadPose.from_matrix(rigid4(scene.camera.matrix_world)), \
-            f"no {eye_name} object; using scene camera {scene.camera.name!r}"
+        rep = {}
+        return HeadPose.from_matrix(rigid4(scene.camera.matrix_world, rep)), \
+            note(f"no {eye_name} object; using scene camera {scene.camera.name!r}", rep)
     raise RuntimeError(f"no {eye_name} object and no scene camera: add a camera named {eye_name!r} at the vantage point")
+
+
+# ----------------------------------------------------------------------------- view layer
+
+def render_view_layer(scene) -> tuple[object, dict]:
+    """Make the view layer that renders the active one, and the only one that renders. Passes are set
+    on the active layer, but Blender writes the layers whose `use` is on: a file whose active layer
+    does not render (issue #4: the Pavilion's RenderLayer.001) got its passes on a layer that was
+    never written. Target: the active layer if it renders, else the first that does."""
+    import bpy
+    ctx = bpy.context.view_layer
+    target = ctx if ctx.use else next((v for v in scene.view_layers if v.use), None)
+    if target is None:
+        raise RuntimeError("no view layer of the scene renders (every layer has use off)")
+    if target != ctx:
+        win = bpy.context.window
+        if win is None:
+            raise RuntimeError(f"the active view layer {ctx.name!r} does not render and there is no window "
+                               f"to make {target.name!r} active")
+        win.view_layer = target
+    off = [v.name for v in scene.view_layers if v != target and v.use]
+    for v in scene.view_layers:
+        v.use = v == target
+    return bpy.context.view_layer, {"view_layer": target.name, "was_active": ctx.name, "switched_off": off,
+                                    "layers": len(scene.view_layers)}
 
 
 # ----------------------------------------------------------------------------- sanitise
@@ -121,27 +174,21 @@ def sanitise(scene, view_layer, keep_passes=("combined", "position", "object_ind
 INSTANCE_ID_MODES = ("legacy", "complete")
 
 
-def assign_instance_ids(scene, mode: str = "complete") -> dict:
-    """Number every renderable object for the Object Index pass (PLAN D11, D13).
+GN_INSTANCE_NODES = ("GeometryNodeInstanceOnPoints", "GeometryNodeObjectInfo", "GeometryNodeCollectionInfo")
 
-    Objects in the scene are numbered 1.. by sorted name_full, exactly as f3d-vision's
-    _assign_instance_ids, in both modes. Objects reached only through collection instances (e.g.
-    linked libraries) are catalogued in both modes too, sorted by name:
 
-    - "complete" (the default, D13): they are numbered after the direct objects, so none reads as a
-      miss or as another object.
-    - "legacy": they keep the pass index their file gives them, as in the legacy code. Often 0
-      (reads as a miss) or a library's own number, which can collide with a direct object's id;
-      collisions are listed in the catalogue. Ask for it when comparing with f3d-vision.
-
-    Several instances of one object share its number: the Object Index pass is per object
-    datablock (a documented limit)."""
-    if mode not in INSTANCE_ID_MODES:
-        raise ValueError(f"instance_ids must be one of {INSTANCE_ID_MODES}, got {mode!r}")
+def renderable_objects(scene) -> dict:
+    """What the Object Index pass can name, in catalogue order:
+    direct     the scene's renderable objects, not hidden from render, sorted by name_full
+    via        objects reached only through collection-instance empties (e.g. linked libraries)
+    particles  objects a particle system renders as instances, not already above; a source hidden from
+               render still renders through its instances (issue #4: the Pavilion's 20,622 pebbles)
+    Also listed, not named: geometry-nodes modifiers that may instance (their instances take the
+    instancer's number or none)."""
     direct = sorted([o for o in scene.objects if o.type in RENDERABLE and not o.hide_render],
                     key=lambda o: o.name_full)
     seen = {o.name_full for o in direct}
-    via = {}
+    via, particles, gn = {}, {}, []
     for o in scene.objects:
         coll = o.instance_collection if o.instance_type == "COLLECTION" else None
         if coll is None:
@@ -149,7 +196,50 @@ def assign_instance_ids(scene, mode: str = "complete") -> dict:
         for x in coll.all_objects:
             if x.type in RENDERABLE and not x.hide_render and x.name_full not in seen:
                 via.setdefault(x.name_full, (x, o.name_full))
-    n_numbered = len(direct) + (len(via) if mode == "complete" else 0)
+    seen |= set(via)
+    for o in scene.objects:
+        if o.hide_render:
+            continue
+        for m in o.modifiers:
+            if m.type == "PARTICLE_SYSTEM" and m.show_render:
+                st = m.particle_system.settings
+                if st.render_type == "OBJECT" and st.instance_object is not None:
+                    srcs = [st.instance_object]
+                elif st.render_type == "COLLECTION" and st.instance_collection is not None:
+                    srcs = list(st.instance_collection.all_objects)
+                else:
+                    srcs = []
+                for x in srcs:
+                    if x.type in RENDERABLE and x.name_full not in seen:
+                        particles.setdefault(x.name_full, (x, o.name_full))
+            elif m.type == "NODES" and m.show_render and m.node_group is not None:
+                kinds = sorted({n.bl_idname for n in m.node_group.nodes if n.bl_idname in GN_INSTANCE_NODES})
+                if kinds:
+                    gn.append({"object": o.name_full, "modifier": m.name, "nodes": kinds})
+    return {"direct": direct, "via": [via[k] for k in sorted(via)],
+            "particles": [particles[k] for k in sorted(particles)], "gn_instancers": gn}
+
+
+def assign_instance_ids(scene, mode: str = "complete", objects: dict | None = None) -> dict:
+    """Number every renderable object for the Object Index pass (PLAN D11, D13).
+
+    Objects in the scene are numbered 1.. by sorted name_full, exactly as f3d-vision's
+    _assign_instance_ids, in both modes. Objects reached only through collection instances, and
+    the sources of particle instances (renderable_objects), are catalogued in both modes too:
+
+    - "complete" (the default, D13): they are numbered after the direct objects (collection
+      instances first, then particle sources), so none reads as a miss or as another object.
+    - "legacy": they keep the pass index their file gives them, as in the legacy code. Often 0
+      (reads as a miss) or a library's own number, which can collide with a direct object's id;
+      collisions are listed in the catalogue. Ask for it when comparing with f3d-vision.
+
+    Several instances of one object share its number: the Object Index pass is per object
+    datablock (a documented limit). Geometry-nodes instancers are listed, not numbered."""
+    if mode not in INSTANCE_ID_MODES:
+        raise ValueError(f"instance_ids must be one of {INSTANCE_ID_MODES}, got {mode!r}")
+    objs = objects or renderable_objects(scene)
+    direct, via, particles = objs["direct"], objs["via"], objs["particles"]
+    n_numbered = len(direct) + (len(via) + len(particles) if mode == "complete" else 0)
     if n_numbered >= MAX_PASS_INDEX:
         raise RuntimeError(f"{n_numbered} renderable objects; the Object Index pass holds at most {MAX_PASS_INDEX - 1}")
     entries = []
@@ -159,19 +249,21 @@ def assign_instance_ids(scene, mode: str = "complete") -> dict:
                         "renumbered": True})
     direct_ids = {e["id"]: e["name"] for e in entries}
     collisions = []
-    for k, name in enumerate(sorted(via), start=len(direct) + 1):
-        obj, parent = via[name]
+    for k, (obj, parent, kind) in enumerate([(o, p, "collection") for o, p in via] +
+                                            [(o, p, "particles") for o, p in particles], start=len(direct) + 1):
         if mode == "complete":
             obj.pass_index = k
         iid = int(obj.pass_index)
-        entries.append({"id": iid, "name": name, "type": obj.type, "via_instance_of": parent,
-                        "renumbered": mode == "complete"})
+        e = {"id": iid, "name": obj.name_full, "type": obj.type, "via_instance_of": parent, "renumbered": mode == "complete"}
+        if kind != "collection":
+            e["via"] = kind
+        entries.append(e)
         if mode == "legacy" and iid in direct_ids:
-            collisions.append({"name": name, "id": iid, "same_id_as": direct_ids[iid]})
+            collisions.append({"name": obj.name_full, "id": iid, "same_id_as": direct_ids[iid]})
     return {"schema": "fov-render-instance-catalog-v1", "mode": mode, "count": len(entries),
-            "direct": len(direct), "via_instance": len(via),
+            "direct": len(direct), "via_instance": len(via), "via_particles": len(particles),
             "via_id_zero": sum(1 for e in entries if e["via_instance_of"] and e["id"] == 0),
-            "collisions": collisions, "instances": entries}
+            "collisions": collisions, "gn_instancers": objs["gn_instancers"], "instances": entries}
 
 
 # ----------------------------------------------------------------------------- materials
@@ -224,11 +316,15 @@ def material_flags(mat) -> list[str]:
     return sorted(flags)
 
 
-def material_audit(scene) -> dict:
+def _all_objects(objects: dict):
+    return list(objects["direct"]) + [o for o, _p in objects["via"]] + [o for o, _p in objects["particles"]]
+
+
+def material_audit(scene, objects: dict | None = None) -> dict:
+    """Flag every catalogued object (direct, collection instances, particle sources) whose
+    materials make the first surface hit differ from what the pixel shows."""
     objs = {}
-    for o in scene.objects:
-        if o.type not in RENDERABLE or o.hide_render:
-            continue
+    for o in _all_objects(objects or renderable_objects(scene)):
         flags = sorted({f for slot in o.material_slots for f in material_flags(slot.material)})
         if flags:
             objs[o.name_full] = flags
@@ -237,8 +333,59 @@ def material_audit(scene) -> dict:
         for n in scene.world.node_tree.nodes:
             if n.bl_idname == "ShaderNodeOutputWorld" and n.inputs.get("Volume") is not None and n.inputs["Volume"].is_linked:
                 world_volume = True
-    return {"flagged_objects": objs, "world_volume": world_volume,
+    by_flag = {}
+    for flags in objs.values():
+        for f in flags:
+            by_flag[f] = by_flag.get(f, 0) + 1
+    return {"flagged_objects": objs, "by_flag": dict(sorted(by_flag.items())), "world_volume": world_volume,
+            "missing_images": image_audit(scene, objects),
             "rule": "first-hit truth differs from the pixel for these; experiments exclude or tag them"}
+
+
+def _images_of(node_tree, out: set, seen: set) -> None:
+    if node_tree is None or node_tree.as_pointer() in seen:
+        return
+    seen.add(node_tree.as_pointer())
+    for n in node_tree.nodes:
+        img = getattr(n, "image", None)
+        if img is not None and n.bl_idname in ("ShaderNodeTexImage", "ShaderNodeTexEnvironment"):
+            out.add(img)
+        if n.bl_idname == "ShaderNodeGroup":
+            _images_of(n.node_tree, out, seen)
+
+
+def image_missing(img) -> bool:
+    """An image whose pixels Cycles cannot load: not packed, a file source, and no file on disk
+    (UDIM: no tile). Cycles renders such a texture magenta."""
+    import glob
+    import bpy
+    if img.packed_file is not None or img.source not in ("FILE", "SEQUENCE", "TILED"):
+        return False
+    path = bpy.path.abspath(img.filepath, library=img.library)
+    if img.source == "TILED":
+        return not glob.glob(path.replace("<UDIM>", "1[0-9][0-9][0-9]"))
+    return not os.path.isfile(path)
+
+
+def image_audit(scene, objects: dict | None = None) -> dict:
+    """Images used by the catalogued objects' materials or the world that will not load, and which
+    objects use them (issue #4: 7 in the Barbershop)."""
+    users: dict = {}
+    for o in _all_objects(objects or renderable_objects(scene)):
+        imgs: set = set()
+        for slot in o.material_slots:
+            if slot.material is not None:
+                _images_of(slot.material.node_tree, imgs, set())
+        for img in imgs:
+            users.setdefault(img.name_full, (img, []))[1].append(o.name_full)
+    world_imgs: set = set()
+    if scene.world is not None:
+        _images_of(scene.world.node_tree, world_imgs, set())
+    for img in world_imgs:
+        users.setdefault(img.name_full, (img, []))[1].append("<world>")
+    missing = {name: {"filepath": img.filepath, "objects": sorted(objs)[:20], "n_objects": len(objs)}
+               for name, (img, objs) in sorted(users.items()) if image_missing(img)}
+    return {"images_used": len(users), "missing": missing, "n_missing": len(missing)}
 
 
 # ----------------------------------------------------------------------------- handle
@@ -259,7 +406,8 @@ class SceneHandle:
     def report(self) -> dict:
         return {"schema": "fov-render-scene-report-v1", "file": self.info, "head": self.head.as_dict(),
                 "eye_note": self.eye_note, "sanitised": self.sanitised,
-                "instances": {k: self.catalog[k] for k in ("mode", "count", "direct", "via_instance", "via_id_zero", "collisions")},
+                "instances": {k: self.catalog.get(k) for k in ("mode", "count", "direct", "via_instance", "via_particles",
+                                                                "via_id_zero", "collisions", "gn_instancers")},
                 "material_audit": self.audit, "checks": self.checks}
 
     def write(self, folder: str) -> None:
@@ -282,28 +430,68 @@ def open_scene(path: str | None, *, eye=None, scale_length: float | None = 1.0,
     import bpy
     if path is not None:
         bpy.ops.wm.open_mainfile(filepath=os.path.abspath(path))
-    scene, vl = bpy.context.scene, bpy.context.view_layer
+    scene = bpy.context.scene
+    vl, layer = render_view_layer(scene)
     info = {"path": bpy.data.filepath, "sha256": sha256(bpy.data.filepath) if bpy.data.filepath else None,
             "saved_with": ".".join(str(x) for x in bpy.data.version), "blender": bpy.app.version_string,
             "unit_system": scene.unit_settings.system, "scale_length": scene.unit_settings.scale_length,
-            "frame_current": scene.frame_current}
+            "frame_current": scene.frame_current, "view_layer": layer}
     if scale_length is not None and not math.isclose(scene.unit_settings.scale_length, scale_length, rel_tol=1e-9):
         raise RuntimeError(f"unit scale_length is {scene.unit_settings.scale_length}, expected {scale_length}; "
                            f"pass scale_length=None to accept it")
     head, note = resolve_head(scene, explicit=eye)
     sanitised = sanitise(scene, vl, keep_passes)
-    catalog = assign_instance_ids(scene, instance_ids)
-    audit = material_audit(scene)
+    objects = renderable_objects(scene)
+    catalog = assign_instance_ids(scene, instance_ids, objects)
+    audit = material_audit(scene, objects)
     return SceneHandle(info["path"], scene, vl, head, note, info, sanitised, catalog, audit)
 
 
 # ----------------------------------------------------------------------------- sanity
 
+def mesh_closed(obj, depsgraph) -> bool | None:
+    """True when the evaluated mesh is closed: every edge borders exactly two faces. None when the
+    object has no mesh."""
+    ev = obj.evaluated_get(depsgraph)
+    try:
+        me = ev.to_mesh()
+    except RuntimeError:
+        return None
+    if me is None:
+        return None
+    try:
+        if not me.polygons:
+            return False
+        count = np.zeros(len(me.edges), dtype=np.int64)
+        keys = {}
+        for i, e in enumerate(me.edges):
+            keys[tuple(sorted(e.vertices))] = i
+        for poly in me.polygons:
+            for k in poly.edge_keys:
+                count[keys[tuple(sorted(k))]] += 1
+        return bool(len(count) and np.all(count == 2))
+    finally:
+        ev.to_mesh_clear()
+
+
+def backface_verdict(sanity: dict, allowed=(), limit: float = 0.001) -> dict:
+    """Back-faces on objects not allowed by name: on open meshes reported, on closed meshes (or of
+    unknown topology) counted against limit (fraction of the sphere)."""
+    def ok_name(n):
+        return any(n == a or n.startswith(a) for a in allowed)
+    closed = sanity.get("backface_closed", {})
+    other = {n: f for n, f in sanity.get("backface_by_object", {}).items() if not ok_name(n)}
+    bad = {n: f for n, f in other.items() if closed.get(n) is not False}
+    return {"not_allowed": other, "closed_not_allowed": bad, "closed_fraction": float(sum(bad.values())),
+            "open_fraction": float(sum(f for n, f in other.items() if closed.get(n) is False)),
+            "ok": float(sum(bad.values())) <= limit, "limit": limit}
+
+
 def sanity_checks(h: SceneHandle, cfg, width: int = 720, spp: int = 4, backface: bool = True,
                   out_dir: str | None = None) -> dict:
     """A low-resolution panorama from the head origin: hole and back-face fractions (solid-angle
-    weighted) and the nadir / zenith depth, median over the top and bottom rows (h // 100 rows,
-    as fov-3d-vision inspect_preview)."""
+    weighted; back-faces also by object), the nearest surface and the nadir / zenith depth, median
+    over the top and bottom rows (h // 100 rows, as fov-3d-vision inspect_preview)."""
     import tempfile
     import bpy
     from . import cameras, engine
@@ -334,6 +522,7 @@ def sanity_checks(h: SceneHandle, cfg, width: int = 720, spp: int = 4, backface:
     nadir, zenith = dist[-rows:][hitr[-rows:]], dist[:rows][hitr[:rows]]
     out = {"width": width, "spp": spp, "render_seconds": round(secs, 3), "device": scene.cycles.device,
            "hole_fraction": float(w[~hit].sum()),
+           "nearest_surface_m": float(rec.distance_m[hit].min()) if hit.any() else None,
            "nadir_depth_m": float(np.median(nadir)) if nadir.size else None,
            "zenith_depth_m": float(np.median(zenith)) if zenith.size else None,
            "consistency": record.sensor_consistency(rec), "settings": readback(scene, cam, vl)}
@@ -355,7 +544,20 @@ def sanity_checks(h: SceneHandle, cfg, width: int = 720, spp: int = 4, backface:
         finally:
             vl.material_override, scene.world = override, world
             bpy.data.materials.remove(mat)
-        out["backface_fraction"] = float(w[hit & (bf > 0.5)].sum())
+        back = hit & (bf > 0.5)
+        out["backface_fraction"] = float(w[back].sum())
+        # which objects the back-faces belong to, by solid angle (issue #4: the Barbershop's set walls)
+        names = {e["id"]: e["name"] for e in h.catalog["instances"]}
+        ids = rec.instance_id[back]
+        per = {}
+        for i in np.unique(ids):
+            per[names.get(int(i), f"id {int(i)}")] = float(w[back][ids == i].sum())
+        out["backface_by_object"] = dict(sorted(per.items(), key=lambda kv: -kv[1]))
+        # an open mesh (a plane, a shelf without a back) shows its back side legitimately; a back-face
+        # on a closed mesh means flipped normals or the head inside it (issue #4)
+        objs = {o.name_full: o for o in _all_objects(renderable_objects(scene))}
+        dg = bpy.context.evaluated_depsgraph_get()
+        out["backface_closed"] = {n: mesh_closed(objs[n], dg) if n in objs else None for n in out["backface_by_object"]}
     bpy.data.objects.remove(cam)
     scene.camera = prev_cam
     return out

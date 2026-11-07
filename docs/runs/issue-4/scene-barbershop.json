@@ -1,0 +1,581 @@
+{
+ "blend": "/home/lvelho/rd/scenes/barbershop/barbershop_eye.blend",
+ "blender": "5.2.1 LTS",
+ "commit": "5e2f9ebe92e023a08c6e3f914c87e2bb73247dfa",
+ "created_utc": "2026-11-07T22:31:38Z",
+ "device": "OPTIX",
+ "failed": 3,
+ "passed": 3,
+ "results": [
+  {
+   "control_detected": true,
+   "detail": {
+    "catalogue": {
+     "count": 1130,
+     "direct": 1130,
+     "gn_instancers": [],
+     "mode": "complete",
+     "via_instance": 0,
+     "via_particles": 0
+    },
+    "expected_missing": [
+     "agent_face_bruises_color",
+     "agent_face_bump",
+     "agent_face_color",
+     "agent_face_spec",
+     "generic_scratches.png",
+     "Dirt_Patch_512.png",
+     "guilder_ornament.png"
+    ],
+    "eye_note": "EYE object",
+    "file": {
+     "blender": "5.2.1 LTS",
+     "path": "/home/lvelho/rd/scenes/barbershop/barbershop_eye.blend",
+     "saved_with": "5.2.44",
+     "scale_length": 1.0,
+     "sha256": "59d81b219fe7c31f85a074535143bd6634e3099606d8002a87ca0f70081e925c",
+     "unit_system": "NONE",
+     "view_layer": {
+      "layers": 1,
+      "switched_off": [],
+      "view_layer": "RenderLayer",
+      "was_active": "RenderLayer"
+     }
+    },
+    "flagged_by_flag": {
+     "alpha": 377,
+     "emission": 21,
+     "transmission": 68,
+     "volume": 3
+    },
+    "head": {
+     "head_R_wh": [
+      [
+       -0.9589695334434509,
+       -1.2073513744326192e-08,
+       0.28350937366485596
+      ],
+      [
+       0.28350937366485596,
+       -1.0189455679210369e-07,
+       0.9589694738388062
+      ],
+      [
+       1.2073513744326192e-08,
+       1.0,
+       6.495456972288594e-08
+      ]
+     ],
+     "head_origin_w_m": [
+      2.54310941696167,
+      8.518610000610352,
+      1.4679419994354248
+     ]
+    },
+    "missing_images": [
+     "generic_scratches.png",
+     "guilder_ornament.png"
+    ],
+    "sanitised": {
+     "animation_removed": [],
+     "passes": {
+      "disabled": [
+       "use_pass_ambient_occlusion",
+       "use_pass_cryptomatte_accurate",
+       "use_pass_diffuse_color",
+       "use_pass_diffuse_direct",
+       "use_pass_diffuse_indirect",
+       "use_pass_emit",
+       "use_pass_environment",
+       "use_pass_glossy_color",
+       "use_pass_glossy_direct",
+       "use_pass_glossy_indirect",
+       "use_pass_normal",
+       "use_pass_shadow",
+       "use_pass_subsurface_color",
+       "use_pass_subsurface_direct",
+       "use_pass_subsurface_indirect",
+       "use_pass_transmission_color",
+       "use_pass_transmission_direct",
+       "use_pass_transmission_indirect",
+       "use_pass_z"
+      ],
+      "kept": [
+       "combined"
+      ]
+     },
+     "switched_off": []
+    },
+    "seconds": 1.1
+   },
+   "name": "S1 the scene opens: head from EYE, rendering view layer, catalogue, audits",
+   "ok": false,
+   "skipped": null,
+   "status": "FAIL",
+   "step": "scene"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "backface_not_allowed": {
+     "Cube.173": 0.00011513809582874298,
+     "Cube.211": 5.9437076671197005e-06,
+     "GEO-Book_shelf.004": 0.0022740005458727025,
+     "GEO-Counter_papers.005": 5.976983550937319e-05,
+     "GEO-Picture_scissors": 6.057325274047096e-06,
+     "GEO-Spiderweb.031": 5.8180478381412725e-06,
+     "GEO-barbershop_ceiling_block": 0.0001392651543896263,
+     "GEO-barbershop_floor_block": 5.491890325355826e-05,
+     "GEO-barbershop_pipes": 1.1679382440610016e-05,
+     "GEO-barbershop_wall_panels.003": 0.014200023115349096,
+     "GEO-barbershop_wall_panels.005": 0.038678994676758754,
+     "GEO-box_medium_open": 6.043487488694197e-06,
+     "GEO-box_medium_open.004": 1.700118392881836e-05,
+     "GEO-laces_right": 5.9974376177397045e-06,
+     "GEO-laces_right.001": 6.00479773612073e-06,
+     "GEO-nail": 5.910722504001471e-06,
+     "GEO-roof_ornaments_rim": 2.9216535474935053e-05,
+     "GEO-shelf_medium": 0.00038356848374866394,
+     "GEO-telegrof_newspaper.001": 0.00019953887693084519
+    },
+    "backface_not_allowed_fraction": 0.05620489031561159,
+    "sanity": {
+     "backface_by_object": {
+      "Cube.173": 0.00011513809582874298,
+      "Cube.211": 5.9437076671197005e-06,
+      "GEO-Book_shelf.004": 0.0022740005458727025,
+      "GEO-Counter_papers.005": 5.976983550937319e-05,
+      "GEO-Picture_scissors": 6.057325274047096e-06,
+      "GEO-Spiderweb.031": 5.8180478381412725e-06,
+      "GEO-barbershop_ceiling_block": 0.0001392651543896263,
+      "GEO-barbershop_floor_block": 5.491890325355826e-05,
+      "GEO-barbershop_pipes": 1.1679382440610016e-05,
+      "GEO-barbershop_wall_panels.003": 0.014200023115349096,
+      "GEO-barbershop_wall_panels.005": 0.038678994676758754,
+      "GEO-barbershop_walls": 0.08090444753322913,
+      "GEO-box_medium_open": 6.043487488694197e-06,
+      "GEO-box_medium_open.004": 1.700118392881836e-05,
+      "GEO-laces_right": 5.9974376177397045e-06,
+      "GEO-laces_right.001": 6.00479773612073e-06,
+      "GEO-nail": 5.910722504001471e-06,
+      "GEO-roof_ornaments_rim": 2.9216535474935053e-05,
+      "GEO-shelf_medium": 0.00038356848374866394,
+      "GEO-telegrof_newspaper.001": 0.00019953887693084519
+     },
+     "backface_fraction": 0.1371151095119454,
+     "consistency": {
+      "hits": 259200,
+      "max_angle_deg": 0.009948128882995198,
+      "p999_angle_deg": 0.00991092348215125
+     },
+     "device": "GPU",
+     "hole_fraction": 0.0,
+     "nadir_depth_m": 1.4719750823963804,
+     "nearest_surface_m": 0.6124656560919914,
+     "render_seconds": 5.849,
+     "spp": 4,
+     "width": 720,
+     "zenith_depth_m": 1.1622978132536186
+    },
+    "seconds": 8.82,
+    "spec": {
+     "backface_allowed": [
+      "GEO-barbershop_walls",
+      "wall_panels"
+     ],
+     "max_backface_fraction_other": 0.001,
+     "max_hole_fraction": 0.001,
+     "min_clearance_m": 0.25
+    }
+   },
+   "name": "S2 sanity panorama: holes, back-faces only where allowed, clearance",
+   "ok": false,
+   "skipped": null,
+   "status": "FAIL",
+   "step": "scene"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "control": "shader E2 = 2.04 while the record says 2.0",
+    "control_failures": [
+     "warp does not match the formula (p99.9 error 0.0806 deg)"
+    ],
+    "fixations": [
+     {
+      "failed": [],
+      "gaze": [
+       0.0,
+       0.0
+      ],
+      "ray_saving": 50.7
+     },
+     {
+      "failed": [],
+      "gaze": [
+       35.0,
+       -10.0
+      ],
+      "ray_saving": 50.7
+     },
+     {
+      "failed": [],
+      "gaze": [
+       -70.0,
+       8.0
+      ],
+      "ray_saving": 50.7
+     }
+    ],
+    "seconds": 29.18
+   },
+   "name": "S3 fov-3d-vision's check_foveated on fov_render fixations",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "scene"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "control_other_eye_pose": {
+     "hits": 102400,
+     "max_angle_deg": 0.6235828069788902,
+     "p999_angle_deg": 0.6204061719461917
+    },
+    "looks": {
+     "foveated_L": {
+      "hits": 12492,
+      "max_angle_deg": 0.009521357362363727,
+      "ok": true,
+      "p999_angle_deg": 0.009288103781887784,
+      "pixel_deg": 2.3552225364135766,
+      "seconds": 5.830660497013014
+     },
+     "foveated_R": {
+      "hits": 12492,
+      "max_angle_deg": 0.009648411939612401,
+      "ok": true,
+      "p999_angle_deg": 0.009424307077714713,
+      "pixel_deg": 2.3552225364135766,
+      "seconds": 1.7397355159628205
+     },
+     "panorama_C": {
+      "hits": 259200,
+      "max_angle_deg": 0.009948128882995198,
+      "ok": true,
+      "p999_angle_deg": 0.00991092348215125,
+      "pixel_deg": 0.5,
+      "seconds": 5.788628178997897
+     },
+     "perspective_L": {
+      "hits": 102400,
+      "max_angle_deg": 0.0,
+      "ok": true,
+      "p999_angle_deg": 0.0,
+      "pixel_deg": 0.0940942045261458,
+      "seconds": 5.6322990210028365
+     },
+     "perspective_R": {
+      "hits": 102400,
+      "max_angle_deg": 0.0,
+      "ok": true,
+      "p999_angle_deg": 0.0,
+      "pixel_deg": 0.0940942045261458,
+      "seconds": 1.8995866240002215
+     },
+     "reference_view_C": {
+      "hits": 348160,
+      "max_angle_deg": 0.007088168676060158,
+      "ok": true,
+      "p999_angle_deg": 0.00668210710283845,
+      "pixel_deg": 0.09123018065792797,
+      "seconds": 5.667037405015435
+     }
+    },
+    "seconds": 39.3
+   },
+   "name": "S4 every sensor's record agrees with its Position pass within a pixel",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "scene"
+  },
+  {
+   "control_detected": true,
+   "detail": {
+    "agree_fraction": 0.9316666666666666,
+    "most_hit": [
+     [
+      "GEO-barbershop_ceiling_block",
+      145
+     ]
+    ],
+    "note": "edge pixels can disagree: one sample at spp 1 against the pixel-centre ray",
+    "sampled_hits": 600,
+    "seconds": 9.63
+   },
+   "name": "S5 Object Index equals the ray-cast object",
+   "ok": false,
+   "skipped": null,
+   "status": "FAIL",
+   "step": "scene"
+  },
+  {
+   "control_detected": null,
+   "detail": {
+    "by_flag_solid_angle_fraction": {
+     "alpha": 0.07879168785240817,
+     "emission": 0.022065665168928775,
+     "transmission": 0.025386754618696633,
+     "volume": 9.580134217783771e-05
+    },
+    "flagged_objects": 393,
+    "flagged_seen": 267,
+    "flagged_solid_angle_fraction": 0.0858004483682195,
+    "missing_image_objects_solid_angle_fraction": 0.07524146457071207,
+    "missing_images": {
+     "images_used": 177,
+     "missing": {
+      "generic_scratches.png": {
+       "filepath": "//__/lib/chars/maps/generic_scratches.png",
+       "n_objects": 30,
+       "objects": [
+        "GEO-barbershop_floor_panels_fill",
+        "GEO-barbershop_floor_panels_fill.001",
+        "GEO-barbershop_floor_panels_fill.002",
+        "GEO-barbershop_floor_panels_fill.003",
+        "GEO-barbershop_floor_panels_fill.004",
+        "GEO-barbershop_floor_panels_fill.005",
+        "GEO-barbershop_floor_panels_fill.006",
+        "GEO-barbershop_floor_panels_fill.007",
+        "GEO-barbershop_floor_panels_fill.008",
+        "GEO-barbershop_floor_panels_fill.009",
+        "GEO-barbershop_floor_panels_fill.010",
+        "GEO-barbershop_floor_panels_fill.011",
+        "GEO-barbershop_floor_panels_fill.012",
+        "GEO-barbershop_floor_panels_fill.013",
+        "GEO-barbershop_floor_panels_fill.014",
+        "GEO-barbershop_floor_panels_fill.015",
+        "GEO-barbershop_floor_panels_fill.016",
+        "GEO-barbershop_floor_panels_fill.017",
+        "GEO-barbershop_floor_panels_fill.018",
+        "GEO-barbershop_floor_panels_fill.019"
+       ]
+      },
+      "guilder_ornament.png": {
+       "filepath": "//__/lib/maps/brushes/guilder_ornament.png",
+       "n_objects": 1,
+       "objects": [
+        "GEO-cash_register_price_tags"
+       ]
+      }
+     },
+     "n_missing": 2
+    },
+    "seconds": 7.63,
+    "top_flagged": {
+     "GEO-Counter.001": {
+      "flags": [
+       "alpha",
+       "transmission"
+      ],
+      "solid_angle_fraction": 0.005045562174459877
+     },
+     "GEO-Dresser_door.L.001": {
+      "flags": [
+       "alpha",
+       "transmission"
+      ],
+      "solid_angle_fraction": 0.001042969123488405
+     },
+     "GEO-Lamp_large": {
+      "flags": [
+       "alpha",
+       "emission"
+      ],
+      "solid_angle_fraction": 0.0060127359285733015
+     },
+     "GEO-Lamp_large.001": {
+      "flags": [
+       "alpha",
+       "emission"
+      ],
+      "solid_angle_fraction": 0.001442742447764175
+     },
+     "GEO-Lamp_large.003": {
+      "flags": [
+       "alpha",
+       "emission"
+      ],
+      "solid_angle_fraction": 0.00760142627677994
+     },
+     "GEO-Lamp_wall.001": {
+      "flags": [
+       "emission"
+      ],
+      "solid_angle_fraction": 0.0011639797894754732
+     },
+     "GEO-amsterdam_racing_poster_different_background": {
+      "flags": [
+       "alpha"
+      ],
+      "solid_angle_fraction": 0.0009051132240147071
+     },
+     "GEO-barbershop_door": {
+      "flags": [
+       "alpha"
+      ],
+      "solid_angle_fraction": 0.004146395239285837
+     },
+     "GEO-barbershop_door.002": {
+      "flags": [
+       "alpha"
+      ],
+      "solid_angle_fraction": 0.002177821435738474
+     },
+     "GEO-barbershop_window": {
+      "flags": [
+       "alpha"
+      ],
+      "solid_angle_fraction": 0.0006776151036927628
+     },
+     "GEO-cabinet_medium": {
+      "flags": [
+       "alpha",
+       "transmission"
+      ],
+      "solid_angle_fraction": 0.01137472094951262
+     },
+     "GEO-cabinet_medium.001": {
+      "flags": [
+       "alpha",
+       "transmission"
+      ],
+      "solid_angle_fraction": 0.001699639672923756
+     },
+     "GEO-cash_register_case": {
+      "flags": [
+       "emission"
+      ],
+      "solid_angle_fraction": 0.0036050331174368637
+     },
+     "GEO-disinfectant_jar.001": {
+      "flags": [
+       "alpha",
+       "transmission"
+      ],
+      "solid_angle_fraction": 0.001096407876344374
+     },
+     "GEO-frame_franciscus": {
+      "flags": [
+       "alpha"
+      ],
+      "solid_angle_fraction": 0.0011736969406048983
+     },
+     "GEO-frame_jas_je_san_poster": {
+      "flags": [
+       "alpha"
+      ],
+      "solid_angle_fraction": 0.0011199412947507591
+     },
+     "GEO-picture_barber_certificate": {
+      "flags": [
+       "alpha"
+      ],
+      "solid_angle_fraction": 0.001241123087709987
+     },
+     "GEO-picture_frame_frame_cigar": {
+      "flags": [
+       "alpha"
+      ],
+      "solid_angle_fraction": 0.0008975595763687465
+     },
+     "GEO-picture_frame_francis_turner.001": {
+      "flags": [
+       "alpha"
+      ],
+      "solid_angle_fraction": 0.000734086633135792
+     },
+     "GEO-picture_frame_gentleman_collection": {
+      "flags": [
+       "alpha"
+      ],
+      "solid_angle_fraction": 0.00392554859244957
+     },
+     "GEO-picture_frame_see_natter": {
+      "flags": [
+       "alpha"
+      ],
+      "solid_angle_fraction": 0.0013243591205743198
+     },
+     "GEO-picture_frame_smeer": {
+      "flags": [
+       "alpha"
+      ],
+      "solid_angle_fraction": 0.0007273924542776157
+     },
+     "GEO-witloff_poster.001": {
+      "flags": [
+       "alpha"
+      ],
+      "solid_angle_fraction": 0.001713361296008148
+     },
+     "Plane.001": {
+      "flags": [
+       "emission"
+      ],
+      "solid_angle_fraction": 0.0011870545033459802
+     },
+     "wallPortrait_B": {
+      "flags": [
+       "alpha"
+      ],
+      "solid_angle_fraction": 0.0014143964622499504
+     }
+    }
+   },
+   "name": "S6 audit coverage from the head (for review, not gated)",
+   "ok": true,
+   "skipped": null,
+   "status": "PASS",
+   "step": "scene"
+  }
+ ],
+ "schema": "fov-render-scene-gate-v1",
+ "spec": "docs/scenes/barbershop.json",
+ "spec_values": {
+  "backface_allowed": [
+   "GEO-barbershop_walls",
+   "wall_panels"
+  ],
+  "gazes": [
+   [
+    0.0,
+    0.0
+   ],
+   [
+    35.0,
+    -10.0
+   ],
+   [
+    -70.0,
+    8.0
+   ]
+  ],
+  "max_backface_fraction_other": 0.001,
+  "max_hole_fraction": 0.001,
+  "min_clearance_m": 0.25,
+  "missing_images": [
+   "agent_face_bruises_color",
+   "agent_face_bump",
+   "agent_face_color",
+   "agent_face_spec",
+   "generic_scratches.png",
+   "Dirt_Patch_512.png",
+   "guilder_ornament.png"
+  ],
+  "panorama_width": 720,
+  "spp": 16
+ }
+}

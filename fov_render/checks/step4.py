@@ -2,13 +2,14 @@
 scene and a synthetic audit scene. Needs bpy. The Classroom parts are Phase 2."""
 from __future__ import annotations
 
+import math
 import tempfile
 from pathlib import Path
 
 import numpy as np
 
 from .. import record
-from ..rig import Rig
+from ..rig import Gaze, HeadPose, Rig
 from ..sensors import PanoramaModel
 from .common import Result, legacy_path, load_legacy
 from .scenes import AUDIT_EXPECTED, HDRI_W, make_audit_scene, make_hdri_scene
@@ -243,3 +244,277 @@ def instance_ids_vs_raycast(ctx) -> Result:
 
 
 CHECKS = [head_pose, instance_catalog, calib_room_sanity, hdri_identity, audit_and_sanitise, instance_ids_vs_raycast]
+
+
+# ----------------------------------------------------------------------------- arbitrary files (issue #4)
+# The Barcelona Pavilion's triage (issue #4, part A) found four ways an arbitrary .blend broke the
+# scene layer. Each gate below builds a small scene that has the problem, and its control shows the
+# previous behaviour failing on it.
+
+def head_from_float32_camera(ctx) -> Result:
+    """A camera rotation off orthonormal by float32 rounding (the Pavilion: 2.4e-7) is made
+    orthonormal; one within tolerance is kept bit for bit (the Classroom's EYE, compared bitwise in
+    #2); a sheared matrix is refused. Control: HeadPose on the raw rotation raises, as open_scene did."""
+    from ..bl import scene as S
+    from ..rig import rot_x, rot_y
+    good = rot_y(-37.0) @ rot_x(12.5)
+    off = good.copy()
+    off[0, 1] += 2.4e-7
+    off[2, 0] -= 1.3e-7
+    fixed, dev = S.orthonormalise(off)
+    kept, dev0 = S.orthonormalise(good)
+    sheared = good @ np.array([[1.0, 2e-3, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]])
+    try:
+        S.orthonormalise(sheared)
+        refused = False
+    except ValueError:
+        refused = True
+    try:
+        HeadPose(off, np.zeros(3))
+        raw_raises = False
+    except ValueError:
+        raw_raises = True
+    HeadPose(fixed, np.zeros(3))
+    ok = (dev > 1e-7 and HeadPose.valid_rotation(fixed) and float(np.abs(fixed - off).max()) < 3e-7
+          and kept.tobytes() == good.tobytes() and refused)
+    return Result(STEP, "4.7 head from a float32 camera: made orthonormal only when needed", ok, raw_raises,
+                  {"deviation_in": dev, "change": float(np.abs(fixed - off).max()), "kept_bitwise": kept.tobytes() == good.tobytes(),
+                   "deviation_good": dev0, "sheared_refused": refused, "control_raw_rotation_raises": raw_raises})
+
+
+def _two_layer_scene(work: Path) -> str:
+    """The calibration room with a second view layer that does not render made the active one."""
+    import bpy
+    from .step1 import calib_room
+    out = Path(work) / "scenes" / "two_layers.blend"
+    if out.is_file():
+        return str(out)
+    bpy.ops.wm.open_mainfile(filepath=calib_room({"work": work}))
+    s = bpy.context.scene
+    other = s.view_layers.new("Inactive")
+    other.use = False
+    bpy.context.window.view_layer = other
+    bpy.context.preferences.filepaths.save_version = 0
+    bpy.ops.wm.save_as_mainfile(filepath=str(out))
+    return str(out)
+
+
+def view_layer_that_renders(ctx) -> Result:
+    """A file whose active view layer does not render: open_scene makes the rendering layer active
+    and the only one, and a look's record has its Position and Object Index. Control: passes set on
+    the file's active layer, as before, leave the written EXR without Position."""
+    import bpy
+    from .. import Session
+    from ..bl import config, engine
+    from ..sensors import Perspective
+    path = _two_layer_scene(ctx["work"])
+    bpy.ops.wm.open_mainfile(filepath=path)
+    was = bpy.context.view_layer.name
+    ip = Session.in_process(config.RenderConfig(profile="small", device=ctx["device"], spp=1), Rig(), blend=path,
+                            access="oracle")
+    vl = ip.ready["scene"]["file"]["view_layer"]
+    look = ip.look(Perspective(), ("L",), Gaze.yaw_pitch(0.0, 0.0, 2.0), out_dir=Path(ctx["work"]) / "step4" / "4.8",
+                   outputs=("exr", "records"))
+    rec = look.records[0]
+    hits = int(np.isfinite(rec.distance_m).sum())
+    # control: the old behaviour
+    bpy.ops.wm.open_mainfile(filepath=path)
+    s = bpy.context.scene
+    cfg = config.RenderConfig(profile="small", device=ctx["device"], spp=1)
+    config.apply(s, cfg, 64, 32, bpy.context.view_layer)
+    ctrl_exr = Path(ctx["work"]) / "step4" / "4.8" / "control.exr"
+    from ..bl import cameras
+    from ..sensors import PanoramaModel
+    cameras.build(s, PanoramaModel(64), cfg)
+    engine.render_once(s, 1, 0, str(ctrl_exr))
+    ctrl_has_position = "position" in engine.read_passes(str(ctrl_exr))
+    ok = was == "Inactive" and vl["view_layer"] == "ViewLayer" and vl["was_active"] == "Inactive" and hits > 1000
+    return Result(STEP, "4.8 the view layer that renders gets the passes (active layer not rendering)", ok,
+                  not ctrl_has_position, {"file_active_layer": was, "view_layer": vl, "record_hits": hits,
+                                          "control_exr_has_position": ctrl_has_position})
+
+
+def _particle_scene(work: Path) -> str:
+    """Two emitters in front of the EYE: one whose particles render an object hidden from render, one
+    whose particles render a collection that is not linked into the scene."""
+    import bpy
+    out = Path(work) / "scenes" / "particles-v2.blend"
+    if out.is_file():
+        return str(out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    bpy.ops.wm.read_factory_settings(use_empty=True)
+    s = bpy.context.scene
+    s.unit_settings.system, s.unit_settings.scale_length = "METRIC", 1.0
+    for name, x, kind in (("EmitterA", -0.6, "OBJECT"), ("EmitterB", 0.6, "COLLECTION")):
+        bpy.ops.mesh.primitive_plane_add(size=1.0, location=(x, 3.0, 1.6), rotation=(math.radians(-90), 0, 0))
+        em = bpy.context.object
+        em.name = name
+        bpy.ops.mesh.primitive_ico_sphere_add(radius=0.12, location=(0, -50, 0))
+        src = bpy.context.object
+        src.name, src.hide_render = f"Pebble{name[-1]}", True
+        em.modifiers.new("ps", "PARTICLE_SYSTEM")
+        st = em.particle_systems[0].settings
+        st.type, st.count, st.hair_length = "HAIR", 30, 1.0
+        if kind == "OBJECT":
+            st.render_type, st.instance_object = "OBJECT", src
+        else:                                   # a source collection not linked into the scene
+            coll = bpy.data.collections.new(f"Pebbles{name[-1]}")
+            coll.objects.link(src)
+            for c in list(src.users_collection):
+                if c != coll:
+                    c.objects.unlink(src)
+            src.hide_render = False
+            st.render_type, st.instance_collection = "COLLECTION", coll
+    cam = bpy.data.objects.new("EYE", bpy.data.cameras.new("EYE"))
+    s.collection.objects.link(cam)
+    cam.location, cam.rotation_euler = (0, 0, 1.6), (math.radians(90.0), 0.0, 0.0)
+    bpy.context.preferences.filepaths.save_version = 0
+    bpy.ops.wm.save_as_mainfile(filepath=str(out))
+    return str(out)
+
+
+def particle_instances_named(ctx) -> Result:
+    """Particle instances of a source hidden from render (the Pavilion's pebbles) read the source's
+    number under "complete". Control: under "legacy" they read 0."""
+    from .. import Session
+    from ..bl import config
+    from ..sensors import Perspective
+    path = _particle_scene(ctx["work"])
+    out = {}
+    for mode in ("complete", "legacy"):
+        ip = Session.in_process(config.RenderConfig(profile="small", device=ctx["device"], spp=1), Rig(), blend=path,
+                                access="oracle", instance_ids=mode)
+        cat = ip.handler.scene_handle.catalog
+        rec = ip.look(Perspective(), ("C",), Gaze.yaw_pitch(0.0, 0.0), out_dir=Path(ctx["work"]) / "step4" / "4.9" / mode,
+                      outputs=("exr", "records")).records[0]
+        ids = rec.instance_id[np.isfinite(rec.distance_m)]
+        src = {e["name"]: e["id"] for e in cat["instances"] if e.get("via") == "particles"}
+        emit = {e["name"]: e["id"] for e in cat["instances"] if e["name"].startswith("Emitter")}
+        out[mode] = {"via_particles": cat["via_particles"], "sources": src, "emitters": emit,
+                     "hits": int(ids.size), "hit_ids": {int(i): int((ids == i).sum()) for i in np.unique(ids)}}
+    c, lg = out["complete"], out["legacy"]
+    instance_px = sum(c["hit_ids"].get(v, 0) for v in c["sources"].values())
+    ok = (c["via_particles"] == 2 and all(c["hit_ids"].get(v, 0) > 0 for v in c["sources"].values()))
+    # control: under legacy the same pixels read Object Index 0, i.e. the record counts them as misses
+    ctrl = instance_px > 0 and c["hits"] - lg["hits"] == instance_px and all(v == 0 for v in lg["sources"].values())
+    return Result(STEP, "4.9 particle instances of sources outside the render are named (complete)", ok, ctrl,
+                  {"complete": c, "legacy": lg, "instance_pixels": instance_px,
+                   "control_legacy_reads_them_as_misses": ctrl})
+
+
+def _audit_scene_v3(work: Path) -> str:
+    """The audit scene with a glass object inside an instanced collection, an image texture whose
+    file is missing, and one whose file exists."""
+    import bpy
+    from .scenes import _mat
+    out = Path(work) / "scenes" / "audit-v3.blend"
+    if out.is_file():
+        return str(out)
+    bpy.ops.wm.open_mainfile(filepath=make_audit_scene(work))
+    s = bpy.context.scene
+    inner = bpy.data.collections.new("Bottles")
+    bpy.ops.mesh.primitive_cube_add(size=0.3, location=(0, 0, 0))
+    b = bpy.context.object
+    b.name = "Bottle"
+    for c in list(b.users_collection):
+        c.objects.unlink(b)
+    inner.objects.link(b)
+    b.data.materials.append(_mat("bottle_glass", "glass"))
+    e = bpy.data.objects.new("BottlesA", None)
+    e.instance_type, e.instance_collection, e.location = "COLLECTION", inner, (0, 2.5, 1.6)
+    s.collection.objects.link(e)
+    present = Path(work) / "scenes" / "present.png"
+    img = bpy.data.images.new("present", 4, 4)
+    img.filepath_raw, img.file_format = str(present), "PNG"
+    img.save()
+    for name, path, obj in (("missing_tex", str(Path(work) / "scenes" / "no-such-texture.png"), "Floor"),
+                            ("present_tex", str(present), "Lamp")):
+        m = bpy.data.materials.new(name)
+        if hasattr(m, "use_nodes"):
+            m.use_nodes = True
+        t = m.node_tree.nodes.new("ShaderNodeTexImage")
+        t.image = bpy.data.images.load(path, check_existing=False) if Path(path).is_file() else bpy.data.images.new(name, 2, 2)
+        if not Path(path).is_file():
+            t.image.source, t.image.filepath = "FILE", path
+        m.node_tree.links.new(t.outputs["Color"], m.node_tree.nodes["Principled BSDF"].inputs["Base Color"])
+        bpy.data.objects[obj].data.materials.append(m)
+    bpy.context.preferences.filepaths.save_version = 0
+    bpy.ops.wm.save_as_mainfile(filepath=str(out))
+    return str(out)
+
+
+def audits_reach_instances_and_images(ctx) -> Result:
+    """The material audit visits objects inside collection instances (a glass bottle), and the image
+    audit lists exactly the texture whose file is missing, with the object that uses it. Control: the
+    audit over the scene's own objects only (as before) misses the bottle."""
+    from ..bl import scene as S
+    path = _audit_scene_v3(ctx["work"])
+    h = S.open_scene(path)
+    a = h.audit
+    old = sorted(o.name_full for o in h.scene.objects if o.type in S.RENDERABLE and not o.hide_render
+                 and any(f for slot in o.material_slots for f in S.material_flags(slot.material)))
+    miss = a["missing_images"]["missing"]
+    ok = ("transmission" in a["flagged_objects"].get("Bottle", []) and list(miss) == ["missing_tex"]
+          and miss["missing_tex"]["objects"] == ["Floor"] and a["by_flag"].get("transmission", 0) >= 2)
+    return Result(STEP, "4.10 audits reach collection instances; missing images listed with their objects", ok,
+                  "Bottle" not in old, {"flagged": a["flagged_objects"], "by_flag": a["by_flag"],
+                                        "missing_images": a["missing_images"], "control_scene_objects_only": old})
+
+
+def _backface_scene(work: Path) -> str:
+    """Around the EYE: a cube with its normals flipped (a closed mesh showing back-faces) ahead, and a
+    plane facing away (an open mesh, its back side seen) to the right, inside a large room."""
+    import bpy
+    out = Path(work) / "scenes" / "backfaces.blend"
+    if out.is_file():
+        return str(out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    bpy.ops.wm.read_factory_settings(use_empty=True)
+    s = bpy.context.scene
+    s.unit_settings.system, s.unit_settings.scale_length = "METRIC", 1.0
+    bpy.ops.mesh.primitive_cube_add(size=20.0, location=(0, 0, 1.6))
+    room = bpy.context.object
+    room.name = "Room"
+    bpy.ops.object.mode_set(mode="EDIT")
+    bpy.ops.mesh.normals_make_consistent(inside=True)        # the room faces inwards: no back-faces
+    bpy.ops.object.mode_set(mode="OBJECT")
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0, 3, 1.6))
+    flipped = bpy.context.object
+    flipped.name = "FlippedCube"
+    bpy.ops.object.mode_set(mode="EDIT")
+    bpy.ops.mesh.normals_make_consistent(inside=True)        # closed, normals inwards: seen as back-faces
+    bpy.ops.object.mode_set(mode="OBJECT")
+    bpy.ops.mesh.primitive_plane_add(size=1.5, location=(3, 0, 1.6), rotation=(0, math.radians(90), 0))
+    plane = bpy.context.object
+    plane.name = "OpenPlane"                                  # normal +X: seen from the EYE, its back
+    cam = bpy.data.objects.new("EYE", bpy.data.cameras.new("EYE"))
+    s.collection.objects.link(cam)
+    cam.location, cam.rotation_euler = (0, 0, 1.6), (math.radians(90.0), 0.0, 0.0)
+    bpy.context.preferences.filepaths.save_version = 0
+    bpy.ops.wm.save_as_mainfile(filepath=str(out))
+    return str(out)
+
+
+def backfaces_open_and_closed(ctx) -> Result:
+    """Back-faces on an open mesh (a plane seen from behind) are reported, on a closed mesh (a cube
+    with flipped normals) counted against the limit (issue #4: the Barbershop's open set dressing).
+    Control: counting every back-face as the previous rule did also fails on the open plane."""
+    from ..bl import config, scene as S
+    h = S.open_scene(_backface_scene(ctx["work"]))
+    c = h.sanity(config.RenderConfig(profile="small", device=ctx["device"]), width=360, spp=1,
+                 out_dir=str(Path(ctx["work"]) / "step4" / "4.11"))
+    v = S.backface_verdict(c, (), 0.0)
+    only_plane = S.backface_verdict({k: c[k] for k in ("backface_by_object", "backface_closed")},
+                                    ("FlippedCube",), 0.0)
+    old_rule_on_plane = {"backface_by_object": {"OpenPlane": c["backface_by_object"].get("OpenPlane", 0.0)}}
+    ctrl = not S.backface_verdict(old_rule_on_plane, (), 0.0)["ok"]
+    ok = (c["backface_closed"].get("FlippedCube") is True and c["backface_closed"].get("OpenPlane") is False
+          and "Room" not in c["backface_by_object"] and not v["ok"] and list(v["closed_not_allowed"]) == ["FlippedCube"]
+          and only_plane["ok"] and only_plane["open_fraction"] > 0)
+    return Result(STEP, "4.11 back-faces: open meshes reported, closed meshes counted", ok, ctrl,
+                  {"backface_by_object": c["backface_by_object"], "closed": c["backface_closed"], "verdict": v,
+                   "with_the_cube_allowed": only_plane})
+
+
+CHECKS += [head_from_float32_camera, view_layer_that_renders, particle_instances_named, audits_reach_instances_and_images,
+           backfaces_open_and_closed]

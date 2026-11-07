@@ -1,0 +1,140 @@
+{
+ "schema": "fov-render-issue4-step7-diagnosis-v1",
+ "blend": "/home/lvelho/rd/scenes/barbershop/barbershop_eye.blend",
+ "S1_images": {
+  "agent_face_bruises_color": {
+   "missing_on_disk": true,
+   "users": [
+    {
+     "material": "agent_skin",
+     "objects": 0,
+     "rendering": 0
+    }
+   ],
+   "used_by_rendered_objects": false
+  },
+  "agent_face_bump": {
+   "missing_on_disk": true,
+   "users": [
+    {
+     "material": "agent_skin",
+     "objects": 0,
+     "rendering": 0
+    }
+   ],
+   "used_by_rendered_objects": false
+  },
+  "agent_face_color": {
+   "missing_on_disk": true,
+   "users": [
+    {
+     "material": "agent_skin",
+     "objects": 0,
+     "rendering": 0
+    }
+   ],
+   "used_by_rendered_objects": false
+  },
+  "agent_face_spec": {
+   "missing_on_disk": true,
+   "users": [
+    {
+     "material": "agent_skin",
+     "objects": 0,
+     "rendering": 0
+    }
+   ],
+   "used_by_rendered_objects": false
+  },
+  "generic_scratches.png": {
+   "missing_on_disk": true,
+   "users": [
+    {
+     "material": "wood_floor",
+     "objects": 30,
+     "rendering": 30
+    },
+    {
+     "material": "wood_floor.001",
+     "objects": 30,
+     "rendering": 0
+    }
+   ],
+   "used_by_rendered_objects": true
+  },
+  "Dirt_Patch_512.png": {
+   "missing_on_disk": true,
+   "users": [],
+   "used_by_rendered_objects": false
+  },
+  "guilder_ornament.png": {
+   "missing_on_disk": true,
+   "users": [
+    {
+     "material": "cash_register_paper_red.001",
+     "objects": 1,
+     "rendering": 0
+    },
+    {
+     "material": "cash_register_paper_white",
+     "objects": 1,
+     "rendering": 1
+    },
+    {
+     "material": "cash_register_paper_white.001",
+     "objects": 1,
+     "rendering": 0
+    },
+    {
+     "material": "cash_register_paper_red",
+     "objects": 1,
+     "rendering": 1
+    }
+   ],
+   "used_by_rendered_objects": true
+  }
+ },
+ "S1_used_by_rendered_objects": [
+  "generic_scratches.png",
+  "guilder_ornament.png"
+ ],
+ "S5": {
+  "hits": 600,
+  "tally": {
+   "opaque agree": 520,
+   "flagged agree": 39,
+   "flagged differ": 41
+  },
+  "agree_fraction_all": 0.9316666666666666,
+  "agree_fraction_opaque": 1.0,
+  "mismatched_ray_cast_objects": {
+   "ENV-Fog.001": {
+    "n": 24,
+    "flags": [
+     "emission",
+     "volume"
+    ]
+   },
+   "GEO-Counter.001": {
+    "n": 13,
+    "flags": [
+     "alpha",
+     "transmission"
+    ]
+   },
+   "GEO-cabinet_medium.001": {
+    "n": 3,
+    "flags": [
+     "alpha",
+     "transmission"
+    ]
+   },
+   "GEO-Spiderweb.010": {
+    "n": 1,
+    "flags": [
+     "alpha"
+    ]
+   }
+  }
+ }
+}

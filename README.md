@@ -83,6 +83,14 @@ python -m fov_render.checks --device OPTIX                      # or CPU; numpy 
 python -m fov_render.checks --steps classroom --device OPTIX    # needs an f3d-vision checkout
 ```
 
+A new scene gets its own gate, every check that an arbitrary file can run (S1 opens, S2 sanity,
+S3 `check_foveated`, S4 every sensor's record against Position, S5 Object Index against a ray cast,
+S6 the audits by solid angle):
+
+```
+python -m fov_render.checks.scene --blend scene_eye.blend [--spec docs/scenes/NAME.json] --device OPTIX
+```
+
 The checks run with the `bpy` wheel (PLAN D12): under the Blender binary
 (`blender -b --python-exit-code 1 -P tools/run_checks.py -- …`) gate 1.2 SKIPs, because Blender's
 own Python has no OpenEXR. Gate 1.2 renders on CPU whatever `--device` says (D10). Without `bpy`
@@ -101,6 +109,8 @@ fov_render/checks/     the gates of the migration plan
 legacy/                comparators, never edited
 tools/run_checks.py    gates under the Blender binary
 tools/gfe_session.py   f3d-vision's greedy explorer (Playground-2) on a Session
+tools/make_eye_scene.py  a derived copy of a .blend with an EYE (the head), the original untouched
+docs/scenes/           what each scene used in the project is expected to give (fov_render.checks.scene)
 docs/                  PLAN, STATUS, reports
 ```
 
