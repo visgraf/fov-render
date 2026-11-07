@@ -35,13 +35,16 @@ rays = m.rays()                     # Blender-camera directions, footprints (sr)
 pose = Rig(roll="baseline_projected").pose(head, Gaze.yaw_pitch(10, -5, vergence_m=2.1), "L")
 ```
 
-The Blender side (`fov_render.bl`) needs `bpy`: Blender 5.2.1 on the workstation, or
-`pip install bpy==5.2.1` on any machine for CPU rendering.
+The Blender side (`fov_render.bl`) needs `bpy`: Blender 5.2.1, or the `bpy` 5.2.1 wheel
+(`pip install -e ".[bpy]"`, which needs **Python 3.13**; it renders on CPU anywhere and on OptiX
+where there is an NVIDIA GPU). The numpy side needs Python 3.11 or later.
 
 ```python
 from fov_render.bl import cameras, config, engine, scene
 
 h = scene.open_scene("room.blend")                      # head from EYE, sanitised, objects numbered
+# instance_ids="legacy" (default) or "complete": objects reached only through collection
+# instances keep their file's pass index, or are numbered after the scene's own (PLAN D11)
 cfg = config.RenderConfig(profile="small", device="OPTIX")
 config.apply(h.scene, cfg, m.width, m.height)
 cam = cameras.build(h.scene, m, cfg)
@@ -57,11 +60,15 @@ Phase 2.
 Every module ships a check with a control that must fail. Run them all:
 
 ```
-python -m fov_render.checks --device CPU                                   # bpy wheel, or numpy only
-blender -b --python-exit-code 1 -P tools/run_checks.py -- --device OPTIX   # the workstation
+pip install -e ".[bpy,checks]"                                  # Python 3.13: bpy wheel + OpenEXR
+python -m fov_render.checks --device OPTIX                      # or CPU; numpy only without bpy
+python -m fov_render.checks --steps classroom --device OPTIX    # needs an f3d-vision checkout
 ```
 
-Without `bpy` the Blender gates are reported SKIP, never PASS. Results go to
+The checks run with the `bpy` wheel (PLAN D12): under the Blender binary
+(`blender -b --python-exit-code 1 -P tools/run_checks.py -- …`) gate 1.2 SKIPs, because Blender's
+own Python has no OpenEXR. Gate 1.2 renders on CPU whatever `--device` says (D10). Without `bpy`
+the Blender gates are reported SKIP, never PASS. Results go to
 `previews/checks/results.json`. The checks compare against byte-identical copies of the legacy
 code in `legacy/` (provenance and hashes in `legacy/PROVENANCE.json`).
 

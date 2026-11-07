@@ -18,6 +18,14 @@ holds what was decided and the two phases.
 | D8 | Working agreement | the N-Surface method, lighter, with GitHub Issues between Chat and Code; in fov-render only, f3d-vision unchanged |
 | D9 | Classroom gates | deferred to Phase 2: the Classroom files cannot be downloaded into Chat's sandbox |
 
+Added in Phase 2 (Luiz, 2026-11-07, recorded in #1):
+
+| # | Question | Decision |
+|---|---|---|
+| D10 | Gate 1.2 (fov_render image = legacy image, bitwise) on a GPU | always rendered on CPU, whatever `--device` says: OptiX is not bit-reproducible (two legacy runs differ, #1), and the claim is about builder, shader and settings. OptiX's run-to-run variation is measured in #3 |
+| D11 | Object Index of objects reached only through collection instances | both numberings, `open_scene(instance_ids="legacy"\|"complete")`. `legacy` (default) leaves them at their file's pass index as the legacy code does (on the Classroom: 116 objects, id 0 or a library's 10, 20, 2, which collide with direct ids); `complete` numbers them after the direct objects. Default stays `legacy` until #2 passes `check_equivalence`, then a Decision issue on switching it |
+| D12 | Interpreter for the checks | the `bpy` 5.2.1 wheel (same build as the binary, OptiX under the strict policy, has OpenEXR; needs Python 3.13). The binary stays supported for rendering; under it gate 1.2 SKIPs |
+
 ## Phase 1: Chat, local repository, CPU (done, 2026-11-07)
 
 Steps 1–4 of the migration plan, in Chat's sandbox with the `bpy` 5.2.1 wheel on CPU. Report:

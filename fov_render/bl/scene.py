@@ -118,13 +118,26 @@ def sanitise(scene, view_layer, keep_passes=("combined", "position", "object_ind
 
 # ----------------------------------------------------------------------------- instances
 
-def assign_instance_ids(scene) -> dict:
-    """Number every renderable object for the Object Index pass.
+INSTANCE_ID_MODES = ("legacy", "complete")
+
+
+def assign_instance_ids(scene, mode: str = "legacy") -> dict:
+    """Number every renderable object for the Object Index pass (PLAN D11).
 
     Objects in the scene are numbered 1.. by sorted name_full, exactly as f3d-vision's
-    _assign_instance_ids. Objects reached only through collection instances follow, also sorted,
-    so they no longer read as misses. Several instances of one object share its number: the Object
-    Index pass is per object datablock (a documented limit)."""
+    _assign_instance_ids, in both modes. Objects reached only through collection instances (e.g.
+    linked libraries) are catalogued in both modes too, sorted by name:
+
+    - "legacy" (the default until #2 passes): they keep the pass index their file gives them, as in
+      the legacy code. Often 0 (reads as a miss) or a library's own number, which can collide with a
+      direct object's id; collisions are listed in the catalogue.
+    - "complete": they are numbered after the direct objects, so none reads as a miss or as another
+      object.
+
+    Several instances of one object share its number: the Object Index pass is per object
+    datablock (a documented limit)."""
+    if mode not in INSTANCE_ID_MODES:
+        raise ValueError(f"instance_ids must be one of {INSTANCE_ID_MODES}, got {mode!r}")
     direct = sorted([o for o in scene.objects if o.type in RENDERABLE and not o.hide_render],
                     key=lambda o: o.name_full)
     seen = {o.name_full for o in direct}
@@ -136,16 +149,29 @@ def assign_instance_ids(scene) -> dict:
         for x in coll.all_objects:
             if x.type in RENDERABLE and not x.hide_render and x.name_full not in seen:
                 via.setdefault(x.name_full, (x, o.name_full))
-    ordered = direct + [via[k][0] for k in sorted(via)]
-    if len(ordered) >= MAX_PASS_INDEX:
-        raise RuntimeError(f"{len(ordered)} renderable objects; the Object Index pass holds at most {MAX_PASS_INDEX - 1}")
+    n_numbered = len(direct) + (len(via) if mode == "complete" else 0)
+    if n_numbered >= MAX_PASS_INDEX:
+        raise RuntimeError(f"{n_numbered} renderable objects; the Object Index pass holds at most {MAX_PASS_INDEX - 1}")
     entries = []
-    for iid, obj in enumerate(ordered, start=1):
+    for iid, obj in enumerate(direct, start=1):
         obj.pass_index = iid
-        entries.append({"id": iid, "name": obj.name_full, "type": obj.type,
-                        "via_instance_of": via[obj.name_full][1] if obj.name_full in via else None})
-    return {"schema": "fov-render-instance-catalog-v1", "count": len(entries),
-            "direct": len(direct), "via_instance": len(via), "instances": entries}
+        entries.append({"id": iid, "name": obj.name_full, "type": obj.type, "via_instance_of": None,
+                        "renumbered": True})
+    direct_ids = {e["id"]: e["name"] for e in entries}
+    collisions = []
+    for k, name in enumerate(sorted(via), start=len(direct) + 1):
+        obj, parent = via[name]
+        if mode == "complete":
+            obj.pass_index = k
+        iid = int(obj.pass_index)
+        entries.append({"id": iid, "name": name, "type": obj.type, "via_instance_of": parent,
+                        "renumbered": mode == "complete"})
+        if mode == "legacy" and iid in direct_ids:
+            collisions.append({"name": name, "id": iid, "same_id_as": direct_ids[iid]})
+    return {"schema": "fov-render-instance-catalog-v1", "mode": mode, "count": len(entries),
+            "direct": len(direct), "via_instance": len(via),
+            "via_id_zero": sum(1 for e in entries if e["via_instance_of"] and e["id"] == 0),
+            "collisions": collisions, "instances": entries}
 
 
 # ----------------------------------------------------------------------------- materials
@@ -233,7 +259,7 @@ class SceneHandle:
     def report(self) -> dict:
         return {"schema": "fov-render-scene-report-v1", "file": self.info, "head": self.head.as_dict(),
                 "eye_note": self.eye_note, "sanitised": self.sanitised,
-                "instances": {k: self.catalog[k] for k in ("count", "direct", "via_instance")},
+                "instances": {k: self.catalog[k] for k in ("mode", "count", "direct", "via_instance", "via_id_zero", "collisions")},
                 "material_audit": self.audit, "checks": self.checks}
 
     def write(self, folder: str) -> None:
@@ -249,9 +275,10 @@ class SceneHandle:
 
 
 def open_scene(path: str | None, *, eye=None, scale_length: float | None = 1.0,
-               keep_passes=("combined", "position", "object_index")) -> SceneHandle:
+               keep_passes=("combined", "position", "object_index"), instance_ids: str = "legacy") -> SceneHandle:
     """Open a .blend (None: use the scene already loaded) and prepare it (see module docstring).
-    scale_length: the unit scale the file must have; None accepts any (then it is recorded)."""
+    scale_length: the unit scale the file must have; None accepts any (then it is recorded).
+    instance_ids: "legacy" or "complete", see assign_instance_ids (PLAN D11)."""
     import bpy
     if path is not None:
         bpy.ops.wm.open_mainfile(filepath=os.path.abspath(path))
@@ -265,7 +292,7 @@ def open_scene(path: str | None, *, eye=None, scale_length: float | None = 1.0,
                            f"pass scale_length=None to accept it")
     head, note = resolve_head(scene, explicit=eye)
     sanitised = sanitise(scene, vl, keep_passes)
-    catalog = assign_instance_ids(scene)
+    catalog = assign_instance_ids(scene, instance_ids)
     audit = material_audit(scene)
     return SceneHandle(info["path"], scene, vl, head, note, info, sanitised, catalog, audit)
 

@@ -4,10 +4,11 @@ Classroom and the accepted f3d-vision records. Needs bpy.
     python -m fov_render.checks --steps classroom --device OPTIX
 
     1.C   legacy check_foveated on a fov_render fixation of the Classroom (profile small)
-    3.C   preset("ab1a", device="OPTIX") through the scene layer equals AB1a's own configure, and
+    3.C   preset("ab1a", device="OPTIX"), through the scene layer and on the raw file, equals AB1a's own configure, and
           AB1a's own readback of it equals the accepted AB1a record
     4.C1  the Classroom head pose from scene.resolve_head equals the accepted records
-    4.C2  catalogue entries 1..234 equal the accepted Breadth-1 catalogue (names, ids, order)
+    4.C2  catalogue entries 1..234 equal the accepted Breadth-1 catalogue (names, ids, order); the
+          legacy and complete numberings of the 116 collection-instance objects (PLAN D11)
 
 Every file comes from the f3d-vision checkout the legacy specs name (their SHARED), or from
 $FOVRENDER_F3D_ROOT, and is checked against the sha256 that a spec in legacy/ pins before it is
@@ -178,9 +179,11 @@ def ab1a_optix_settings(ctx) -> Result:
                            ("device CPU", cfg.with_(device="CPU"))):
         _u, b_rb, b_own = fov_render_side(bad_cfg)
         controls[label] = {"vs_legacy": _diff(legacy_rb, b_rb), "vs_record": own_diff(b_own)}
-    # what the preset gives without the scene layer (Phase 1's method in step 3): reported, not gated
+    # the preset without the scene layer (Phase 1's method in step 3): gated since the ab1a preset sets
+    # its passes exactly (issue #1 item 3; before, Depth and Normal stayed on from the raw file)
     raw = _diff(legacy_rb, _new(f["blend"], cfg, model))
-    ok = backend == "OPTIX" and used == "OPTIX" and d_legacy == [] and d_record == [] and legacy_own == rec["settings"]
+    ok = (backend == "OPTIX" and used == "OPTIX" and d_legacy == [] and d_record == [] and raw == []
+          and legacy_own == rec["settings"])
     return Result(STEP, name, ok, all(v["vs_legacy"] and v["vs_record"] for v in controls.values()),
                   {"legacy_backend": backend, "fov_render_backend": used, "differences_vs_legacy": d_legacy,
                    "differences_vs_accepted_record": d_record,
@@ -188,8 +191,8 @@ def ab1a_optix_settings(ctx) -> Result:
                    "record": {"path": str(f["ab1a_acquisition"]), "created_utc": rec.get("created_utc")},
                    "gaze_yaw_pitch_deg": [ar.SP.GAZE_YAW_DEG, ar.SP.GAZE_PITCH_DEG], "spp": ar.SP.SPP,
                    "controls": controls, "preset_on_raw_file_differences": raw,
-                   "note": "fov_render side goes through scene.open_scene, which trims passes; the preset alone "
-                           "only switches passes on, so on the raw Classroom file Depth and Normal stay on"})
+                   "note": "compared twice: through scene.open_scene (which trims passes) and the preset alone "
+                           "on the raw Classroom file (which has Depth and Normal on)"})
 
 
 # ----------------------------------------------------------------------------- 4.C1
@@ -230,45 +233,79 @@ def classroom_head_pose(ctx) -> Result:
 
 # ----------------------------------------------------------------------------- 4.C2
 
+def _via_live_ids(scene) -> dict:
+    """name_full -> live pass_index of every renderable object reached only through a collection
+    instance. Read through the instancing collections: a linked object's name alone does not index
+    bpy.data.objects."""
+    from ..bl import scene as S
+    direct = {o.name_full for o in scene.objects}
+    out = {}
+    for o in scene.objects:
+        coll = o.instance_collection if o.instance_type == "COLLECTION" else None
+        if coll is None:
+            continue
+        for x in coll.all_objects:
+            if x.type in S.RENDERABLE and not x.hide_render and x.name_full not in direct:
+                out.setdefault(x.name_full, int(x.pass_index))
+    return out
+
+
 def breadth1_catalog(ctx) -> Result:
-    """fov_render numbers the Classroom's own renderable objects 1..234 exactly as the accepted
-    Breadth-1 catalogue and the legacy _assign_instance_ids (names, ids, order); objects reached only
-    through collection instances follow from 235. Controls: the accepted catalogue with one entry
-    dropped, and the scene with one object hidden from render, must both disagree."""
+    """Both numberings on the Classroom (PLAN D11). The Classroom's own renderable objects are 1..234
+    exactly as the accepted Breadth-1 catalogue and the legacy _assign_instance_ids (names, ids,
+    order), in both modes. Objects reached only through collection instances: under "legacy" (the
+    default) every one keeps the pass index the legacy code leaves it, and the collisions with direct
+    ids are listed; under "complete" they are 235.. with no gaps. Controls: the accepted catalogue
+    with one entry dropped, and the scene with one object hidden from render, must both disagree."""
     import bpy
     from ..bl import scene as S
-    name = "4.C2 catalogue entries 1..234 equal the accepted Breadth-1 catalogue"
+    name = "4.C2 catalogue: entries 1..234 equal the accepted Breadth-1 catalogue; both numberings"
     f, skip = _need(name)
     if skip:
         return skip
     _ab, b1, _ns = _specs()
     accepted = [(int(e["instance_id"]), e["object_name"]) for e in json.loads(f["catalog"].read_text())["instances"]]
     n = len(accepted)
-    h = S.open_scene(str(f["blend"]))
-    entries = h.catalog["instances"]
-    ours = [(e["id"], e["name"]) for e in entries]
-    direct = [(e["id"], e["name"]) for e in entries if e["via_instance_of"] is None]
-    via = [e for e in entries if e["via_instance_of"] is not None]
+    # the legacy numbering, live: every pass index as the legacy code leaves it
     bpy.ops.wm.open_mainfile(filepath=str(f["blend"]))
     with legacy_path("f3d"):
         co = load_legacy("f3d", "classroom_oracle1_render.py")
         by_id, _by_name = co._assign_instance_ids()
     live = sorted(by_id.items())
-    ok = (n == b1.CATALOG_COUNT and direct == accepted and live == accepted and ours[:n] == accepted
-          and [i for i, _ in ours] == list(range(1, len(ours) + 1)) and all(e["id"] > n for e in via))
+    legacy_via = _via_live_ids(bpy.context.scene)
+    # fov_render, default (legacy)
+    h = S.open_scene(str(f["blend"]))
+    lg = h.catalog
+    lg_direct = [(e["id"], e["name"]) for e in lg["instances"] if e["via_instance_of"] is None]
+    lg_via = {e["name"]: e["id"] for e in lg["instances"] if e["via_instance_of"] is not None}
+    lg_via_live = _via_live_ids(h.scene)
+    # fov_render, complete
+    hc = S.open_scene(str(f["blend"]), instance_ids="complete")
+    cp = hc.catalog
+    cp_all = [(e["id"], e["name"]) for e in cp["instances"]]
+    cp_via = [e for e in cp["instances"] if e["via_instance_of"] is not None]
+    cp_via_live = _via_live_ids(hc.scene)
+    ok_legacy = (lg["mode"] == "legacy" and n == b1.CATALOG_COUNT and lg_direct == accepted and live == accepted
+                 and lg_via == legacy_via and lg_via_live == legacy_via)
+    ok_complete = (cp_all[:n] == accepted and [i for i, _ in cp_all] == list(range(1, len(cp_all) + 1))
+                   and all(e["id"] > n for e in cp_via) and cp_via_live == {e["name"]: e["id"] for e in cp_via}
+                   and cp["collisions"] == [] and set(lg_via) == {e["name"] for e in cp_via})
     # controls
     k = n // 2
     dropped = accepted[:k] + accepted[k + 1:]
     h2 = S.open_scene(str(f["blend"]))
     bpy.data.objects[accepted[k][1]].hide_render = True
     hidden = [(e["id"], e["name"]) for e in S.assign_instance_ids(h2.scene)["instances"] if e["via_instance_of"] is None]
-    ctrl = {"one_entry_dropped_detected": direct != dropped, "one_object_hidden_detected": hidden != accepted}
-    return Result(STEP, name, ok, all(ctrl.values()),
-                  {"accepted_count": n, "spec_count": b1.CATALOG_COUNT, "catalog_count": h.catalog["count"],
-                   "direct": h.catalog["direct"], "via_instance": h.catalog["via_instance"],
-                   "direct_equals_accepted": direct == accepted, "legacy_live_equals_accepted": live == accepted,
-                   "via_first": via[:5], "via_parents": sorted({e["via_instance_of"] for e in via}),
+    ctrl = {"one_entry_dropped_detected": lg_direct != dropped, "one_object_hidden_detected": hidden != accepted,
+            "complete_differs_from_legacy_on_via": {e["name"]: e["id"] for e in cp_via} != legacy_via}
+    zero = sum(1 for v in lg_via.values() if v == 0)
+    return Result(STEP, name, ok_legacy and ok_complete, all(ctrl.values()),
+                  {"accepted_count": n, "spec_count": b1.CATALOG_COUNT, "direct": lg["direct"],
+                   "via_instance": lg["via_instance"], "legacy": {"ok": ok_legacy, "via_id_zero": zero,
+                   "via_nonzero_ids": sorted({v for v in lg_via.values() if v}), "collisions": len(lg["collisions"]),
+                   "collisions_first": lg["collisions"][:5]},
+                   "complete": {"ok": ok_complete, "count": cp["count"], "via_first": cp_via[:5]},
+                   "via_parents": sorted({e["via_instance_of"] for e in cp_via}),
                    "controls": ctrl, "dropped": list(accepted[k]), "catalog_file": str(f["catalog"])})
-
 
 CHECKS = [classroom_check_foveated, ab1a_optix_settings, classroom_head_pose, breadth1_catalog]

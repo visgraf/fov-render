@@ -38,8 +38,11 @@ def head_pose(ctx) -> Result:
 
 
 def instance_catalog(ctx) -> Result:
-    """Numbering equals f3d-vision's _assign_instance_ids on the calibration room, is the same on
-    reopening, and reaches objects that exist only inside collection instances."""
+    """Both numberings (PLAN D11). Direct objects equal f3d-vision's _assign_instance_ids on the
+    calibration room and are stable on reopening. On the audit scene, "legacy" leaves every pass index
+    exactly where the legacy code leaves it (Prop keeps its own 2 and the collision with Floor is
+    listed) and "complete" numbers Prop after the direct objects. Controls: one legacy name changed;
+    the complete catalogue compared with the legacy pass indices."""
     import bpy
     from ..bl import scene as S
     h = S.open_scene(calib_room(ctx))
@@ -49,15 +52,43 @@ def instance_catalog(ctx) -> Result:
         co = load_legacy("f3d", "classroom_oracle1_render.py")
         _by_id, by_name = co._assign_instance_ids()
     again = {e["name"]: e["id"] for e in S.open_scene(calib_room(ctx)).catalog["instances"]}
-    a = S.open_scene(make_audit_scene(ctx["work"]))
-    via = [e for e in a.catalog["instances"] if e["via_instance_of"]]
-    ok = ours == dict(by_name) and ours == again and [e["name"] for e in via] == ["Prop"] and via[0]["id"] > a.catalog["direct"]
+
+    audit = make_audit_scene(ctx["work"])
+
+    def live_ids(cat):
+        return {e["name"]: int(bpy.data.objects[e["name"]].pass_index) for e in cat["instances"]}
+
+    bpy.ops.wm.open_mainfile(filepath=audit)
+    with legacy_path("f3d"):
+        co._assign_instance_ids()
+    legacy_live = {o.name_full: int(o.pass_index) for o in bpy.data.objects if o.type in S.RENDERABLE}
+    lg = S.open_scene(audit, instance_ids="legacy").catalog
+    lg_ids = {e["name"]: e["id"] for e in lg["instances"]}
+    lg_live = live_ids(lg)
+    cp = S.open_scene(audit, instance_ids="complete").catalog
+    cp_ids = {e["name"]: e["id"] for e in cp["instances"]}
+    cp_live = live_ids(cp)
+    via_c = [e for e in cp["instances"] if e["via_instance_of"]]
+    try:
+        S.open_scene(audit, instance_ids="nonsense")
+        refused = False
+    except ValueError:
+        refused = True
+    ok = (ours == dict(by_name) and ours == again and h.catalog["mode"] == "legacy"
+          and lg_ids == legacy_live and lg_live == legacy_live
+          and lg_ids["Prop"] == 2 and lg["collisions"] == [{"name": "Prop", "id": 2, "same_id_as": "Floor"}]
+          and cp_ids == cp_live and [e["name"] for e in via_c] == ["Prop"] and via_c[0]["id"] == cp["direct"] + 1
+          and cp["collisions"] == [] and refused)
     renamed = dict(by_name)
     k = sorted(renamed)[0]
     renamed[k + "_x"] = renamed.pop(k)
-    return Result(STEP, "instance catalogue (legacy numbering, stable, collection instances)", ok, renamed != ours,
+    ctrl = {"renamed_detected": renamed != ours, "complete_differs_from_legacy": cp_ids != legacy_live}
+    return Result(STEP, "instance catalogue (legacy and complete numbering, stable, collection instances)", ok,
+                  all(ctrl.values()),
                   {"calib_room_count": len(ours), "equal_to_legacy": ours == dict(by_name), "stable": ours == again,
-                   "audit_scene": {k: a.catalog[k] for k in ("count", "direct", "via_instance")}, "via": via})
+                   "audit_legacy": {"ids": lg_ids, "legacy_live": legacy_live, "collisions": lg["collisions"]},
+                   "audit_complete": {"ids": cp_ids, "via": via_c}, "unknown_mode_refused": refused,
+                   "controls": ctrl})
 
 
 def calib_room_sanity(ctx) -> Result:
@@ -154,7 +185,7 @@ def instance_ids_vs_raycast(ctx) -> Result:
     Control: renumbering one object after the render breaks the agreement."""
     import bpy
     from ..bl import cameras, config, engine, scene as S
-    h = S.open_scene(make_audit_scene(ctx["work"]))
+    h = S.open_scene(make_audit_scene(ctx["work"]), instance_ids="complete")
     model = PanoramaModel(180)
     cfg = config.RenderConfig(device=ctx["device"], spp=1)
     config.apply(h.scene, cfg, model.width, model.height, h.view_layer)
@@ -203,7 +234,7 @@ def instance_ids_vs_raycast(ctx) -> Result:
     bad = bad_n - bad_agree
     bpy.data.objects["Floor"].pass_index = names["Floor"]
     frac = agree / max(n, 1)
-    return Result(STEP, "Object Index equals the ray-cast object (instances included)", n > 50 and frac >= 0.97,
+    return Result(STEP, "Object Index equals the ray-cast object (complete numbering, instances included)", n > 50 and frac >= 0.97,
                   bad > 0, {"sampled_hits": n, "agree_fraction": frac, "mismatches_first": mismatch[:10],
                             "ids_seen": sorted(set(int(x) for x in np.unique(ids))), "floor_id": names["Floor"],
                             "control_renumbered_floor_mismatches": bad,
