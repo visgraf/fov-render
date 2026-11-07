@@ -1,0 +1,395 @@
+{
+ "fov_render_commit": "32cd5eb28d268d851d9a5893357e1f79c27dfb45",
+ "fov_render_dirty": false,
+ "launcher": {
+  "executable": "/usr/local/bin/blender",
+  "kind": "blender"
+ },
+ "ready": {
+  "blender": "5.2.1 LTS",
+  "device": "OPTIX",
+  "formats": {
+   "f3d_ab1a": {
+    "passes": {
+     "disabled": [
+      "use_pass_ambient_occlusion",
+      "use_pass_cryptomatte_accurate",
+      "use_pass_diffuse_color",
+      "use_pass_diffuse_direct",
+      "use_pass_diffuse_indirect",
+      "use_pass_emit",
+      "use_pass_glossy_color",
+      "use_pass_glossy_direct",
+      "use_pass_glossy_indirect",
+      "use_pass_transmission_color",
+      "use_pass_transmission_direct",
+      "use_pass_transmission_indirect"
+     ],
+     "kept": [
+      "use_pass_combined",
+      "use_pass_position",
+      "use_pass_object_index"
+     ]
+    },
+    "settings": {
+     "adaptive_sampling": false,
+     "camera": {
+      "clip_m": [
+       0.009999999776482582,
+       1000.0
+      ],
+      "dof": false,
+      "lens_mm": 68.50342559814453,
+      "sensor_fit": "HORIZONTAL",
+      "sensor_width_mm": 36.0,
+      "shift": [
+       0.0,
+       0.0
+      ],
+      "type": "PERSP"
+     },
+     "color_depth": "32",
+     "cycles_device": "GPU",
+     "denoising": false,
+     "engine": "CYCLES",
+     "exr_codec": "NONE",
+     "file_format": "OPEN_EXR_MULTILAYER",
+     "film_transparent": false,
+     "filter_width": 1.0,
+     "motion_blur": false,
+     "passes": {
+      "combined": true,
+      "normal": false,
+      "object_index": true,
+      "position": true,
+      "z": false
+     },
+     "pixel_filter": "BOX",
+     "resolution_percentage": 100,
+     "resolution_wh": [
+      640,
+      640
+     ],
+     "samples": 64
+    }
+   }
+  },
+  "head": {
+   "head_R_wh": [
+    [
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     3.422854177870249e-08,
+     -0.9999999403953552
+    ],
+    [
+     0.0,
+     0.9999999403953552,
+     3.422854177870249e-08
+    ]
+   ],
+   "head_origin_w_m": [
+    -0.6000000238418579,
+    -1.0,
+    1.2000000476837158
+   ]
+  },
+  "pid": 451295,
+  "prepared": {
+   "core_fov_deg": 12.0,
+   "core_px": null,
+   "type": "perspective"
+  },
+  "scene": {
+   "checks": {},
+   "eye_note": "EYE object",
+   "file": {
+    "blender": "5.2.1 LTS",
+    "frame_current": 1,
+    "opened": "already loaded (command line)",
+    "path": "/home/lvelho/rd/f3d-vision/scenes/classroom/classroom_eye.blend",
+    "saved_with": "5.2.44",
+    "scale_length": 1.0,
+    "sha256": "dca66a3257b909aef00b0331652c55f62a93a8dff0665d070fba7efa436953cc",
+    "unit_system": "METRIC"
+   },
+   "head": {
+    "head_R_wh": [
+     [
+      1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      3.422854177870249e-08,
+      -0.9999999403953552
+     ],
+     [
+      0.0,
+      0.9999999403953552,
+      3.422854177870249e-08
+     ]
+    ],
+    "head_origin_w_m": [
+     -0.6000000238418579,
+     -1.0,
+     1.2000000476837158
+    ]
+   },
+   "instances": {
+    "collisions": [
+     {
+      "id": 20,
+      "name": "ChamferBox01 [lib.003]",
+      "same_id_as": "Cube.016"
+     },
+     {
+      "id": 10,
+      "name": "Circle.003 [lib]",
+      "same_id_as": "Cube.006"
+     },
+     {
+      "id": 10,
+      "name": "Circle.006 [lib]",
+      "same_id_as": "Cube.006"
+     },
+     {
+      "id": 2,
+      "name": "crayonPapier [lib.010]",
+      "same_id_as": "Box25.002"
+     }
+    ],
+    "count": 350,
+    "direct": 234,
+    "mode": "legacy",
+    "via_id_zero": 112,
+    "via_instance": 116
+   },
+   "material_audit": {
+    "flagged_objects": {
+     "Box309.002": [
+      "transmission"
+     ],
+     "blackboardLamp": [
+      "emission"
+     ],
+     "hallWindow": [
+      "alpha",
+      "emission"
+     ],
+     "windows": [
+      "alpha",
+      "emission"
+     ]
+    },
+    "rule": "first-hit truth differs from the pixel for these; experiments exclude or tag them",
+    "world_volume": false
+   },
+   "sanitised": {
+    "animation_removed": [
+     "fcurve on cycles.seed in action 'SceneAction', keys [(1.0, 144.0)]"
+    ],
+    "passes": {
+     "disabled": [
+      "use_pass_ambient_occlusion",
+      "use_pass_cryptomatte_accurate",
+      "use_pass_diffuse_color",
+      "use_pass_diffuse_direct",
+      "use_pass_diffuse_indirect",
+      "use_pass_emit",
+      "use_pass_glossy_color",
+      "use_pass_glossy_direct",
+      "use_pass_glossy_indirect",
+      "use_pass_normal",
+      "use_pass_transmission_color",
+      "use_pass_transmission_direct",
+      "use_pass_transmission_indirect",
+      "use_pass_z"
+     ],
+     "kept": [
+      "combined",
+      "object_index"
+     ]
+    },
+    "switched_off": [
+     "border"
+    ]
+   },
+   "schema": "fov-render-scene-report-v1"
+  },
+  "schema": "fov-render-ready-v1",
+  "session": {
+   "access": "oracle",
+   "blend": "/home/lvelho/rd/f3d-vision/scenes/classroom/classroom_eye.blend",
+   "config": {
+    "clip_m": [
+     0.01,
+     1000.0
+    ],
+    "color": "scene",
+    "color_mode": null,
+    "denoise": false,
+    "device": "OPTIX",
+    "device_policy": "strict",
+    "exr_codec": "NONE",
+    "extra": {},
+    "filter_width": 1.0,
+    "multilayer": true,
+    "passes": [
+     "combined",
+     "position",
+     "object_index"
+    ],
+    "passes_exact": true,
+    "persistent_data": true,
+    "pixel_aspect": true,
+    "pixel_filter": "BOX",
+    "preset": "ab1a",
+    "profile": "full",
+    "seed": 0,
+    "single_layer": true,
+    "spp": 64,
+    "use_border": false
+   },
+   "formats": [
+    "f3d_ab1a"
+   ],
+   "head": null,
+   "instance_ids": "legacy",
+   "prepare": {
+    "core_fov_deg": 12.0,
+    "core_px": null,
+    "type": "perspective"
+   },
+   "rig": {
+    "baseline_h": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "ipd_m": 0.063,
+    "roll": "baseline_projected"
+   },
+   "schema": "fov-render-session-v1"
+  },
+  "settings": {
+   "adaptive_sampling": false,
+   "blender": "5.2.1 LTS",
+   "border": false,
+   "camera": {
+    "clip_m": [
+     0.01,
+     1000.0
+    ],
+    "dof": false,
+    "lens_mm": 68.503425598,
+    "sensor_fit": "HORIZONTAL",
+    "sensor_width_mm": 36.0,
+    "shift": [
+     0.0,
+     0.0
+    ],
+    "type": "PERSP"
+   },
+   "color_depth": "32",
+   "color_mode": "RGB",
+   "compositing": false,
+   "cycles_device": "GPU",
+   "denoising": false,
+   "engine": "CYCLES",
+   "exposure": 0.0,
+   "exr_codec": "NONE",
+   "exr_interleave": true,
+   "file_format": "OPEN_EXR_MULTILAYER",
+   "film_transparent": false,
+   "filter_width": 1.0,
+   "frame_current": 1,
+   "gamma": 1.0,
+   "look": "None",
+   "motion_blur": false,
+   "passes": [
+    "combined",
+    "object_index",
+    "position"
+   ],
+   "persistent_data": true,
+   "pixel_aspect": [
+    1.0,
+    1.0
+   ],
+   "pixel_filter": "BOX",
+   "resolution_percentage": 100,
+   "resolution_wh": [
+    640,
+    640
+   ],
+   "samples": 64,
+   "seed": 0,
+   "sequencer": false,
+   "single_layer": true,
+   "time_limit": 0.0,
+   "view_transform": "Standard"
+  },
+  "start_seconds": 0.1262673000455834
+ },
+ "schema": "gfe-on-fov-render-v1",
+ "session": {
+  "access": "oracle",
+  "blend": "/home/lvelho/rd/f3d-vision/scenes/classroom/classroom_eye.blend",
+  "config": {
+   "clip_m": [
+    0.01,
+    1000.0
+   ],
+   "color": "scene",
+   "color_mode": null,
+   "denoise": false,
+   "device": "OPTIX",
+   "device_policy": "strict",
+   "exr_codec": "NONE",
+   "extra": {},
+   "filter_width": 1.0,
+   "multilayer": true,
+   "passes": [
+    "combined",
+    "position",
+    "object_index"
+   ],
+   "passes_exact": true,
+   "persistent_data": true,
+   "pixel_aspect": true,
+   "pixel_filter": "BOX",
+   "preset": "ab1a",
+   "profile": "full",
+   "seed": 0,
+   "single_layer": true,
+   "spp": 64,
+   "use_border": false
+  },
+  "formats": [
+   "f3d_ab1a"
+  ],
+  "head": null,
+  "instance_ids": "legacy",
+  "prepare": {
+   "core_fov_deg": 12.0,
+   "core_px": null,
+   "type": "perspective"
+  },
+  "rig": {
+   "baseline_h": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "ipd_m": 0.063,
+   "roll": "baseline_projected"
+  },
+  "schema": "fov-render-session-v1"
+ }
+}
