@@ -51,10 +51,6 @@ def _open(ctx):
     return S.open_scene(ctx["blend"], scale_length=None)
 
 
-def _allowed(name: str, allowed) -> bool:
-    return any(name == a or name.startswith(a) for a in allowed)
-
-
 # ----------------------------------------------------------------------------- S1
 
 def opens(ctx) -> Result:
@@ -82,16 +78,18 @@ def sanity(ctx) -> Result:
     sp = ctx["spec"]
     cfg = config.RenderConfig(profile="small", device=ctx["device"])
     c = h.sanity(cfg, width=sp["panorama_width"], spp=4, out_dir=str(Path(ctx["work"]) / "S2"))
-    other = {k: v for k, v in c["backface_by_object"].items() if not _allowed(k, sp["backface_allowed"])}
-    other_frac = float(sum(other.values()))
-    ok = (c["hole_fraction"] <= sp["max_hole_fraction"] and other_frac <= sp["max_backface_fraction_other"]
+    from ..bl.scene import backface_verdict
+    v = backface_verdict(c, sp["backface_allowed"], sp["max_backface_fraction_other"])
+    ok = (c["hole_fraction"] <= sp["max_hole_fraction"] and v["ok"]
           and (c["nearest_surface_m"] or 0) >= sp["min_clearance_m"])
-    # control: with no object allowed, the scene's back-faces (if it has any) must fail the same test
-    ctrl = None if c["backface_fraction"] <= sp["max_backface_fraction_other"] else True
-    return Result(STEP, "S2 sanity panorama: holes, back-faces only where allowed, clearance", ok, ctrl,
-                  {"sanity": {k: v for k, v in c.items() if k != "settings"}, "backface_not_allowed": other,
-                   "backface_not_allowed_fraction": other_frac, "spec": {k: sp[k] for k in (
-                       "max_hole_fraction", "backface_allowed", "max_backface_fraction_other", "min_clearance_m")}})
+    # control: with every object's back-faces counted as if closed and none allowed, a scene that has
+    # back-faces fails the same limit (None when it has none)
+    worst = backface_verdict({"backface_by_object": c["backface_by_object"]}, (), sp["max_backface_fraction_other"])
+    ctrl = None if c["backface_fraction"] <= sp["max_backface_fraction_other"] else not worst["ok"]
+    return Result(STEP, "S2 sanity panorama: holes, back-faces on closed meshes only where allowed, clearance",
+                  ok, ctrl, {"sanity": {k: v for k, v in c.items() if k != "settings"}, "backface_verdict": v,
+                             "spec": {k: sp[k] for k in ("max_hole_fraction", "backface_allowed",
+                                                         "max_backface_fraction_other", "min_clearance_m")}})
 
 
 # ----------------------------------------------------------------------------- S3
@@ -172,28 +170,54 @@ def ids_vs_raycast(ctx) -> Result:
     dg = bpy.context.evaluated_depsgraph_get()
     rng = np.random.default_rng(0)
     rows, cols = rng.integers(0, model.height, 600), rng.integers(0, model.width, 600)
-    hits = []
+    flagged = set(h.audit["flagged_objects"])
+
+    def chain(origin, d, steps=12):
+        """The objects a ray meets up to and including the first one the audit does not flag: the
+        render's Object Index may stop on a flagged (non-opaque) one or pass through it (issue #4:
+        fog volumes, glass)."""
+        out, o = [], np.asarray(origin, float)
+        for _ in range(steps):
+            hit, loc, _n, _f, obj, _m = h.scene.ray_cast(dg, o.tolist(), d.tolist())
+            if not hit:
+                return out, False
+            obj = getattr(obj, "original", obj)
+            out.append(obj)
+            if obj.name_full not in flagged:
+                return out, True
+            o = np.asarray(loc) + 1e-4 * d
+        return out, False
+
+    hits, through = [], 0
     for i, j in zip(rows, cols):
         d = pose.R_wb @ rays.direction[i, j]
-        hit, _l, _n, _f, obj, _m = h.scene.ray_cast(dg, pose.centre_w.tolist(), d.tolist())
-        if hit:
-            hits.append((int(i), int(j), getattr(obj, "original", obj)))
-    agree = sum(int(ids[i, j]) == int(o.pass_index) for i, j, o in hits)
+        objs, opaque = chain(pose.centre_w, d)
+        if objs:
+            hits.append((int(i), int(j), objs))
+            through += len(objs) > 1
+
+    def agrees(i, j, objs):
+        return int(ids[i, j]) in {int(o.pass_index) for o in objs}
+    agree = sum(agrees(i, j, objs) for i, j, objs in hits)
+    first_only = sum(int(ids[i, j]) == int(objs[0].pass_index) for i, j, objs in hits)
     frac = agree / max(len(hits), 1)
     # control: renumber the most-hit object after the render; its pixels stop agreeing
     from collections import Counter
-    top = Counter(o.name_full for _i, _j, o in hits).most_common(1)
+    top = Counter(objs[-1].name_full for _i, _j, objs in hits).most_common(1)
     ctrl = None
     if top:
-        o = next(o for _i, _j, o in hits if o.name_full == top[0][0])
+        o = next(objs[-1] for _i, _j, objs in hits if objs[-1].name_full == top[0][0])
         keep = o.pass_index
         o.pass_index = keep + 30000 if keep + 30000 < 32767 else keep + 1
-        bad = sum(int(ids[i, j]) == int(x.pass_index) for i, j, x in hits)
+        bad = sum(agrees(i, j, objs) for i, j, objs in hits)
         o.pass_index = keep
         ctrl = bad < agree
-    return Result(STEP, "S5 Object Index equals the ray-cast object", len(hits) > 50 and frac >= 0.97, ctrl,
-                  {"sampled_hits": len(hits), "agree_fraction": frac, "most_hit": top,
-                   "note": "edge pixels can disagree: one sample at spp 1 against the pixel-centre ray"})
+    return Result(STEP, "S5 Object Index equals the ray-cast object (through flagged non-opaque objects)",
+                  len(hits) > 50 and frac >= 0.97, ctrl,
+                  {"sampled_hits": len(hits), "agree_fraction": frac, "agree_first_hit_only": first_only / max(len(hits), 1),
+                   "rays_through_flagged": through, "most_hit": top,
+                   "note": "a pixel agrees when its Object Index is one of the objects the ray meets up to the first "
+                           "unflagged one; edge pixels can disagree (one sample at spp 1 against the pixel-centre ray)"})
 
 
 # ----------------------------------------------------------------------------- S6

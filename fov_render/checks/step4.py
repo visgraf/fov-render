@@ -461,4 +461,60 @@ def audits_reach_instances_and_images(ctx) -> Result:
                                         "missing_images": a["missing_images"], "control_scene_objects_only": old})
 
 
-CHECKS += [head_from_float32_camera, view_layer_that_renders, particle_instances_named, audits_reach_instances_and_images]
+def _backface_scene(work: Path) -> str:
+    """Around the EYE: a cube with its normals flipped (a closed mesh showing back-faces) ahead, and a
+    plane facing away (an open mesh, its back side seen) to the right, inside a large room."""
+    import bpy
+    out = Path(work) / "scenes" / "backfaces.blend"
+    if out.is_file():
+        return str(out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    bpy.ops.wm.read_factory_settings(use_empty=True)
+    s = bpy.context.scene
+    s.unit_settings.system, s.unit_settings.scale_length = "METRIC", 1.0
+    bpy.ops.mesh.primitive_cube_add(size=20.0, location=(0, 0, 1.6))
+    room = bpy.context.object
+    room.name = "Room"
+    bpy.ops.object.mode_set(mode="EDIT")
+    bpy.ops.mesh.normals_make_consistent(inside=True)        # the room faces inwards: no back-faces
+    bpy.ops.object.mode_set(mode="OBJECT")
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0, 3, 1.6))
+    flipped = bpy.context.object
+    flipped.name = "FlippedCube"
+    bpy.ops.object.mode_set(mode="EDIT")
+    bpy.ops.mesh.normals_make_consistent(inside=True)        # closed, normals inwards: seen as back-faces
+    bpy.ops.object.mode_set(mode="OBJECT")
+    bpy.ops.mesh.primitive_plane_add(size=1.5, location=(3, 0, 1.6), rotation=(0, math.radians(90), 0))
+    plane = bpy.context.object
+    plane.name = "OpenPlane"                                  # normal +X: seen from the EYE, its back
+    cam = bpy.data.objects.new("EYE", bpy.data.cameras.new("EYE"))
+    s.collection.objects.link(cam)
+    cam.location, cam.rotation_euler = (0, 0, 1.6), (math.radians(90.0), 0.0, 0.0)
+    bpy.context.preferences.filepaths.save_version = 0
+    bpy.ops.wm.save_as_mainfile(filepath=str(out))
+    return str(out)
+
+
+def backfaces_open_and_closed(ctx) -> Result:
+    """Back-faces on an open mesh (a plane seen from behind) are reported, on a closed mesh (a cube
+    with flipped normals) counted against the limit (issue #4: the Barbershop's open set dressing).
+    Control: counting every back-face as the previous rule did also fails on the open plane."""
+    from ..bl import config, scene as S
+    h = S.open_scene(_backface_scene(ctx["work"]))
+    c = h.sanity(config.RenderConfig(profile="small", device=ctx["device"]), width=360, spp=1,
+                 out_dir=str(Path(ctx["work"]) / "step4" / "4.11"))
+    v = S.backface_verdict(c, (), 0.0)
+    only_plane = S.backface_verdict({k: c[k] for k in ("backface_by_object", "backface_closed")},
+                                    ("FlippedCube",), 0.0)
+    old_rule_on_plane = {"backface_by_object": {"OpenPlane": c["backface_by_object"].get("OpenPlane", 0.0)}}
+    ctrl = not S.backface_verdict(old_rule_on_plane, (), 0.0)["ok"]
+    ok = (c["backface_closed"].get("FlippedCube") is True and c["backface_closed"].get("OpenPlane") is False
+          and "Room" not in c["backface_by_object"] and not v["ok"] and list(v["closed_not_allowed"]) == ["FlippedCube"]
+          and only_plane["ok"] and only_plane["open_fraction"] > 0)
+    return Result(STEP, "4.11 back-faces: open meshes reported, closed meshes counted", ok, ctrl,
+                  {"backface_by_object": c["backface_by_object"], "closed": c["backface_closed"], "verdict": v,
+                   "with_the_cube_allowed": only_plane})
+
+
+CHECKS += [head_from_float32_camera, view_layer_that_renders, particle_instances_named, audits_reach_instances_and_images,
+           backfaces_open_and_closed]

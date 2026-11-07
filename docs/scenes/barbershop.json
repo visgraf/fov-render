@@ -19,17 +19,35 @@
  },
  "expect": {
   "max_hole_fraction": 0.001,
-  "backface_allowed": ["GEO-barbershop_walls", "wall_panels"],
+  "backface_allowed": [
+   "GEO-barbershop_walls",
+   "GEO-barbershop_wall_panels"
+  ],
   "max_backface_fraction_other": 0.001,
   "min_clearance_m": 0.25,
-  "missing_images": ["agent_face_bruises_color", "agent_face_bump", "agent_face_color", "agent_face_spec",
-                     "generic_scratches.png", "Dirt_Patch_512.png", "guilder_ornament.png"],
-  "gazes": [[0.0, 0.0], [35.0, -10.0], [-70.0, 8.0]],
+  "missing_images": [
+   "generic_scratches.png",
+   "guilder_ornament.png"
+  ],
+  "gazes": [
+   [
+    0.0,
+    0.0
+   ],
+   [
+    35.0,
+    -10.0
+   ],
+   [
+    -70.0,
+    8.0
+   ]
+  ],
   "spp": 16,
   "panorama_width": 720
  },
  "notes": {
-  "backface_allowed": "the set walls were built to be seen from outside the room; from inside they show back-faces (13.7 % of the sphere from the provisional head). Accepted as the scene is, not edited",
-  "missing_images": "the triage's 7 images that do not load (files absent from the benchmark folder); Cycles renders them magenta. The image audit lists only images used by rendered objects, so this list may shrink: if S1 differs only by images no rendered object uses, the spec is corrected, not the code"
+  "backface_allowed": "the set walls and wall panels were built to be seen from outside the room; from inside they show back-faces (13.4 % of the sphere). Accepted as the scene is, not edited. Any other object's back-faces count against max_backface_fraction_other only on closed meshes (flipped normals, or the head inside); open meshes (planes, shelves without backs) are reported. The pattern was 'wall_panels', which matched nothing (Chat's spec error, #4 part B)",
+  "missing_images": "the images used by rendered objects whose files are missing (Cycles renders them magenta): generic_scratches.png on 30 floor panels, guilder_ornament.png on the cash register's price tags (#4 part B, Code). The triage's other 5 missing images are used by no rendered object: the four agent_face_* only by the unused material agent_skin, Dirt_Patch_512.png by nothing. Corrected from the triage's 7 (Chat's spec error)"
  }
 }

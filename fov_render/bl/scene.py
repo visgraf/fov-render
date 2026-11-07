@@ -449,6 +449,44 @@ def open_scene(path: str | None, *, eye=None, scale_length: float | None = 1.0,
 
 # ----------------------------------------------------------------------------- sanity
 
+def mesh_closed(obj, depsgraph) -> bool | None:
+    """True when the evaluated mesh is closed: every edge borders exactly two faces. None when the
+    object has no mesh."""
+    ev = obj.evaluated_get(depsgraph)
+    try:
+        me = ev.to_mesh()
+    except RuntimeError:
+        return None
+    if me is None:
+        return None
+    try:
+        if not me.polygons:
+            return False
+        count = np.zeros(len(me.edges), dtype=np.int64)
+        keys = {}
+        for i, e in enumerate(me.edges):
+            keys[tuple(sorted(e.vertices))] = i
+        for poly in me.polygons:
+            for k in poly.edge_keys:
+                count[keys[tuple(sorted(k))]] += 1
+        return bool(len(count) and np.all(count == 2))
+    finally:
+        ev.to_mesh_clear()
+
+
+def backface_verdict(sanity: dict, allowed=(), limit: float = 0.001) -> dict:
+    """Back-faces on objects not allowed by name: on open meshes reported, on closed meshes (or of
+    unknown topology) counted against limit (fraction of the sphere)."""
+    def ok_name(n):
+        return any(n == a or n.startswith(a) for a in allowed)
+    closed = sanity.get("backface_closed", {})
+    other = {n: f for n, f in sanity.get("backface_by_object", {}).items() if not ok_name(n)}
+    bad = {n: f for n, f in other.items() if closed.get(n) is not False}
+    return {"not_allowed": other, "closed_not_allowed": bad, "closed_fraction": float(sum(bad.values())),
+            "open_fraction": float(sum(f for n, f in other.items() if closed.get(n) is False)),
+            "ok": float(sum(bad.values())) <= limit, "limit": limit}
+
+
 def sanity_checks(h: SceneHandle, cfg, width: int = 720, spp: int = 4, backface: bool = True,
                   out_dir: str | None = None) -> dict:
     """A low-resolution panorama from the head origin: hole and back-face fractions (solid-angle
@@ -514,7 +552,12 @@ def sanity_checks(h: SceneHandle, cfg, width: int = 720, spp: int = 4, backface:
         per = {}
         for i in np.unique(ids):
             per[names.get(int(i), f"id {int(i)}")] = float(w[back][ids == i].sum())
-        out["backface_by_object"] = dict(sorted(per.items(), key=lambda kv: -kv[1])[:20])
+        out["backface_by_object"] = dict(sorted(per.items(), key=lambda kv: -kv[1]))
+        # an open mesh (a plane, a shelf without a back) shows its back side legitimately; a back-face
+        # on a closed mesh means flipped normals or the head inside it (issue #4)
+        objs = {o.name_full: o for o in _all_objects(renderable_objects(scene))}
+        dg = bpy.context.evaluated_depsgraph_get()
+        out["backface_closed"] = {n: mesh_closed(objs[n], dg) if n in objs else None for n in out["backface_by_object"]}
     bpy.data.objects.remove(cam)
     scene.camera = prev_cam
     return out
