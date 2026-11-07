@@ -91,10 +91,11 @@ AUDIT_EXPECTED = {"Glass": ["transmission"], "Cutout": ["alpha"], "Lamp": ["emis
 def make_audit_scene(work: Path) -> str:
     """Room-free scene, EYE at (0, 0, 1.6) looking +Y. Objects: a diffuse Floor, the four flagged
     materials, a collection 'Props' (not in the scene) instanced twice, animation on cycles.seed and
-    view_settings.exposure."""
+    view_settings.exposure. 'Prop' carries its own pass index 2, as the Classroom's linked libraries
+    do (10, 20, 2): under legacy numbering it collides with the direct object numbered 2 (Floor)."""
     import bpy
     from ..bl import config as C
-    out = Path(work) / "scenes" / "audit.blend"
+    out = Path(work) / "scenes" / "audit-v2.blend"   # v2: Prop.pass_index = 2
     if out.is_file():
         return str(out)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -112,7 +113,8 @@ def make_audit_scene(work: Path) -> str:
     _cube("Lamp", (-2.5, 3, 1.6), 1.0, _mat("emitter", "emitter"))
     _cube("Fog", (0, -3, 1.6), 1.0, _mat("fog", "fog"))
     props = bpy.data.collections.new("Props")
-    _cube("Prop", (0, 0, 0), 0.6, _mat("prop", "diffuse"), coll=props)
+    prop = _cube("Prop", (0, 0, 0), 0.6, _mat("prop", "diffuse"), coll=props)
+    prop.pass_index = 2
     for name, loc in (("PropsA", (3, 0, 1.6)), ("PropsB", (-3, 0, 1.6))):
         e = bpy.data.objects.new(name, None)
         e.instance_type, e.instance_collection, e.location = "COLLECTION", props, loc

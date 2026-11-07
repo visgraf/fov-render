@@ -5,6 +5,9 @@
 
 Every check has a known answer and a control that must fail. Exit status 1 if any check fails.
 Checks that need bpy are SKIPPED without it, never passed.
+
+`--steps classroom` adds the Classroom gates (classroom.py): not in the default set, they need the
+f3d-vision Classroom files and accepted records, and SKIP without them.
 """
 from __future__ import annotations
 
@@ -41,8 +44,10 @@ def run(steps, work: Path, device: str) -> list[Result]:
             g.__name__ = f.__name__
             return g
         plan += [(m.__name__[-1], [bind(f) for f in m.CHECKS], True) for m in (step1, step3, step4)]
+        from . import classroom
+        plan.append(("classroom", [bind(f) for f in classroom.CHECKS], True))
     else:
-        plan += [(s, [], True) for s in ("1", "3", "4")]
+        plan += [(s, [], True) for s in ("1", "3", "4", "classroom")]
     out = []
     for step, fns, needs_bpy in sorted(plan, key=lambda x: x[0]):
         if step not in steps and step != "0":

@@ -108,17 +108,21 @@ def _folder(_meta, folder):
 def new_equals_legacy_render(ctx) -> Result:
     """Same scene, gaze, spp, seed and device. With the legacy pose matrix the fov_render image must
     equal the legacy image bit for bit (builder, shader, settings identical). With fov_render's own
-    float64 pose the difference must stay at the pose-precision level, far below a seed change."""
+    float64 pose the difference must stay at the pose-precision level, far below a seed change.
+
+    Always on CPU, whatever --device says (PLAN D10): OptiX is not bit-reproducible, two legacy runs
+    differ from each other on it (issue #1), and the claim is about builder, shader and settings,
+    which CPU shows bitwise. OptiX's run-to-run variation is measured separately (issue #3)."""
     try:
         import OpenEXR
     except ImportError:
         return Result(STEP, "fov_render fixation equals legacy fixation", False, None, skipped="OpenEXR not installed")
-    work = Path(ctx["work"]) / "step1"
-    render_legacy_foveated(ctx, work / "legacy")
-    render_new_foveated(ctx, work / "new_legacy_pose", legacy_pose=True)
-    if not (work / "new" / "fix.exr").is_file():
-        render_new_foveated(ctx, work / "new")
-    render_new_foveated(ctx, work / "new_seed1", seed=1)
+    cpu = dict(ctx, device="CPU")
+    work = Path(ctx["work"]) / "step1" / "cpu"
+    render_legacy_foveated(cpu, work / "legacy")
+    render_new_foveated(cpu, work / "new_legacy_pose", legacy_pose=True)
+    render_new_foveated(cpu, work / "new")
+    render_new_foveated(cpu, work / "new_seed1", seed=1)
 
     def chans(p):
         with OpenEXR.File(str(p)) as f:
@@ -142,7 +146,10 @@ def new_equals_legacy_render(ctx) -> Result:
     return Result(STEP, "fov_render fixation equals legacy fixation (bitwise with the legacy pose)", ok,
                   seed_d[comb] > 0, {"channels": keys, "max_abs_diff_legacy_pose": exact,
                                      "max_abs_diff_own_float64_pose": own_d, "pose_diff_float32_vs_float64": pose_diff,
-                                     "control_seed1_max_diff": seed_d, "spp": SPP, "gaze": GAZE})
+                                     "control_seed1_max_diff": seed_d, "spp": SPP, "gaze": GAZE,
+                                     "device": "CPU", "requested_device": ctx["device"],
+                                     "backends": [json.loads((work / d / "meta.json").read_text())["device"]
+                                                  for d in ("legacy", "new_legacy_pose", "new", "new_seed1")]})
 
 
 def record_from_render(ctx) -> Result:

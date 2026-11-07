@@ -82,18 +82,39 @@ def _head(S):
 
 # ------------------------------------------------------------------- legacy sides
 
+def _room(ctx) -> str:
+    """The scene the comparison runs on: the calibration room, or ctx["room"] (the all-passes copy)."""
+    return ctx.get("room") or calib_room(ctx)
+
+
+def calib_room_all_passes(ctx) -> str:
+    """The calibration room with all five passes switched on. A preset that leaves on a pass its
+    legacy path switches off (issue #1: ab1a's Depth and Normal) agrees on the plain room, whose
+    file has them off, and disagrees here."""
+    import bpy
+    from ..bl import passes as P
+    out = Path(ctx["work"]) / "scenes" / "calib_room_all_passes.blend"
+    if out.is_file():
+        return str(out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    bpy.ops.wm.open_mainfile(filepath=calib_room(ctx))
+    P.set_passes(bpy.context.view_layer, tuple(P.PASS_ATTR))
+    bpy.context.preferences.filepaths.save_version = 0
+    bpy.ops.wm.save_as_mainfile(filepath=str(out))
+    return str(out)
+
 def legacy_fov_fixation(ctx, tmp):
     from ..bl import env
     env.prepare()
     rf = load_legacy("fov", "render_foveated.py")
     return _capture_first_render(lambda: call_with_argv(rf.main, "render_foveated.py", [
-        "--blend", calib_room(ctx), "--out", tmp / "fix", "--profile", "small", "--device", "CPU", "--spp", 1]))
+        "--blend", _room(ctx), "--out", tmp / "fix", "--profile", "small", "--device", "CPU", "--spp", 1]))
 
 
 def legacy_preview360(ctx, tmp):
     p = load_legacy("fov", "preview360.py")
     return _capture_first_render(lambda: call_with_argv(p.main, "preview360.py", [
-        "--blend", calib_room(ctx), "--out", tmp / "pano", "--width", 64, "--spp", 1, "--device", "CPU", "--no-backface"]))
+        "--blend", _room(ctx), "--out", tmp / "pano", "--width", 64, "--spp", 1, "--device", "CPU", "--no-backface"]))
 
 
 def legacy_fsg(ctx, tmp):
@@ -109,7 +130,7 @@ def legacy_fsg(ctx, tmp):
 def legacy_oracle1(ctx, tmp, profile="small", narrowed=False):
     from ..bl.config import readback
     import bpy
-    scene, vl = _open(calib_room(ctx))
+    scene, vl = _open(_room(ctx))
     co = load_legacy("f3d", "classroom_oracle1_render.py")
     lg = load_legacy("f3d", "fsg_geometry.py")
     _eye, _note, o, r = co._head_pose()
@@ -127,7 +148,7 @@ def legacy_oracle1(ctx, tmp, profile="small", narrowed=False):
 def legacy_breadth1(ctx, tmp):
     from ..bl.config import readback
     import bpy
-    scene, vl = _open(calib_room(ctx))
+    scene, vl = _open(_room(ctx))
     b = load_legacy("f3d", "classroom_oracle/breadth1_render.py", "classroom_oracle")
     from ..bl import scene as S
     h = S.resolve_head(scene)[0]
@@ -137,7 +158,7 @@ def legacy_breadth1(ctx, tmp):
 
 def legacy_reference_view(ctx, tmp):
     from ..bl import scene as S
-    scene, vl = _open(calib_room(ctx))
+    scene, vl = _open(_room(ctx))
     h = S.resolve_head(scene)[0]
     seeds = tmp / "seeds.json"
     seeds.write_text(json.dumps(h.as_dict()))
@@ -150,7 +171,7 @@ def legacy_reference_view(ctx, tmp):
 
 def _cases(ctx):
     from ..bl import config
-    room = calib_room(ctx)
+    room = _room(ctx)
     fixed = lambda S: Rig().fixed_pose(_head(S), "C")   # noqa: E731
     return [
         ("fov_fixation", legacy_fov_fixation, room, config.preset("fov_fixation", device="CPU", spp=1),
@@ -177,25 +198,34 @@ LEGACY_REPO = {"fov_fixation": ("fov", ()), "preview360": ("fov", ()), "fsg": ("
 
 
 def presets_match_legacy(ctx) -> Result:
+    """Each preset against its legacy path, on the calibration room and on a copy with all five passes
+    on (fsg builds its own scene, so it runs once). Control: one setting mutated per preset."""
     per, controls = {}, {}
+    variants = (("", None), (" [all passes on]", calib_room_all_passes(ctx)))
     with tempfile.TemporaryDirectory() as d:
-        for name, legacy, scene_path, cfg, model, pose_fn, mutation in _cases(ctx):
-            tmp = Path(d) / name
-            tmp.mkdir()
-            try:
-                repo, subs = LEGACY_REPO[name]
-                with legacy_path(repo, *subs):
-                    a = legacy(ctx, tmp)
-                b = _new(scene_path, cfg, model, pose_fn)
-                per[name] = _diff(a, b)
-                controls[name] = bool(_diff(a, _new(scene_path, cfg.with_(**mutation), model, pose_fn)))
-            except Exception as e:  # noqa: BLE001
-                per[name] = [f"error: {type(e).__name__}: {e}"]
-                controls[name] = None
+        for label, room in variants:
+            vctx = dict(ctx, room=room) if room else ctx
+            for name, legacy, scene_path, cfg, model, pose_fn, mutation in _cases(vctx):
+                if room and scene_path is None:
+                    continue
+                key = name + label
+                tmp = Path(d) / key.replace(" ", "_").replace("[", "").replace("]", "")
+                tmp.mkdir()
+                try:
+                    repo, subs = LEGACY_REPO[name]
+                    with legacy_path(repo, *subs):
+                        a = legacy(vctx, tmp)
+                    b = _new(scene_path, cfg, model, pose_fn)
+                    per[key] = _diff(a, b)
+                    controls[key] = bool(_diff(a, _new(scene_path, cfg.with_(**mutation), model, pose_fn)))
+                except Exception as e:  # noqa: BLE001
+                    per[key] = [f"error: {type(e).__name__}: {e}"]
+                    controls[key] = None
     ok = all(v == [] for v in per.values())
-    return Result(STEP, f"presets reproduce the legacy settings ({len(per)} paths)", ok,
+    return Result(STEP, f"presets reproduce the legacy settings ({len(per)} comparisons, 7 paths)", ok,
                   all(controls.values()), {"differences": per, "control_detected": controls,
-                                           "note": "ab1a compared with its spec's OPTIX replaced by CPU (no GPU here)"})
+                                           "note": "ab1a compared with its spec's OPTIX replaced by CPU here; "
+                                                   "its OPTIX spec is gate 3.C (classroom)"})
 
 
 def render_call_guarantees(ctx) -> Result:
@@ -203,7 +233,7 @@ def render_call_guarantees(ctx) -> Result:
     animated setting that overwrites the request is caught."""
     import bpy
     from ..bl import cameras, config, engine, scene as S
-    h = S.open_scene(calib_room(ctx))
+    h = S.open_scene(_room(ctx))
     model = PanoramaModel(96)
     cfg = config.RenderConfig(device=ctx["device"], spp=2, persistent_data=True)
     config.apply(h.scene, cfg, model.width, model.height, h.view_layer)

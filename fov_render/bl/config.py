@@ -90,8 +90,8 @@ _PRESETS = {
                     pixel_aspect=True, use_border=False),
     "ab1a": dict(seed=0, pixel_filter="BOX", filter_width=1.0, denoise=False, persistent_data=True,
                  color="scene", multilayer=True, exr_codec="NONE", clip_m=(0.01, 1000.0),
-                 passes=("combined", "position", "object_index"), single_layer=True,
-                 pixel_aspect=True, use_border=False, profile="full", spp=256),
+                 passes=("combined", "position", "object_index"), passes_exact=True, single_layer=True,
+                 pixel_aspect=True, use_border=False, profile="full", spp=256),   # AB1a switches Depth, Normal off
     "breadth1": dict(seed=0, pixel_filter="BOX", filter_width=1.0, denoise=False, persistent_data=None,
                      color="scene", multilayer=True, exr_codec="NONE", clip_m=(0.01, 1000.0),
                      passes=("combined", "position", "object_index"), single_layer=True,
@@ -109,7 +109,7 @@ def preset(name: str, **overrides) -> RenderConfig:
     if name not in _PRESETS:
         raise ValueError(f"unknown preset {name!r}; expected one of {PRESET_NAMES}")
     kw = {k: v for k, v in _PRESETS[name].items()}
-    kw.setdefault("passes_exact", False)       # every legacy path only switches passes on
+    kw.setdefault("passes_exact", False)       # legacy paths switch passes on; ab1a also switches some off
     kw.update(overrides)
     if kw.get("seed") is None:
         kw["seed"] = 0

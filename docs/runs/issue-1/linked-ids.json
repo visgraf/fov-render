@@ -1,0 +1,32 @@
+{
+ "blend": "/home/lvelho/rd/f3d-vision/scenes/classroom/classroom_eye.blend",
+ "width": 720,
+ "spp": 1,
+ "device": "OPTIX",
+ "catalog": {
+  "count": 350,
+  "direct": 234,
+  "via_instance": 116
+ },
+ "libraries": 11,
+ "linked_objects": 117,
+ "linked_raw_pass_index_values": [
+  0,
+  2,
+  10,
+  20
+ ],
+ "solid_angle_fraction": {
+  "misses": 0.020626344758761107,
+  "fov_render_ids_1_234": 0.8119761724103822,
+  "fov_render_ids_above_234": 0.1673974828308568,
+  "distinct_ids_above_234_seen": 63,
+  "legacy_id_on_those_pixels": {
+   "0": 0.1542976654061156,
+   "2": 6.018145581417195e-06,
+   "10": 0.00928353035861874,
+   "20": 0.0038102689205410075
+  }
+ },
+ "elsewhere_legacy_equals_fov_render": true
+}

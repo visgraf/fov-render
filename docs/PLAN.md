@@ -18,6 +18,14 @@ holds what was decided and the two phases.
 | D8 | Working agreement | the N-Surface method, lighter, with GitHub Issues between Chat and Code; in fov-render only, f3d-vision unchanged |
 | D9 | Classroom gates | deferred to Phase 2: the Classroom files cannot be downloaded into Chat's sandbox |
 
+Added in Phase 2 (Luiz, 2026-11-07, recorded in #1):
+
+| # | Question | Decision |
+|---|---|---|
+| D10 | Gate 1.2 (fov_render image = legacy image, bitwise) on a GPU | always rendered on CPU, whatever `--device` says: OptiX is not bit-reproducible (two legacy runs differ, #1), and the claim is about builder, shader and settings. OptiX's run-to-run variation is measured in #3 |
+| D11 | Object Index of objects reached only through collection instances | both numberings, `open_scene(instance_ids="legacy"\|"complete")`. `legacy` (default) leaves them at their file's pass index as the legacy code does (on the Classroom: 116 objects, id 0 or a library's 10, 20, 2, which collide with direct ids); `complete` numbers them after the direct objects. Default stays `legacy` until #2 passes `check_equivalence`, then a Decision issue on switching it |
+| D12 | Interpreter for the checks | the `bpy` 5.2.1 wheel (same build as the binary, OptiX under the strict policy, has OpenEXR; needs Python 3.13). The binary stays supported for rendering; under it gate 1.2 SKIPs |
+
 ## Phase 1: Chat, local repository, CPU (done, 2026-11-07)
 
 Steps 1–4 of the migration plan, in Chat's sandbox with the `bpy` 5.2.1 wheel on CPU. Report:
@@ -34,9 +42,11 @@ Steps 1–4 of the migration plan, in Chat's sandbox with the `bpy` 5.2.1 wheel 
 
 1. **Set up** (done, 2026-11-07). Create `visgraf/fov-render`, push `main`, create the labels `for-code`, `for-chat`,
    `for-luiz`; open one issue per step below.
-2. **Phase 1 on the workstation.** Code runs `tools/run_checks.py` with `--device OPTIX` and adds the
+2. **Phase 1 on the workstation** (done, 2026-11-07, #1). Code runs `tools/run_checks.py` with `--device OPTIX` and adds the
    Classroom gates deferred from steps 1 and 4: `check_foveated` on the Classroom, the Classroom head
    pose against the accepted AB1a record, the 234-entry catalogue of Breadth-1, AB1a's own OPTIX spec.
+   Result: 19/19 on CPU and OPTIX with the wheel, 23/23 with the Classroom gates; decisions D10–D12;
+   report [`docs/runs/issue-1/README.md`](runs/issue-1/README.md).
 3. **Step 5. Session, server and client** (report §8), then the greedy explorer through
    `client.Session`; gate: f3d-vision `check_equivalence.py` 23/23 against the frozen Playground-2 run.
 4. **Step 6. The foveated sensor in the same handler**: fov-3d-vision's `active_loop.py --policy
