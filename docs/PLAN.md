@@ -32,7 +32,7 @@ Steps 1–4 of the migration plan, in Chat's sandbox with the `bpy` 5.2.1 wheel 
 
 ## Phase 2: GitHub, Chat and Code, the workstation
 
-1. **Set up.** Create `visgraf/fov-render`, push `main`, create the labels `for-code`, `for-chat`,
+1. **Set up** (done, 2026-11-07). Create `visgraf/fov-render`, push `main`, create the labels `for-code`, `for-chat`,
    `for-luiz`; open one issue per step below.
 2. **Phase 1 on the workstation.** Code runs `tools/run_checks.py` with `--device OPTIX` and adds the
    Classroom gates deferred from steps 1 and 4: `check_foveated` on the Classroom, the Classroom head
