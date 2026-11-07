@@ -1,0 +1,5 @@
+ws-cpu exit=0 wall_s=4.130782109
+ws-optix exit=1 wall_s=7.971954134
+ws-bin exit=0 wall_s=6.789983080
+ws-all exit=1 wall_s=10.546682423
+ws-bin-classroom exit=0 wall_s=3.115091716
