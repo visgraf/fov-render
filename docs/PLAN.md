@@ -117,3 +117,31 @@ What changed in the gates that stayed:
 - **The migration rule** (CLAUDE.md rule 6, "show it behaves the same, by a check against the copies in
   `legacy/`") now reads against the known answers and the pinned files. Only Luiz changes CLAUDE.md
   (proposed wording in the PR of #16).
+
+## The command line and the course's scene specs (#18)
+
+What #18 adds, in two steps (Chat on CPU, then Code on the workstation):
+- **`fov-render`** (`fov_render/cli.py`, console script): `look`, `panorama`, `requests` (host side,
+  through `Session`), and `info`, `eye`, `check`, `selftest` (`fov_render/blcli.py` in Blender). Exit
+  status 0 / 1 failed / 2 refused before Blender starts. Gates cli.1–cli.5 (step `cli`, in the default
+  set).
+- **`fov_render/launch.py`**: finding Blender and building its command, shared by `Session` (whose
+  command is unchanged, gates 5.4 and cli.2) and the command line.
+- **`tools/make_eye_scene.py`** moved into the package (`fov_render/bl/eye_scene.py`); the tool is a
+  wrapper. Gate cli.5 checks that `fov-render eye` writes the same EYE as the tool at `v0.1.0`.
+- **Scene specs:** `--write-spec` drafts one (to review); a spec with unknown or null expectations, or a
+  non-empty `to_measure`, is refused. `docs/scenes/calib_room.json`, `docs/scenes/classroom.json` (to be
+  measured).
+- **S1's control** was undefined for a scene expected to have no missing images (it compared against
+  the list minus its first entry, the same empty list, so S1 always FAILED on such a scene). It now
+  compares against one image more when none is expected. Found by gate cli.4 on the calibration room.
+
+- **The run record's device:** `ready.device` was null for the command line's looks (Code, #18), since
+  Cycles' device is chosen when a sensor is first set up. The command line now opens its session with
+  the first look's sensor prepared (`Session(prepare=…)`); gate cli.2 checks that `ready.device` is set
+  and that the images are still bit for bit those of a `Session` opened without it.
+
+**D18 (Luiz, #18): scenes may have their own limits.** The Classroom's window panes open onto a
+featureless world: 2.063 % holes (Code, workstation, OPTIX), above the default 0.02. Its spec sets
+`max_hole_fraction` 0.025, about a fifth above the measured value, with the reason in its notes. A
+draft never raises a limit above the default by itself; a person does, in the scene's spec.

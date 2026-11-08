@@ -1,0 +1,49 @@
+{
+ "schema": "fov-render-scene-spec-v1",
+ "name": "classroom",
+ "source": {
+  "title": "Classroom (Blender demo file classroom.zip)",
+  "author": "Christophe Seux",
+  "licence": "CC0",
+  "url": "https://download.blender.org/demo/test/classroom.zip",
+  "zip_bytes": 70279690,
+  "zip_md5": "3adbb7114b514bfc6fc724ce20f86b4e",
+  "provenance": "f3d-vision scenes/manifest.json and scenes/classroom/ASSET_MANIFEST.json (48 required files, 11 linked libraries, 36 linked textures, 0 missing references)"
+ },
+ "derived": {
+  "file": "classroom_eye.blend (f3d-vision scenes/classroom/, on the workstation; not committed)",
+  "sha256": "dca66a3257b909aef00b0331652c55f62a93a8dff0665d070fba7efa436953cc",
+  "tool": "f3d-vision tools/place_eye.py: EYE at (-0.6, -1.0, 1.2) m, yaw 0, pitch 0 (f3d-vision manifest)",
+  "why": "the course playground's scene (visgraf/foveal-playground, from f3d-vision's Classroom); the file's own renderCam stands 0.46 m off the rear wall (f3d-vision manifest)"
+ },
+ "expect": {
+  "max_hole_fraction": 0.025,
+  "backface_allowed": [],
+  "max_backface_fraction_other": 0.001,
+  "min_clearance_m": 0.25,
+  "missing_images": [],
+  "gazes": [
+   [
+    0.0,
+    0.0
+   ],
+   [
+    35.0,
+    -10.0
+   ],
+   [
+    -70.0,
+    8.0
+   ]
+  ],
+  "spp": 16,
+  "panorama_width": 720
+ },
+ "notes": {
+  "how": "drafted by Code with `fov-render check --device OPTIX --only S1 S2 --write-spec` on the workstation at 8bfdff0 (issue #18), reviewed by Chat; the hole limit is Luiz's decision in #18",
+  "max_hole_fraction": "the Classroom's own limit (Luiz, #18): its window panes open onto a featureless world. Measured 0.020626 (Code, workstation, OPTIX, 720 px, 4 spp, 8bfdff0), f3d-vision 0.0208 (manifest, OPTIX, 2026-09-12): above the default 0.02. 0.025 leaves about a fifth of headroom; a wall or a ceiling gone would show far more",
+  "backface_allowed": "none needed: the 0.00386 back-faces (plank 0.00352, doorFrame.001 0.00026, Cylinder.057 [lib.004] 0.00008) are all on open meshes, reported and not counted (Code, #18); f3d-vision recorded 0.0038",
+  "min_clearance_m": "the default; the nearest surface measured 0.446 m (Code, #18)",
+  "missing_images": "none: 49 images used, all found (Code, #18), as f3d-vision's asset manifest says"
+ }
+}

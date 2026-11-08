@@ -18,19 +18,18 @@ from __future__ import annotations
 
 import json
 import os
-import shutil
 import subprocess
-import sys
 import tempfile
 import time
 from pathlib import Path
 
+from . import launch
 from .bl.config import RenderConfig
 from .record import SampleRecord
 from .request import RequestError, dumps, make_request, make_session
 from .rig import Rig
 
-PACKAGE_ROOT = Path(__file__).resolve().parents[1]
+PACKAGE_ROOT = launch.PACKAGE_ROOT
 SERVER_SCRIPT = Path(__file__).resolve().parent / "server.py"
 
 
@@ -107,7 +106,13 @@ class Session(_Base):
         self._own_log = log is None or isinstance(log, (str, Path))
         self.log = open(log or (self.q / "server.log"), "w") if self._own_log else log
         t0 = time.perf_counter()
-        self.p = subprocess.Popen(cmd, stdout=self.log, stderr=subprocess.STDOUT, env=env, start_new_session=True)
+        try:
+            self.p = subprocess.Popen(cmd, stdout=self.log, stderr=subprocess.STDOUT, env=env, start_new_session=True)
+        except OSError as e:
+            self.p = None
+            if self._own_log:
+                self.log.close()
+            raise SessionError(f"cannot start {cmd[0]}: {e}") from None
         while not (self.q / "server-ready.json").exists():
             if (self.q / "fail-0000.json").exists() or self.p.poll() is not None:
                 self._died("at start")
@@ -123,31 +128,12 @@ class Session(_Base):
         return InProcessSession(blend, cfg, rig, **kw)
 
     def _command(self, launcher: str):
-        env = dict(os.environ)
-        env["PYTHONPATH"] = os.pathsep.join([str(PACKAGE_ROOT)] + ([env["PYTHONPATH"]] if env.get("PYTHONPATH") else []))
-        exe = None
-        if launcher == "auto":
-            exe = os.environ.get("FOVRENDER_BLENDER") or shutil.which("blender")
-            if exe is None:
-                try:
-                    import bpy  # noqa: F401
-                    exe = sys.executable
-                except ImportError:
-                    raise SessionError("no Blender: set FOVRENDER_BLENDER, put blender on PATH, or install the bpy wheel")
-        elif launcher == "blender":
-            exe = os.environ.get("FOVRENDER_BLENDER") or shutil.which("blender")
-            if exe is None:
-                raise SessionError("launcher='blender' but no blender on PATH and FOVRENDER_BLENDER unset")
-        elif launcher == "python":
-            exe = sys.executable
-        else:
-            exe = launcher
-        args = ["--queue", str(self.q), "--session", str(self.q / "session.json")]
-        if Path(exe).name.lower().startswith("blender"):
-            return [exe, "-b", str(self.blend), "--python-exit-code", "1", "-P", str(SERVER_SCRIPT), "--", *args,
-                    "--reuse-loaded"], env, \
-                {"kind": "blender", "executable": exe}
-        return [exe, "-m", "fov_render.server", *args], env, {"kind": "python", "executable": exe}
+        try:
+            return launch.command(launcher, SERVER_SCRIPT, "fov_render.server",
+                                  ["--queue", self.q, "--session", self.q / "session.json"],
+                                  blend=self.blend, blender_only_args=["--reuse-loaded"])
+        except launch.LaunchError as e:
+            raise SessionError(str(e)) from None
 
     def _died(self, when: str):
         f0 = self.q / "fail-0000.json"

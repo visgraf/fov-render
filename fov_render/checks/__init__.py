@@ -6,6 +6,7 @@
 Every check has a known answer and a control that must fail. Exit status 1 if any check fails.
 Checks that need bpy are SKIPPED without it, never passed.
 
+Step "cli" (cli.py) runs the `fov-render` command line, one Blender process per run.
 `--steps classroom` adds the Classroom gates (classroom.py): not in the default set, they need the
 f3d-vision Classroom files and accepted records, and SKIP without them.
 """
@@ -33,9 +34,16 @@ def _git_head() -> str | None:
         return None
 
 
+def _bind(f, work):
+    g = lambda: f({"work": work})  # noqa: E731
+    g.__name__ = f.__name__
+    return g
+
+
 def run(steps, work: Path, device: str) -> list[Result]:
-    from . import legacy_integrity, step2, step5
-    plan = [("0", legacy_integrity.CHECKS, False), ("2", step2.CHECKS, False), ("5", step5.CHECKS_NP, False)]
+    from . import cli, legacy_integrity, step2, step5
+    plan = [("0", legacy_integrity.CHECKS, False), ("2", step2.CHECKS, False), ("5", step5.CHECKS_NP, False),
+            ("cli", [_bind(f, work) for f in cli.CHECKS_NP], False)]
     if have_bpy():
         from . import step1, step3, step4
         ctx = {"work": work, "device": device}
@@ -45,10 +53,11 @@ def run(steps, work: Path, device: str) -> list[Result]:
             return g
         plan += [(m.__name__[-1], [bind(f) for f in m.CHECKS], True) for m in (step1, step3, step4)]
         plan.append(("5", [bind(f) for f in step5.CHECKS], True))
+        plan.append(("cli", [bind(f) for f in cli.CHECKS], True))
         from . import classroom
         plan.append(("classroom", [bind(f) for f in classroom.CHECKS], True))
     else:
-        plan += [(s, [], True) for s in ("1", "3", "4", "5", "classroom")]
+        plan += [(s, [], True) for s in ("1", "3", "4", "5", "cli", "classroom")]
     out = []
     for step, fns, needs_bpy in sorted(plan, key=lambda x: x[0]):
         if step not in steps and step != "0":
@@ -71,7 +80,7 @@ def run(steps, work: Path, device: str) -> list[Result]:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="fov_render.checks")
-    ap.add_argument("--steps", nargs="*", default=["1", "2", "3", "4", "5"])
+    ap.add_argument("--steps", nargs="*", default=["1", "2", "3", "4", "5", "cli"])
     ap.add_argument("--work", default=str(ROOT / "previews" / "checks"))
     ap.add_argument("--device", default="CPU", choices=["CPU", "OPTIX", "CUDA"])
     ap.add_argument("--json", default=None, help="where to write the results (default: WORK/results.json)")

@@ -73,13 +73,49 @@ Each look is a `fov-render-request-v1` JSON request (`fov_render/request.py`); i
 settings Cycles used, timings). A malformed request is refused with every reason, before anything
 renders.
 
+## Command line
+
+`pip install -e .` puts `fov-render` on the PATH (also `python -m fov_render.cli`). It finds Blender
+as `Session` does (`--launcher auto`: `$FOVRENDER_BLENDER`, `blender` on PATH, or the `bpy` wheel).
+
+```
+fov-render eye      --blend scene.blend --out scene_eye.blend --from-camera --forward-m 1.5   # add the head
+fov-render info     --blend scene_eye.blend                       # head, view layer, catalogue, audits (JSON)
+fov-render check    --blend scene_eye.blend --only S1 S2 --write-spec draft.json             # a first spec
+fov-render check    --blend scene_eye.blend --spec docs/scenes/NAME.json --device OPTIX      # the scene gate
+fov-render look     --blend scene_eye.blend --sensor foveated --eyes L R --point 0.4 2.1 1.1 \
+                    --profile full --records --out runs/demo/f0000
+fov-render look     --blend scene_eye.blend --sensor perspective --gaze 10 -5 --vergence 2.1 \
+                    --seeds L=2111 R=2112 --out runs/demo/p0000
+fov-render panorama --blend scene_eye.blend --preset preview360 --eye C --out previews/ref_C
+fov-render requests --blend scene_eye.blend looks.json --out runs/demo     # many looks, one session
+fov-render selftest --device OPTIX                                         # the gates below
+```
+
+`look`, `panorama` and `requests` send exactly the requests `Session.look` sends (gate cli.2 checks it
+bit for bit); every folder also gets `fov-render-run.json` (the command, the session, the answers).
+Sensor fields go in `--param` (`E2_deg=2.0 e_max_deg=45`), the gaze is one of `--point`,
+`--gaze YAW PITCH [--vergence M]`, `--per-eye L=YAW,PITCH R=…`, or none (a fixed look). A
+`requests` file is a JSON list of looks, `{sensor, eyes, gaze, spp, seeds, rig, out_dir, outputs}`,
+with `out_dir` relative to `--out`.
+
+Exit status: **0** done, **1** a render, a gate or Blender failed, **2** the arguments, a request or a
+spec were refused: every reason is printed, and Blender is not started.
+
+A scene's spec (`docs/scenes/NAME.json`) says what the scene gate expects of it. `--write-spec`
+drafts one from what S1 and S2 measure: the missing images as found, the closed meshes with
+back-faces as allowed, a hole limit of twice the measured fraction (at least 0.001, at most the
+default 0.02). A draft accepts the scene as it is, so it is reviewed before it is committed; a spec
+that still lists `to_measure` is refused. Specs so far: `calib_room.json` (the fixture, everything
+known), `barbershop.json` (#4), `classroom.json` (to be measured on the workstation, #18).
+
 ## Checks
 
 Every module ships a check with a control that must fail. Run them all:
 
 ```
 pip install -e ".[bpy,checks]"                                  # Python 3.13: bpy wheel + OpenEXR
-python -m fov_render.checks --device OPTIX                      # or CPU; numpy only without bpy
+python -m fov_render.checks --device OPTIX                      # or CPU; numpy only without bpy (= fov-render selftest)
 python -m fov_render.checks --steps classroom --device OPTIX    # the workstation: Classroom files + f3d-vision
 ```
 
@@ -88,7 +124,7 @@ S3 `check_foveated`, S4 every sensor's record against Position, S5 Object Index 
 S6 the audits by solid angle):
 
 ```
-python -m fov_render.checks.scene --blend scene_eye.blend [--spec docs/scenes/NAME.json] --device OPTIX
+fov-render check --blend scene_eye.blend [--spec docs/scenes/NAME.json] --device OPTIX   # python -m fov_render.checks.scene
 ```
 
 The checks run with the `bpy` wheel (PLAN D12): under the Blender binary
@@ -110,11 +146,14 @@ history is in [`docs/HISTORY.md`](docs/HISTORY.md).
 ```
 fov_render/            numpy side: profiles, warp, rig, geometry, sensors/, record, exr_lite,
                        request (JSON schemas), session (Session, Look)
+fov_render/cli.py      the `fov-render` command line; launch.py finds Blender for it and for Session
 fov_render/server.py   the persistent render server (Blender side)
-fov_render/bl/         Blender side: env, config (RenderConfig, presets), engine, passes, cameras, scene, handler
+fov_render/blcli.py    the Blender side of `fov-render info | eye | check | selftest`
+fov_render/bl/         Blender side: env, config (RenderConfig, presets), engine, passes, cameras, scene, handler,
+                       eye_scene (`fov-render eye`)
 fov_render/checks/     the gates; known/ (frozen answers, pins), fixtures/ (scene builders, check_foveated)
 tools/run_checks.py    gates under the Blender binary
-tools/make_eye_scene.py  a derived copy of a .blend with an EYE (the head), the original untouched
+tools/make_eye_scene.py  `fov-render eye` by hand: a derived copy of a .blend with an EYE, the original untouched
 tools/freeze_known_answers.py  re-freezes known/ from the pinned legacy code (needs both checkouts)
 docs/scenes/           what each scene used in the project is expected to give (fov_render.checks.scene)
 docs/                  PLAN, STATUS, HISTORY
