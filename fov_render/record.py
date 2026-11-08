@@ -150,8 +150,12 @@ def sensor_consistency(rec: SampleRecord) -> dict:
     hit = np.isfinite(rec.distance_m)
     if not hit.any():
         return {"hits": 0, "max_angle_deg": None, "p999_angle_deg": None}
-    v = rec.position_w[hit] - rec.origin
+    v = np.asarray(rec.position_w[hit], dtype=np.float64) - rec.origin
     v /= np.linalg.norm(v, axis=-1, keepdims=True)
-    ang = np.degrees(np.arccos(np.clip(np.sum(v * rec.direction[hit], axis=-1), -1.0, 1.0)))
+    d = np.asarray(rec.direction[hit], dtype=np.float64)
+    d /= np.linalg.norm(d, axis=-1, keepdims=True)
+    # atan2(|v x d|, v . d): arccos of a dot product near 1 turns a float32 norm error of 1e-7 into
+    # an angle of ~0.03 deg (issue #3)
+    ang = np.degrees(np.arctan2(np.linalg.norm(np.cross(v, d), axis=-1), np.sum(v * d, axis=-1)))
     return {"hits": int(hit.sum()), "max_angle_deg": float(ang.max()),
             "p999_angle_deg": float(np.quantile(ang, 0.999))}

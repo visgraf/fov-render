@@ -94,3 +94,17 @@ def gfe_passes(sanitised: dict, view_layer) -> dict:
 
 
 FORMATS = {"f3d_ab1a": "ab1a_readback and gfe_passes in the session's ready answer"}
+
+POSE_CONVENTIONS = ("fov_render", "fov3d")
+
+
+def fov3d_gaze_matrix(eye_obj, yaw_deg: float, pitch_deg: float, offset_local=(0.0, 0.0, 0.0)):
+    """fov-3d-vision's render_foveated.gaze_matrix: the EYE's rigid pose (bl_common.rigid), the eye
+    centre offset in the head frame, then Ry(-yaw) Rx(pitch), in mathutils' float32 arithmetic.
+    fov_render's Rig gives the same pose in float64, equal to ~1e-7 (gate 1.2); this one is equal
+    bit for bit, for comparing whole runs with the legacy loop (issue #3)."""
+    from mathutils import Matrix, Vector
+    loc, rot, _ = eye_obj.matrix_world.decompose()
+    rigid = Matrix.Translation(loc) @ rot.to_matrix().to_4x4()
+    return (rigid @ Matrix.Translation(Vector(offset_local)) @ Matrix.Rotation(math.radians(-yaw_deg), 4, "Y")
+            @ Matrix.Rotation(math.radians(pitch_deg), 4, "X"))
