@@ -73,6 +73,11 @@ Steps 1–4 of the migration plan, in Chat's sandbox with the `bpy` 5.2.1 wheel 
    Classroom small and full: 3 runs in `--mode native` (fov_render's own rig and records), each Phase
    C number's mean within one legacy range of the legacy mean (`tools/loop_spread_gate.py`). Only
    the fixation-0 RGB test of #9 is kept. Sandbox gates 6.1–6.3.
+   **Outcome (Luiz, #3): accepted on the exact test** (50 fixations, CPU, bit for bit; control
+   differs). The statistical gate is withdrawn. It was Chat's design error: its range came from
+   runs sharing fixation 0, while the loop is chaotic, and the unchanged legacy loop fails it when
+   its IPD moves by 0.2 µm (Code's diagnosis, `runs/issue-3/part2/`). Native mode is kept but not
+   validated statistically.
 5. **Step 7. A new scene** neither repository has used, through every sensor; gate: every check
    passes and the material audit is reviewed. Scene (Luiz, #4): the Agent 327 Barbershop
    (Blender Studio, CC-BY); the Barcelona Pavilion was triaged and discarded, and its triage found

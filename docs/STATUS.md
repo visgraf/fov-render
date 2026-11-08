@@ -2,41 +2,43 @@
 
 Rewritten at each milestone; earlier versions are in git.
 
-**Now:** #2 accepted (Luiz, 2026-11-07). Step 5 is done: `Session`, the render server, the JSON
-requests, `compat` and `tools/gfe_session.py`. f3d-vision's greedy explorer runs unchanged on a
-fov_render Session and reproduces the frozen Playground-2 run: `check_equivalence` 23/23 with the
-known answer (356 fixations, 315 local / 40 global, 98.82 % sr), through the Blender binary on the
-workstation; the IPD-one-ULP control fails 14/17. Gates 24/24 on OPTIX. Report:
-[`runs/issue-2/README.md`](runs/issue-2/README.md). Before that, #1: the Phase 1 gates on the
-workstation and the Classroom gates; decisions D10–D12 in [`PLAN.md`](PLAN.md).
+**Now: the migration is done** (pending the merge of #3's PR). Steps 1–7 of the plan are built and
+gated on the workstation:
 
-| Issue | Step | Whose turn |
+- **Steps 1–4:** #1 and #10. The Phase 1 gates on OPTIX, plus the Classroom gates; `complete` is the
+  default Object Index numbering (D13).
+- **Step 5:** #2. f3d-vision's greedy explorer runs unchanged on a Session and reproduces the frozen
+  Playground-2 run (`check_equivalence` 23/23).
+- **Step 6:** #3. fov-3d-vision's foveated active loop runs unchanged on a Session
+  (`tools/active_loop_session.py --mode exact`). Over 50 fixations on CPU it equals the legacy loop
+  bit for bit in every file and every Phase C number; the IPD + 1 ULP control differs.
+- **Step 7:** #4. The Barbershop passes the scene gate (`python -m fov_render.checks.scene`). The
+  Pavilion's triage led to the fixes behind gates 4.7–4.11.
+- **#9:** the one-off darkening of a wheel run is ignored (Luiz); the wheel is not the cause.
+
+Gates: 32 in the Chat sandbox, plus the 4 Classroom gates and the scene gate on the workstation.
+
+| Issue | Step | State |
 |---|---|---|
-| #1 | Phase 1 gates on the workstation with OPTIX, plus the Classroom gates | done |
-| #2 | Step 5: `Session`, server and client; `check_equivalence` 23/23 | done |
-| #3 | Step 6: foveated active loop through `Session`; part 1 measures the legacy spread | Code (part 1) |
-| #4 | Step 7: choose the new scene | Luiz |
+| #1, #10 | Phase 1 gates on the workstation; numbering default | done |
+| #2 | Step 5: Session, server, client | done |
+| #4 | Step 7: the Barbershop | done |
+| #9 | the wheel's darker Classroom | done (ignored) |
+| #3 | Step 6: the active loop on a Session | PR for Luiz |
 
-**Next:**
-- Chat opens the Decision on D11: whether `complete` becomes the default Object Index numbering.
-- Code runs part 1 of #3 (the legacy spread, overnight if needed).
-- Luiz answers #4.
-
-**Open from #2** (in its report, for Chat): `pyproject.toml`'s `[checks]` extra does not declare
-Pillow, which gate 5.5 needs (f3d-vision's `run.py` imports it); f3d-vision's
-`check_equivalence.py source` gives 11/12 on the workstation because its import-closure check
-counts f3d-vision's own `.venv` as untracked modules; the wheel renders the Classroom's RGB darker
-than the binary (geometry and ids bitwise equal), cause not established.
-
-**Open for Luiz:** #4.
+**Next:** Luiz merges #3. Then the clean-up discussed in Chat: tag the end of the migration, turn
+the legacy comparisons into stored known answers, remove `legacy/`. Chat opens it as a Decision.
 
 **Known limits:**
-- **OptiX:** not bit-reproducible (two identical legacy runs differ by up to 4.8e-7 in Combined), so
-  equality with legacy on a GPU means "within the spread" (#3). Position and Object Index repeat
-  exactly, which is what Playground-2's equivalence compares.
-- **Object Index:** under the `legacy` numbering, objects reached only through collection instances
-  keep their library's pass index (on the Classroom 112 read 0, 4 collide with direct ids);
-  `complete` fixes this (D11). Instances of one object share its Object Index.
-- **RGB:** measure with the Blender binary until the wheel's difference is understood (D12: the
-  binary stays supported for rendering). Under the binary gate 1.2 SKIPs (no OpenEXR).
-- **Not built yet:** the `fov-render` command line of report §8.6.
+- **OptiX:** not bit-reproducible. Position and Object Index repeat exactly; Combined does not.
+  CPU repeats bit for bit on the calibration room, but not on the Classroom (#9).
+- **The active loop is chaotic.** A one-float32-step difference at fixation 0 (fov_render's float64
+  rig against fov-3d-vision's float32 composition) gives a different 50-fixation run. The unchanged
+  legacy loop does the same when its IPD moves by 0.2 µm (#3).
+- **Native mode is not validated statistically** (Luiz, #3). In `tools/active_loop_session.py
+  --mode native`, fov_render's own rig and records drive the loop. Its fixation-0 records agree
+  with legacy's (gate 6.3), but whether its Phase C numbers are unbiased is not established: on the
+  full Classroom its fine-level errors leaned ~3 % high, in too few runs to tell.
+- **Object Index:** instances of one object share its number; geometry-nodes instancers are listed,
+  not numbered.
+- **Not built:** the `fov-render` command line of report §8.6, beyond `python -m fov_render.checks.scene`.

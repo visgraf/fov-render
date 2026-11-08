@@ -1,4 +1,9 @@
-"""Issue #3's statistical gate: fov_render runs of the active loop against the legacy spread.
+"""WITHDRAWN as #3's gate (Luiz, 2026-11-07). It cannot pass a correct loop: the legacy range comes
+from runs that share fixation 0, the loop is chaotic, and the unchanged legacy loop fails it when its
+IPD moves by 0.2 um (docs/runs/issue-3/part2/). Kept because that diagnosis runs it; do not use it as
+an equivalence test.
+
+Issue #3's statistical gate: fov_render runs of the active loop against the legacy spread.
 
     python tools/loop_spread_gate.py --spread docs/runs/issue-3/spread.json --config class_small \
         --legacy RUN_a RUN_b RUN_c --runs NATIVE_1 NATIVE_2 NATIVE_3 --fov3d /path/to/fov-3d-vision [--json OUT]

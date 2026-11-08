@@ -16,7 +16,9 @@ active_eval.py on the result.
                 run must equal the legacy loop's bit for bit (#3's exact test).
 --mode native   fov_render's own Rig poses the camera (float64) and the records come from
                 fov_render's SampleRecord (directions, footprints, range from Position), converted
-                to the loop's D1 format; judged statistically against the legacy spread (#3).
+                to the loop's D1 format. NOT validated statistically (Luiz, #3): its fixation-0
+                records agree with legacy's (gate 6.3), but the loop is chaotic and whether its
+                Phase C numbers are unbiased is not established.
 The run folder also gets fov-render-loop.json: the mode, fov-render's commit and the session.
 """
 from __future__ import annotations
