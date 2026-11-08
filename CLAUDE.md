@@ -39,8 +39,9 @@ Luiz starts Code with "work on #n"; nobody has to copy prompts around.
    Decisions that matter end up in `docs/PLAN.md` or `docs/STATUS.md`.
 4. **Fix forward.** Don't rewrite pushed history; a correction is a new commit.
 5. **When unsure, ask** (`for-luiz`) instead of guessing.
-6. **Behaviour before structure.** When legacy code moves here, show it behaves the same, by a
-   check against the copies in `legacy/`, before improving it.
+6. **Behaviour before structure.** When code that replaces checked behaviour changes, show it still
+   behaves the same, by the known answers in `fov_render/checks/known/` or the pinned legacy files
+   (`fov_render/checks/pinned.py`), before improving it.
 
 ## Branches
 
@@ -65,5 +66,6 @@ you start, push before you hand over, and put the commit in your issue comment.
 
 - `CLAUDE.md`: this file. `docs/STATUS.md`: where the project is, a page at most, rewritten at
   each milestone. `docs/PLAN.md`: the plan and the decisions.
-- `legacy/`: byte-identical copies of the code fov-render replaces, used only by the checks.
-  Never edit them.
+- `fov_render/checks/known/`: the legacy code's answers and pins (#16); `fov_render/checks/fixtures/`:
+  vendored scene builders and `check_foveated`. Never edit them by hand; re-freeze with
+  `tools/freeze_known_answers.py`.
