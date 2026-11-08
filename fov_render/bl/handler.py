@@ -131,12 +131,24 @@ class Handler:
         _write_atomic(out / "request.json", dumps(req))
         look_id = f"{int(req['n']):06d}"
         eyes = {}
+        fov3d = self.session.get("pose_convention", "fov_render") == "fov3d"
+        if fov3d and (gaze is None or gaze.mode != "per_eye"):
+            from ..request import RequestError
+            raise RequestError(["gaze: the fov3d pose convention takes per-eye (yaw, pitch) angles"])
         for eye in req["eyes"]:
             if gaze is None:
                 pose = rig.fixed_pose(self.head, eye, float(req["gaze"].get("yaw_offset_deg", 0.0)))
             else:
                 pose = rig.pose(self.head, gaze, eye)
-            cameras.pose(cam, pose)
+            if fov3d:                       # fov-3d-vision's own float32 composition (compat)
+                import bpy
+                from .. import compat
+                yaw, pitch = gaze.angles[eye]
+                eye_obj = bpy.data.objects.get("EYE") or h.scene.camera
+                cam.matrix_world = compat.fov3d_gaze_matrix(eye_obj, float(yaw), float(pitch), tuple(rig.centre_h(eye)))
+                bpy.context.view_layer.update()
+            else:
+                cameras.pose(cam, pose)
             exr = out / f"raw_{eye}.exr"
             secs = engine.render_once(h.scene, spp, int(seeds[eye]), str(exr))
             e = {"exr": str(exr), "seed": int(seeds[eye]), "render_seconds": float(secs), "pose": pose.as_dict(),

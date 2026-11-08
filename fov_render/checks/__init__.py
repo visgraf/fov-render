@@ -45,10 +45,12 @@ def run(steps, work: Path, device: str) -> list[Result]:
             return g
         plan += [(m.__name__[-1], [bind(f) for f in m.CHECKS], True) for m in (step1, step3, step4)]
         plan.append(("5", [bind(f) for f in step5.CHECKS], True))
+        from . import step6
+        plan.append(("6", [bind(f) for f in step6.CHECKS], True))
         from . import classroom
         plan.append(("classroom", [bind(f) for f in classroom.CHECKS], True))
     else:
-        plan += [(s, [], True) for s in ("1", "3", "4", "5", "classroom")]
+        plan += [(s, [], True) for s in ("1", "3", "4", "5", "6", "classroom")]
     out = []
     for step, fns, needs_bpy in sorted(plan, key=lambda x: x[0]):
         if step not in steps and step != "0":
@@ -71,7 +73,7 @@ def run(steps, work: Path, device: str) -> list[Result]:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="fov_render.checks")
-    ap.add_argument("--steps", nargs="*", default=["1", "2", "3", "4", "5"])
+    ap.add_argument("--steps", nargs="*", default=["1", "2", "3", "4", "5", "6"])
     ap.add_argument("--work", default=str(ROOT / "previews" / "checks"))
     ap.add_argument("--device", default="CPU", choices=["CPU", "OPTIX", "CUDA"])
     ap.add_argument("--json", default=None, help="where to write the results (default: WORK/results.json)")

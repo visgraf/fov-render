@@ -247,14 +247,15 @@ def validate_request(req) -> dict:
 # ----------------------------------------------------------------------------- the session
 
 def make_session(blend, cfg, rig: Rig, *, access="observation", head: HeadPose | None = None,
-                 instance_ids="complete", prepare=None, formats=()) -> dict:
+                 instance_ids="complete", prepare=None, formats=(), pose_convention="fov_render") -> dict:
     """prepare: a sensor to set up when the session opens, so the ready answer carries its
     settings (as a legacy server that configures its camera at start). formats: extra readbacks
     the handler also reports, e.g. ("f3d_ab1a",) (fov_render.compat)."""
     d = {"schema": SESSION_SCHEMA, "blend": None if blend is None else str(Path(blend).resolve()),
          "config": cfg.as_dict(), "rig": rig.as_dict(), "access": access,
          "head": None if head is None else head.as_dict(), "instance_ids": instance_ids,
-         "prepare": None if prepare is None else sensor_to_dict(prepare), "formats": list(formats)}
+         "prepare": None if prepare is None else sensor_to_dict(prepare), "formats": list(formats),
+         "pose_convention": pose_convention}
     validate_session(d)
     return d
 
@@ -263,8 +264,8 @@ def validate_session(d) -> dict:
     out = []
     if not isinstance(d, dict):
         raise RequestError(["session: must be a JSON object"])
-    _unknown(d, ("schema", "blend", "config", "rig", "access", "head", "instance_ids", "prepare", "formats"),
-             "session", out)
+    _unknown(d, ("schema", "blend", "config", "rig", "access", "head", "instance_ids", "prepare", "formats",
+                 "pose_convention"), "session", out)
     if d.get("schema") != SESSION_SCHEMA:
         out.append(f"schema: expected {SESSION_SCHEMA!r}, got {d.get('schema')!r}")
     if d.get("blend") is not None and not isinstance(d["blend"], str):
@@ -285,6 +286,9 @@ def validate_session(d) -> dict:
         out.append("instance_ids: must be 'legacy' or 'complete'")
     if d.get("prepare") is not None:
         out += check_sensor(d["prepare"])
+    from .compat import POSE_CONVENTIONS
+    if d.get("pose_convention", "fov_render") not in POSE_CONVENTIONS:
+        out.append(f"pose_convention: must be one of {list(POSE_CONVENTIONS)}")
     from .compat import FORMATS
     if not (isinstance(d.get("formats"), list) and all(x in FORMATS for x in d["formats"])):
         out.append(f"formats: must be a list of names from {sorted(FORMATS)}")

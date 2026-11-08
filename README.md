@@ -110,6 +110,8 @@ legacy/                comparators, never edited
 tools/run_checks.py    gates under the Blender binary
 tools/gfe_session.py   f3d-vision's greedy explorer (Playground-2) on a Session
 tools/make_eye_scene.py  a derived copy of a .blend with an EYE (the head), the original untouched
+tools/active_loop_session.py  fov-3d-vision's foveated active loop on a Session (exact; native, not validated)
+tools/compare_loop_runs.py   two loop runs bit for bit (#3's gate); tools/loop_spread_gate.py is withdrawn
 docs/scenes/           what each scene used in the project is expected to give (fov_render.checks.scene)
 docs/                  PLAN, STATUS, reports
 ```
