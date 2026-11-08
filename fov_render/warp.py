@@ -1,7 +1,7 @@
 """The foveated log-polar warp in numpy: raster -> eccentricity -> direction -> footprint.
 
-Same formulas as `foveated_camera.osl` and fov-3d-vision `tools/warp.py` (the comparator in
-legacy/). Spacing s(e) = s0 (1 + e/E2) integrates to the raster radius w(e) = (E2/s0) ln(1 + e/E2);
+Same formulas as `foveated_camera.osl` and fov-3d-vision `tools/warp.py` (frozen as a known answer
+in checks/known/, issue #16). Spacing s(e) = s0 (1 + e/E2) integrates to the raster radius w(e) = (E2/s0) ln(1 + e/E2);
 normalised by the rim, e(r) = E2 ((1 + e_max/E2)^r - 1) for r in [0, 1].
 
 Frames: the shader frame is +X right, +Y up, +Z forward. Raster rows are top-down, so row i has

@@ -2,6 +2,7 @@
 scene and a synthetic audit scene. Needs bpy. The Classroom parts are Phase 2."""
 from __future__ import annotations
 
+import json
 import math
 import tempfile
 from pathlib import Path
@@ -11,7 +12,7 @@ import numpy as np
 from .. import record
 from ..rig import Gaze, HeadPose, Rig
 from ..sensors import PanoramaModel
-from .common import Result, legacy_path, load_legacy
+from .common import KNOWN, Result
 from .scenes import AUDIT_EXPECTED, HDRI_W, make_audit_scene, make_hdri_scene
 from .step1 import calib_room
 
@@ -20,20 +21,19 @@ STEP = "4"
 
 def head_pose(ctx) -> Result:
     """The head comes from EYE: make_calib_room's eye at (0, 0, 1.6) looking +Y, up +Z; equal to the
-    legacy readers (f3d-vision _head_pose, fov-3d-vision eye_record)."""
+    legacy reader (f3d-vision _head_pose, frozen in known/step4.json, issue #16)."""
     import bpy
     from ..bl import scene as S
     h = S.open_scene(calib_room(ctx))
     expect_r = np.array([[1.0, 0, 0], [0, 0, -1.0], [0, 1.0, 0]])     # columns: right, up, -forward
     d_r = float(np.abs(h.head.R_wh - expect_r).max())
     d_o = float(np.abs(h.head.origin_w - [0, 0, 1.6]).max())
-    with legacy_path("f3d"):
-        co = load_legacy("f3d", "classroom_oracle1_render.py")
-        _e, _n, lo, lr = co._head_pose()
+    k = json.loads((KNOWN / "step4.json").read_text())
+    lo, lr = np.array(k["head_origin_w"]), np.array(k["head_R_wh"])
     d_leg = max(float(np.abs(lr - h.head.R_wh).max()), float(np.abs(lo - h.head.origin_w).max()))
     other = S.resolve_head(bpy.context.scene, explicit=((0.0, 0.0, 1.6), 10.0, 0.0))[0]
     ctrl = float(np.abs(other.R_wh - h.head.R_wh).max()) > 1e-3
-    return Result(STEP, "head pose from EYE (known answer and legacy readers)", max(d_r, d_o, d_leg) < 1e-6, ctrl,
+    return Result(STEP, "head pose from EYE (known answer and the frozen legacy reader)", max(d_r, d_o, d_leg) < 1e-6, ctrl,
                   {"eye_note": h.eye_note, "R_diff": d_r, "origin_diff": d_o, "vs_legacy": d_leg,
                    "control": "an explicit head yawed 10 deg differs"})
 
@@ -46,12 +46,10 @@ def instance_catalog(ctx) -> Result:
     the complete catalogue compared with the legacy pass indices."""
     import bpy
     from ..bl import scene as S
+    k = json.loads((KNOWN / "step4.json").read_text())      # f3d-vision's numbering, frozen (issue #16)
     h = S.open_scene(calib_room(ctx))
     ours = {e["name"]: e["id"] for e in h.catalog["instances"]}
-    bpy.ops.wm.open_mainfile(filepath=calib_room(ctx))
-    with legacy_path("f3d"):
-        co = load_legacy("f3d", "classroom_oracle1_render.py")
-        _by_id, by_name = co._assign_instance_ids()
+    by_name = k["calib_room_ids"]
     again = {e["name"]: e["id"] for e in S.open_scene(calib_room(ctx)).catalog["instances"]}
 
     audit = make_audit_scene(ctx["work"])
@@ -59,10 +57,7 @@ def instance_catalog(ctx) -> Result:
     def live_ids(cat):
         return {e["name"]: int(bpy.data.objects[e["name"]].pass_index) for e in cat["instances"]}
 
-    bpy.ops.wm.open_mainfile(filepath=audit)
-    with legacy_path("f3d"):
-        co._assign_instance_ids()
-    legacy_live = {o.name_full: int(o.pass_index) for o in bpy.data.objects if o.type in S.RENDERABLE}
+    legacy_live = k["audit_scene_ids_after_legacy"]
     lg = S.open_scene(audit, instance_ids="legacy").catalog
     lg_ids = {e["name"]: e["id"] for e in lg["instances"]}
     lg_live = live_ids(lg)

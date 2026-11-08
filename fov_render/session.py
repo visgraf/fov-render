@@ -88,8 +88,7 @@ class _Base:
 
 class Session(_Base):
     def __init__(self, blend, cfg: RenderConfig, rig: Rig | None = None, *, access: str = "observation",
-                 head=None, instance_ids: str = "complete", prepare=None, formats=(), launcher: str = "auto",
-                 pose_convention: str = "fov_render",
+                 head=None, instance_ids: str = "complete", prepare=None, launcher: str = "auto",
                  workdir=None, log=None, ready_timeout_s: float = 600.0, poll_s: float = 0.003):
         self.cfg, self.rig, self.access = cfg, rig or Rig(), access
         self.blend = None if blend is None else Path(blend).resolve()
@@ -101,7 +100,7 @@ class Session(_Base):
         if any(self.q.glob("req-*.json")) or (self.q / "server-ready.json").exists():
             raise SessionError(f"{self.q} already holds a session's queue")
         self.session = make_session(self.blend, cfg, self.rig, access=access, head=head, instance_ids=instance_ids,
-                                    prepare=prepare, formats=formats, pose_convention=pose_convention)
+                                    prepare=prepare)
         (self.q / "session.json").write_text(dumps(self.session))
         self.poll_s, self.n = poll_s, 0
         cmd, env, self.launcher = self._command(launcher)
@@ -211,13 +210,12 @@ class InProcessSession(_Base):
     """The same handler, called directly inside a Blender script (no second process)."""
 
     def __init__(self, blend, cfg: RenderConfig, rig: Rig | None = None, *, access: str = "observation", head=None,
-                 instance_ids: str = "complete", prepare=None, formats=(), workdir=None,
-                 pose_convention: str = "fov_render"):
+                 instance_ids: str = "complete", prepare=None, workdir=None):
         from .bl.handler import Handler
         self.cfg, self.rig, self.access = cfg, rig or Rig(), access
         self.workdir = Path(workdir).resolve() if workdir else Path(tempfile.mkdtemp(prefix="fov-render-session-"))
         self.session = make_session(blend, cfg, self.rig, access=access, head=head, instance_ids=instance_ids,
-                                    prepare=prepare, formats=formats, pose_convention=pose_convention)
+                                    prepare=prepare)
         t0 = time.perf_counter()
         self.handler = Handler(self.session)
         self.ready = dict(self.handler.ready, start_seconds=time.perf_counter() - t0)

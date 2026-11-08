@@ -15,9 +15,9 @@ It unifies the render support of [fov-3d-vision](https://github.com/visgraf/fov-
 technical report *Foveated Stereo Rendering in Blender: A Unified Sensor Framework*
 ([lvelho/fov-render-tr](https://github.com/lvelho/fov-render-tr)).
 
-**Status:** migration steps 1–4 done and accepted on the workstation (#1); step 5 (`Session`, the
-render server, JSON requests) is in #2. See [`docs/STATUS.md`](docs/STATUS.md) and
-[`docs/PLAN.md`](docs/PLAN.md).
+**Status:** the migration from fov-3d-vision and f3d-vision is complete (tag `v0.1.0`), and the
+migration scaffolding is gone from `main` (#16). See [`docs/STATUS.md`](docs/STATUS.md),
+[`docs/PLAN.md`](docs/PLAN.md) and [`docs/HISTORY.md`](docs/HISTORY.md).
 
 ## Use it as a submodule
 
@@ -71,7 +71,7 @@ s = Session.in_process(RenderConfig(...), rig=Rig(), blend=None)   # inside Blen
 Each look is a `fov-render-request-v1` JSON request (`fov_render/request.py`); its folder holds
 `request.json`, `raw_<eye>.exr`, `record_<eye>.npz` when asked, and `meta.json` (poses, the
 settings Cycles used, timings). A malformed request is refused with every reason, before anything
-renders. `tools/gfe_session.py` runs f3d-vision's greedy explorer unchanged on a Session.
+renders.
 
 ## Checks
 
@@ -80,7 +80,7 @@ Every module ships a check with a control that must fail. Run them all:
 ```
 pip install -e ".[bpy,checks]"                                  # Python 3.13: bpy wheel + OpenEXR
 python -m fov_render.checks --device OPTIX                      # or CPU; numpy only without bpy
-python -m fov_render.checks --steps classroom --device OPTIX    # needs an f3d-vision checkout
+python -m fov_render.checks --steps classroom --device OPTIX    # the workstation: Classroom files + f3d-vision
 ```
 
 A new scene gets its own gate, every check that an arbitrary file can run (S1 opens, S2 sanity,
@@ -95,25 +95,29 @@ The checks run with the `bpy` wheel (PLAN D12): under the Blender binary
 (`blender -b --python-exit-code 1 -P tools/run_checks.py -- …`) gate 1.2 SKIPs, because Blender's
 own Python has no OpenEXR. Gate 1.2 renders on CPU whatever `--device` says (D10). Without `bpy`
 the Blender gates are reported SKIP, never PASS. Results go to
-`previews/checks/results.json`. The checks compare against byte-identical copies of the legacy
-code in `legacy/` (provenance and hashes in `legacy/PROVENANCE.json`).
+`previews/checks/results.json`.
+
+The comparisons with the code fov_render replaced (fov-3d-vision, f3d-vision) use **known answers**:
+what the legacy code gave, frozen in `fov_render/checks/known/` by `tools/freeze_known_answers.py`.
+The legacy files themselves are pinned in `known/pins.json` (repository, commit, path, sha256) and
+rebuilt on demand from a checkout's git history (`fov_render/checks/pinned.py`, with
+`$FOVRENDER_F3D_ROOT` and `$FOVRENDER_FOV3D_ROOT`): the Classroom gates use them, and so does the
+freeze if it ever has to be re-run. Until `v0.1.0` they were copies in `legacy/`; the migration's
+history is in [`docs/HISTORY.md`](docs/HISTORY.md).
 
 ## Layout
 
 ```
 fov_render/            numpy side: profiles, warp, rig, geometry, sensors/, record, exr_lite,
-                       request (JSON schemas), session (Session, Look), compat (f3d-vision formats)
+                       request (JSON schemas), session (Session, Look)
 fov_render/server.py   the persistent render server (Blender side)
 fov_render/bl/         Blender side: env, config (RenderConfig, presets), engine, passes, cameras, scene, handler
-fov_render/checks/     the gates of the migration plan
-legacy/                comparators, never edited
+fov_render/checks/     the gates; known/ (frozen answers, pins), fixtures/ (scene builders, check_foveated)
 tools/run_checks.py    gates under the Blender binary
-tools/gfe_session.py   f3d-vision's greedy explorer (Playground-2) on a Session
 tools/make_eye_scene.py  a derived copy of a .blend with an EYE (the head), the original untouched
-tools/active_loop_session.py  fov-3d-vision's foveated active loop on a Session (exact; native, not validated)
-tools/compare_loop_runs.py   two loop runs bit for bit (#3's gate); tools/loop_spread_gate.py is withdrawn
+tools/freeze_known_answers.py  re-freezes known/ from the pinned legacy code (needs both checkouts)
 docs/scenes/           what each scene used in the project is expected to give (fov_render.checks.scene)
-docs/                  PLAN, STATUS, reports
+docs/                  PLAN, STATUS, HISTORY
 ```
 
 How we work on it (Luiz, Chat, Code, GitHub Issues): [`CLAUDE.md`](CLAUDE.md).

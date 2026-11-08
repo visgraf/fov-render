@@ -20,3 +20,4 @@ include = ["fov_render*"]
 
 [tool.setuptools.package-data]
 "fov_render.sensors" = ["*.osl"]
+"fov_render.checks" = ["known/*.json", "known/*.npz", "fixtures/*.py", "fixtures/*.md"]

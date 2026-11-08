@@ -30,7 +30,7 @@ Added in Phase 2 (Luiz, 2026-11-07, recorded in #1):
 ## Phase 1: Chat, local repository, CPU (done, 2026-11-07)
 
 Steps 1–4 of the migration plan, in Chat's sandbox with the `bpy` 5.2.1 wheel on CPU. Report:
-[`docs/phase-1-report.md`](phase-1-report.md).
+[`docs/phase-1-report.md` (in v0.1.0)](https://github.com/visgraf/fov-render/blob/v0.1.0/docs/phase-1-report.md).
 
 | Step | Gate | Status |
 |---|---|---|
@@ -47,7 +47,7 @@ Steps 1–4 of the migration plan, in Chat's sandbox with the `bpy` 5.2.1 wheel 
    Classroom gates deferred from steps 1 and 4: `check_foveated` on the Classroom, the Classroom head
    pose against the accepted AB1a record, the 234-entry catalogue of Breadth-1, AB1a's own OPTIX spec.
    Result: 19/19 on CPU and OPTIX with the wheel, 23/23 with the Classroom gates; decisions D10–D12;
-   report [`docs/runs/issue-1/README.md`](runs/issue-1/README.md).
+   report [`docs/runs/issue-1/README.md`](https://github.com/visgraf/fov-render/blob/v0.1.0/docs/runs/issue-1/README.md).
 3. **Step 5. Session, server and client** (done, 2026-11-07, #2) (report §8), then the greedy explorer through
    `client.Session`; gate: f3d-vision `check_equivalence.py` 23/23 against the frozen Playground-2 run.
    Built in #2 (Chat): `request.py` (schemas `fov-render-session-v1`, `-request-v1`, `-response-v1`),
@@ -62,7 +62,7 @@ Steps 1–4 of the migration plan, in Chat's sandbox with the `bpy` 5.2.1 wheel 
    which `check_equivalence` reports but does not compare. Not built: the `fov-render` command
    line of report §8.6. Result (Code, workstation): `check_equivalence` 23/23 with the known answer
    through the binary (and through the wheel); the IPD-ULP control fails 14/17; gates 24/24 on
-   OPTIX; report [`docs/runs/issue-2/README.md`](runs/issue-2/README.md).
+   OPTIX; report [`docs/runs/issue-2/README.md`](https://github.com/visgraf/fov-render/blob/v0.1.0/docs/runs/issue-2/README.md).
 4. **Step 6. The foveated sensor in the same handler**: fov-3d-vision's `active_loop.py --policy
    coverage` with `Session(in_process=True)`; gate: checks (s)–(v) and the Phase C numbers within the
    spread of one repeated legacy run (to be measured first). In #3: part 1 (Code) measured the
@@ -91,3 +91,29 @@ Steps 1–4 of the migration plan, in Chat's sandbox with the `bpy` 5.2.1 wheel 
    back-faces are accepted as the scene is (allowed by name, any other back-face fails S2); the
    missing images are listed and their objects' solid angle reported, the material audit by solid
    angle from the head (S6) is reviewed with Luiz.
+
+## Clean-up (#16, after the tag `v0.1.0`)
+
+`v0.1.0` (tag object `0df9ff0`, at `ca30e29`) is the end of the migration: the last commit with
+`legacy/`, the migration's run records and every comparison against the legacy code.
+
+Decisions (Luiz, 2026-11-07, recorded in #16):
+
+| # | Question | Decision |
+|---|---|---|
+| D14 | What replaces the comparisons against `legacy/` | mixed. Steps 1–4's comparisons use known answers frozen from the legacy code (`fov_render/checks/known/`, by `tools/freeze_known_answers.py`). The Classroom gates use f3d-vision's pinned files rebuilt from a checkout's git history (`fov_render/checks/pinned.py`, `known/pins.json`) |
+| D15 | The migration's history | in the tag. `docs/runs/` and `docs/phase-1-report.md` left `main`; `docs/HISTORY.md` summarises each issue with links into `v0.1.0` |
+| D16 | The migration adapters | removed: `compat.py`, `tools/gfe_session.py`, `tools/active_loop_session.py`, `compare_loop_runs.py`, `run_fov3d_loop.py`, `loop_spread_gate.py`, the session fields `formats` and `pose_convention`, gates 5.2, 5.3, 5.5 and 6.1–6.3. Recoverable from `v0.1.0`, though they may need repair against a later fov_render |
+| D17 | The tag | `v0.1.0` at `ca30e29`, created before anything was removed |
+
+What changed in the gates that stayed:
+- **Gate 1.2** compares fov_render's fixation with the frozen legacy fixation within the pose-precision
+  tolerance. Its bitwise clause (rendering with the legacy pose matrix) needed the legacy code, and CPU
+  renders are not promised bitwise across machines, so it ran up to `v0.1.0` only.
+- **Step 2's legacy self-tests** went: they tested the legacy code itself.
+- **Three files from `legacy/` are fixtures now** (`fov_render/checks/fixtures/`, byte-identical,
+  hash-checked by gate 0): the calibration-room and HDRI scene builders, with their `bl_common`, and
+  fov-3d-vision's `check_foveated`.
+- **The migration rule** (CLAUDE.md rule 6, "show it behaves the same, by a check against the copies in
+  `legacy/`") now reads against the known answers and the pinned files. Only Luiz changes CLAUDE.md
+  (proposed wording in the PR of #16).
