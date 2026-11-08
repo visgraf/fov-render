@@ -65,7 +65,14 @@ Steps 1–4 of the migration plan, in Chat's sandbox with the `bpy` 5.2.1 wheel 
    OPTIX; report [`docs/runs/issue-2/README.md`](runs/issue-2/README.md).
 4. **Step 6. The foveated sensor in the same handler**: fov-3d-vision's `active_loop.py --policy
    coverage` with `Session(in_process=True)`; gate: checks (s)–(v) and the Phase C numbers within the
-   spread of one repeated legacy run (to be measured first).
+   spread of one repeated legacy run (to be measured first). In #3: part 1 (Code) measured the
+   spread, 3 runs × 3 configurations at fov-3d-vision `48a3139`; the Phase C table itself no longer
+   reproduces (the loop changed after it). Gate (Luiz, #3), replacing "inside min..max", which fails
+   by chance: (1) exact, CPU, calibration room: the loop on fov_render (`tools/active_loop_session.py
+   --mode exact`) equals the legacy loop in every file and Phase C number; (2) statistical, OPTIX,
+   Classroom small and full: 3 runs in `--mode native` (fov_render's own rig and records), each Phase
+   C number's mean within one legacy range of the legacy mean (`tools/loop_spread_gate.py`). Only
+   the fixation-0 RGB test of #9 is kept. Sandbox gates 6.1–6.3.
 5. **Step 7. A new scene** neither repository has used, through every sensor; gate: every check
    passes and the material audit is reviewed. Scene (Luiz, #4): the Agent 327 Barbershop
    (Blender Studio, CC-BY); the Barcelona Pavilion was triaged and discarded, and its triage found
