@@ -1,7 +1,7 @@
 """fov-render: Blender Cycles rendering for gaze-directed binocular observers.
 
 numpy side (both interpreters):  profiles, warp, rig, geometry, sensors, record, exr_lite,
-                                 request (JSON schemas), session (Session, Look), compat
+                                 request (JSON schemas), session (Session, Look)
 Blender side (needs bpy):        fov_render.bl  (config, engine, passes, cameras, scene, handler),
                                  fov_render.server (the persistent render server)
 """

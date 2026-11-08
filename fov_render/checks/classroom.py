@@ -11,8 +11,10 @@ Classroom and the accepted f3d-vision records. Needs bpy.
           legacy and complete numberings of the 116 collection-instance objects (PLAN D11)
 
 Every file comes from the f3d-vision checkout the legacy specs name (their SHARED), or from
-$FOVRENDER_F3D_ROOT, and is checked against the sha256 that a spec in legacy/ pins before it is
-used. Without the files a gate is SKIPPED, never passed; a file whose hash differs is a FAIL.
+$FOVRENDER_F3D_ROOT, and is checked against the sha256 its spec pins before it is used. The specs and
+the legacy code are f3d-vision's at the pinned commit, rebuilt from that checkout's git history
+(checks.pinned, issue #16). Without them a gate is SKIPPED, never passed; a file whose hash differs
+is a FAIL.
 """
 from __future__ import annotations
 
@@ -78,11 +80,14 @@ def files() -> dict:
 
 
 def _need(name: str):
+    from .pinned import LegacyUnavailable
     try:
         return files(), None
     except Missing as e:
         return None, Result(STEP, name, False, None,
                             skipped=f"Classroom file not found: {e} (set FOVRENDER_F3D_ROOT to an f3d-vision checkout)")
+    except LegacyUnavailable as e:
+        return None, Result(STEP, name, False, None, skipped=f"f3d-vision's pinned code: {e}")
 
 
 # ----------------------------------------------------------------------------- 1.C

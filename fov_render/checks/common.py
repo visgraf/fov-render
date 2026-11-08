@@ -11,7 +11,21 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-LEGACY = {"fov": ROOT / "legacy" / "fov-3d-vision" / "tools", "f3d": ROOT / "legacy" / "f3d-vision" / "tools"}
+FIXTURES = Path(__file__).resolve().parent / "fixtures"
+KNOWN = Path(__file__).resolve().parent / "known"
+
+
+class _Legacy:
+    """LEGACY["f3d"] / LEGACY["fov"]: the pinned legacy tools folder, rebuilt from a checkout's git
+    history by checks.pinned (legacy/ was removed in issue #16). Raises pinned.LegacyUnavailable
+    when no checkout is configured; the checks that need it SKIP with that reason."""
+
+    def __getitem__(self, repo: str) -> Path:
+        from .pinned import materialize
+        return materialize(repo)
+
+
+LEGACY = _Legacy()
 
 
 @dataclass

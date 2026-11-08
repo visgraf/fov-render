@@ -1,5 +1,5 @@
-"""Step 2 gates: the numpy models (rig, sensors, record, geometry) agree with the legacy code.
-numpy only except the gaze_matrix comparison, which needs mathutils (Blender or the bpy wheel)."""
+"""Step 2 gates: the numpy models (rig, sensors, record, geometry) agree with the legacy code, whose
+answers are frozen in known/step2.npz (tools/freeze_known_answers.py, issue #16). numpy only."""
 from __future__ import annotations
 
 import math
@@ -11,108 +11,92 @@ import numpy as np
 from .. import geometry, record, warp
 from ..rig import HeadPose, Rig, Gaze, camera_rotation, gaze_angles, gaze_direction, gaze_rotation, CV_TO_BLENDER
 from ..sensors import Foveated, Panorama, Perspective, ReferenceView, PanoramaModel
-from .common import Result, load_legacy
+from .common import KNOWN, Result
 
 STEP = "2"
 GAZES = [(y, p) for y in range(-170, 171, 17) for p in range(-80, 81, 16)]
 
 
-def legacy_self_tests() -> Result:
-    lw = load_legacy("fov", "warp.py")
-    lr = load_legacy("fov", "rig.py")
-    lg = load_legacy("f3d", "fsg_geometry.py")
-    fails = {"warp": lw.self_test(), "rig": lr.self_test(), "fsg_geometry": lg.self_test()}
-    # control: the warp self-test must catch a 1 % error in the warp
-    orig = lw.eccentricity_of_r
-    lw.eccentricity_of_r = lambda r, e2, emax: orig(r, e2 * 1.01, emax)
-    try:
-        caught = bool(lw.self_test())
-    finally:
-        lw.eccentricity_of_r = orig
-    return Result(STEP, "legacy self-tests (warp, rig, fsg_geometry)", not any(fails.values()), caught,
-                  {"failures": fails, "control": "E2 perturbed by 1% inside legacy warp"})
+CALIB_CASES = [(roll, frame, y, p) for roll, frame in (("upright", "legacy_upright"), ("baseline_projected", "baseline_projected"))
+               for y, p in [(0, 0), (14, -7), (-24, 11), (120, 45), (-120, -45), (179.9, -89.9)]
+               if not (roll == "upright" and abs(p) > 89)]
+TRIANGULATION_P = (0.3, 0.2, -2.7)
+
+
+def _known():
+    return np.load(KNOWN / "step2.npz")
 
 
 def warp_matches_legacy() -> Result:
-    lw = load_legacy("fov", "warp.py")
+    """Directions, footprints, mask and inverse against fov-3d-vision's warp, frozen on 4000 pixels per
+    profile plus the whole mask (known/step2.npz, issue #16)."""
+    k = _known()
     worst, sizes = 0.0, {}
     for prof, s0 in (("small", 0.1), ("full", 0.05)):
         n = warp.raster_size(s0, 2.0, 45.0)
-        sizes[prof] = [n, lw.raster_size(s0, 2.0, 45.0)]
-        a = lw.raster_samples(n, 2.0, 45.0)
+        sizes[prof] = [n, int(k[f"{prof}_n"])]
         m = Foveated().model(prof)
         r = m.rays()
-        worst = max(worst, float(np.abs(r.direction * np.array([1, 1, -1]) - a["direction_cam"]).max()),
-                    float(np.abs(r.footprint_sr - a["footprint"]).max()))
-        if not np.array_equal(r.valid, a["inside"]):
+        idx = k[f"{prof}_idx"]
+        d = r.direction.reshape(-1, 3)[idx]
+        worst = max(worst, float(np.abs(d * np.array([1, 1, -1]) - k[f"{prof}_direction_cam"]).max()),
+                    float(np.abs(r.footprint_sr.reshape(-1)[idx] - k[f"{prof}_footprint"]).max()))
+        mask = np.unpackbits(k[f"{prof}_mask"])[: int(k[f"{prof}_mask_size"])].astype(bool)
+        if not np.array_equal(r.valid.reshape(-1), mask):
             worst = math.inf
-        rc, ins = m.pixel_of(r.direction)
-        lrc, lins = lw.raster_of_direction(a["direction_cam"], n, 2.0, 45.0)
-        worst = max(worst, float(np.abs(rc - lrc).max()))
+        rc, ins = m.pixel_of(d)
+        worst = max(worst, float(np.abs(rc - k[f"{prof}_rc"]).max()))
+        if not np.array_equal(ins, k[f"{prof}_inside_rc"]):
+            worst = math.inf
     ok = worst <= 1e-12 and all(a == b for a, b in sizes.values())
     ctrl = Foveated(E2_deg=2.02, n=126).model().rays().direction
     base = Foveated(n=126).model().rays().direction
-    return Result(STEP, "new warp equals legacy warp (directions, footprints, mask, inverse)", ok,
+    return Result(STEP, "new warp equals legacy warp (directions, footprints, mask, inverse; frozen)", ok,
                   float(np.abs(ctrl - base).max()) > 1e-6, {"max_abs_diff": worst, "raster_sizes": sizes})
 
 
 def pose_agreement() -> Result:
-    """The three historical pose formulas and the new rig agree for upright roll."""
-    lr = load_legacy("fov", "rig.py")
-    lg = load_legacy("f3d", "fsg_geometry.py")
-    have_mu = True
-    try:
-        from mathutils import Matrix  # noqa: F401
-        rf = load_legacy("fov", "render_foveated.py")
-    except Exception:  # noqa: BLE001
-        have_mu = False
+    """The three historical pose formulas (frozen over the gaze grid) and the new rig agree, upright roll."""
+    k = _known()
+    if [tuple(x) for x in k["gazes"].tolist()] != [tuple(map(float, g)) for g in GAZES]:
+        return Result(STEP, "pose agreement, upright roll, 3 legacy formulas", False, None,
+                      {"error": "known/step2.npz was frozen on another gaze grid"})
     worst = {"rig.gaze_rotation": 0.0, "fsg_geometry.camera_rotation_h": 0.0, "render_foveated.gaze_matrix": 0.0}
-    for yaw, pitch in GAZES:
+    for i, (yaw, pitch) in enumerate(GAZES):
         new = camera_rotation(gaze_direction(yaw, pitch), "upright")
-        worst["rig.gaze_rotation"] = max(worst["rig.gaze_rotation"], float(np.abs(new - lr.gaze_rotation(yaw, pitch)).max()))
-        cv = lg.camera_rotation_h(lg.gaze_direction(yaw, pitch))
+        worst["rig.gaze_rotation"] = max(worst["rig.gaze_rotation"], float(np.abs(new - k["gaze_rotation"][i]).max()))
         worst["fsg_geometry.camera_rotation_h"] = max(worst["fsg_geometry.camera_rotation_h"],
-                                                      float(np.abs(new - cv @ CV_TO_BLENDER).max()))
-        if have_mu:
-            from mathutils import Matrix
-            from types import SimpleNamespace
-            eye = SimpleNamespace(matrix_world=Matrix.Identity(4))
-            m = np.array(rf.gaze_matrix(eye, yaw, pitch).to_3x3())
-            worst["render_foveated.gaze_matrix"] = max(worst["render_foveated.gaze_matrix"], float(np.abs(new - m).max()))
-    if not have_mu:
-        worst.pop("render_foveated.gaze_matrix")
+                                                      float(np.abs(new - k["camera_rotation_h"][i] @ CV_TO_BLENDER).max()))
+        worst["render_foveated.gaze_matrix"] = max(worst["render_foveated.gaze_matrix"],
+                                                   float(np.abs(new - k["gaze_matrix"][i]).max()))
     # numpy formulas agree to round-off; mathutils matrices are float32 (eps 6e-8), hence 1e-6 there
     tol = {"rig.gaze_rotation": 1e-12, "fsg_geometry.camera_rotation_h": 1e-12, "render_foveated.gaze_matrix": 1e-6}
-    ok = all(v <= tol[k] for k, v in worst.items())
-    # control: a yaw sign flip in one formula must be caught
-    flipped = max(float(np.abs(camera_rotation(gaze_direction(-y, p), "upright") - lr.gaze_rotation(y, p)).max())
-                  for y, p in GAZES if abs(y) > 1)
-    return Result(STEP, "pose agreement, upright roll, 3 legacy formulas", ok, flipped > 1e-3,
-                  {"max_abs_diff": worst, "tolerance": tol, "gazes": len(GAZES), "mathutils": have_mu})
+    ok = all(v <= tol[key] for key, v in worst.items())
+    # control: a yaw sign flip must be caught
+    flipped = max(float(np.abs(camera_rotation(gaze_direction(-y, p), "upright") - k["gaze_rotation"][i]).max())
+                  for i, (y, p) in enumerate(GAZES) if abs(y) > 1)
+    return Result(STEP, "pose agreement, upright roll, 3 legacy formulas (frozen)", ok, flipped > 1e-3,
+                  {"max_abs_diff": worst, "tolerance": tol, "gazes": len(GAZES)})
 
 
 def calibration_agreement() -> Result:
-    """Rig.pose reproduces f3d-vision make_calibration (R_hc and eye centres), both rolls."""
-    lg = load_legacy("f3d", "fsg_geometry.py")
-    head = HeadPose(lg.HEAD_R_WH, lg.HEAD_ORIGIN_W)
+    """Rig.pose reproduces f3d-vision make_calibration (R_hc and eye centres, frozen), both rolls."""
+    k = _known()
+    head = HeadPose(k["head_R_wh"], k["head_origin_w"])
     worst, n = 0.0, 0
-    for roll, frame in (("upright", "legacy_upright"), ("baseline_projected", "baseline_projected")):
+    for c, (roll, _frame, yaw, pitch) in enumerate(CALIB_CASES):
         rig = Rig(roll=roll)
-        for yaw, pitch in [(0, 0), (14, -7), (-24, 11), (120, 45), (-120, -45), (179.9, -89.9)]:
-            if roll == "upright" and abs(pitch) > 89:
-                continue
-            c = lg.make_calibration("small", yaw, pitch, vergence_distance=2.10, tangent_frame=frame)
-            g = Gaze.yaw_pitch(yaw, pitch, vergence_m=2.10)
-            for e in c["eyes"]:
-                p = rig.pose(head, g, e["name"])
-                worst = max(worst, float(np.abs(p.R_hc - np.asarray(e["R_hc"])).max()),
-                            float(np.abs(p.centre_h - np.asarray(e["centre_h_m"])).max()))
-                n += 1
+        g = Gaze.yaw_pitch(yaw, pitch, vergence_m=2.10)
+        for j, eye in enumerate(("L", "R")):
+            p = rig.pose(head, g, eye)
+            worst = max(worst, float(np.abs(p.R_hc - k["calib_R_hc"][c, j]).max()),
+                        float(np.abs(p.centre_h - k["calib_centre_h"][c, j]).max()))
+            n += 1
     # control: upright roll at an extreme gaze breaks the baseline-horizontal property
     up = camera_rotation(gaze_direction(179.9, -89.9), "upright")
     bp = camera_rotation(gaze_direction(179.9, -89.9), "baseline_projected")
     ctrl = float(up[:, 0] @ np.array([1.0, 0, 0])) <= 0 < float(bp[:, 0] @ np.array([1.0, 0, 0]))
-    return Result(STEP, "rig reproduces f3d-vision calibrations (R_hc, centres), both rolls", worst <= 1e-12, ctrl,
+    return Result(STEP, "rig reproduces f3d-vision calibrations (R_hc, centres; frozen), both rolls", worst <= 1e-12, ctrl,
                   {"max_abs_diff": worst, "eyes_compared": n,
                    "control": "upright roll at (179.9, -89.9) points image +X against the baseline"})
 
@@ -189,16 +173,15 @@ def record_and_geometry() -> Result:
             gate = False
         except record.AccessError:
             gate = True
-    # triangulation: a known point, both formulas, and the legacy sine rule
-    lr = load_legacy("fov", "rig.py")
+    # triangulation: a known point, both formulas, and the legacy sine rule (frozen)
     rig = Rig()
-    P = np.array([0.3, 0.2, -2.7])
+    P = np.array(TRIANGULATION_P)
     cl, cr = rig.centre_h("L"), rig.centre_h("R")
     tl, _ = geometry.epipolar((P - cl) / np.linalg.norm(P - cl))
     tr, _ = geometry.epipolar((P - cr) / np.linalg.norm(P - cr))
     rl, _ = geometry.triangulate_sine(tl, tr, rig.baseline_m)
     X, gap = geometry.closest_approach(cl, P - cl, cr, P - cr)
-    lrl, _, _ = lr.triangulate(np.degrees(tl), np.degrees(tr), rig.ipd_m)
+    lrl = float(_known()["legacy_triangulate_m"])
     detail.update({"sine_rule_err_m": float(abs(rl - np.linalg.norm(P - cl))),
                    "midpoint_err_m": float(np.linalg.norm(X - P)), "gap_m": float(gap),
                    "vs_legacy_triangulate_m": float(abs(rl - lrl))})
@@ -211,5 +194,4 @@ def record_and_geometry() -> Result:
                   gate and not np.isfinite(swapped), {**detail, "oracle_gate_raises": gate})
 
 
-CHECKS = [legacy_self_tests, warp_matches_legacy, pose_agreement, calibration_agreement, footprint_sums,
-          inverse_maps, record_and_geometry]
+CHECKS = [warp_matches_legacy, pose_agreement, calibration_agreement, footprint_sums, inverse_maps, record_and_geometry]

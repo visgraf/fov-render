@@ -1,26 +1,29 @@
-"""Gate 0: the legacy comparators are the files they claim to be (sha256 against legacy/PROVENANCE.json),
-and the package's OSL shader and EXR reader are byte-identical to their legacy sources."""
+"""Gate 0: the vendored files are the files they claim to be. The package's OSL shader and EXR reader,
+and the check fixtures, have the sha256 of their pinned legacy sources (known/pins.json, issue #16)."""
 from __future__ import annotations
 
 import hashlib
-import json
 
 from .common import ROOT, Result
+from .pinned import pins
+
+VENDORED = {"fov_render/sensors/foveated_camera.osl": ("fov-3d-vision", "tools/foveated_camera.osl"),
+            "fov_render/exr_lite.py": ("f3d-vision", "tools/exr_lite.py"),
+            "fov_render/checks/fixtures/make_calib_room.py": ("fov-3d-vision", "tools/make_calib_room.py"),
+            "fov_render/checks/fixtures/make_hdri_scene.py": ("fov-3d-vision", "tools/make_hdri_scene.py"),
+            "fov_render/checks/fixtures/bl_common.py": ("fov-3d-vision", "tools/bl_common.py"),
+            "fov_render/checks/fixtures/check_foveated.py": ("fov-3d-vision", "tools/check_foveated.py")}
 
 
 def provenance() -> Result:
-    prov = json.loads((ROOT / "legacy" / "PROVENANCE.json").read_text())
-    bad = [f["path"] for f in prov["files"]
-           if hashlib.sha256((ROOT / f["path"]).read_bytes()).hexdigest() != f["sha256"]]
-    vendored = {"fov_render/sensors/foveated_camera.osl": "legacy/fov-3d-vision/tools/foveated_camera.osl",
-                "fov_render/exr_lite.py": "legacy/f3d-vision/tools/exr_lite.py"}
-    diff = [a for a, b in vendored.items() if (ROOT / a).read_bytes() != (ROOT / b).read_bytes()]
-    # control: a one-byte change to a copy must change its hash
-    p = ROOT / prov["files"][0]["path"]
-    ctrl = hashlib.sha256(p.read_bytes() + b" ").hexdigest() != prov["files"][0]["sha256"]
-    return Result("0", "legacy comparators and vendored files unchanged", not bad and not diff, ctrl,
-                  {"files": len(prov["files"]), "hash_mismatch": bad, "vendored_differs": diff,
-                   "sources": prov["sources"]})
+    p = pins()
+    sha = {(f["repo"], f["path"]): f["sha256"] for f in p["files"]}
+    bad = [a for a, key in VENDORED.items() if hashlib.sha256((ROOT / a).read_bytes()).hexdigest() != sha[key]]
+    # control: a one-byte change to a file must change its hash
+    first = next(iter(VENDORED))
+    ctrl = hashlib.sha256((ROOT / first).read_bytes() + b" ").hexdigest() != sha[VENDORED[first]]
+    return Result("0", "vendored files unchanged (shader, EXR reader, check fixtures)", not bad, ctrl,
+                  {"files": len(VENDORED), "hash_mismatch": bad, "sources": p["sources"]})
 
 
 CHECKS = [provenance]

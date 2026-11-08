@@ -1,7 +1,0 @@
-[eval] class_full-a           coverage k  50 rays 1.287e+09 | cover any 0.929 fine 0.094 | rho err med 0.0425 (fine 0.0179) /m | depth med 0.348 (fine 0.137) m | gross 0.345 = coarse 0.242 + outlier 0.103 (outlier fine/mid/coarse 0.220/0.153/0.057; gross 0.228/0.223/0.428) | z 1.01 | verg err med 0.38 m | (s) replay ok; (u) fixation-0 cells 27427: rho err median 0.0397 -> 0.0180 -> loop_fig.png
-[eval] class_full-b           coverage k  50 rays 1.287e+09 | cover any 0.930 fine 0.094 | rho err med 0.0421 (fine 0.0177) /m | depth med 0.347 (fine 0.135) m | gross 0.343 = coarse 0.240 + outlier 0.103 (outlier fine/mid/coarse 0.220/0.155/0.057; gross 0.228/0.225/0.423) | z 1.01 | verg err med 0.35 m | (s) replay ok; (u) fixation-0 cells 27427: rho err median 0.0397 -> 0.0183 -> loop_fig.png
-[eval] class_full-c           coverage k  50 rays 1.287e+09 | cover any 0.930 fine 0.094 | rho err med 0.0421 (fine 0.0178) /m | depth med 0.347 (fine 0.136) m | gross 0.343 = coarse 0.240 + outlier 0.103 (outlier fine/mid/coarse 0.220/0.155/0.057; gross 0.228/0.226/0.422) | z 1.01 | verg err med 0.35 m | (s) replay ok; (u) fixation-0 cells 27427: rho err median 0.0397 -> 0.0183 -> loop_fig.png
-[eval] ranking by rho err median (all measured cells): coverage 0.0421 < coverage 0.0421 < coverage 0.0425
-[eval] ranking by coverage_fine: coverage 0.094 > coverage 0.094 > coverage 0.094
-[eval] comparison -> /home/lvelho/rd/fov-render/previews/issue-3/class_full-compare3/compare.png
-[eval] ok (0 failures)

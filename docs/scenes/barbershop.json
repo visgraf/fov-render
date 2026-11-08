@@ -9,7 +9,7 @@
   "url": "https://svn.blender.org/svnroot/bf-blender/trunk/lib/benchmarks/cycles/barbershop_interior/barbershop_interior.blend",
   "bytes": 287574804,
   "sha256": "95972b56180462cac47ec82f3a755bd9111ec18ca37a6196a319c013db994130",
-  "triage": "issue #4 part A, docs/runs/issue-4/ on branch issue-4-scene-triage"
+  "triage": "issue #4 part A: docs/runs/issue-4/ at the tag v0.1.0"
  },
  "derived": {
   "file": "barbershop_eye.blend (next to the source, outside the repo)",

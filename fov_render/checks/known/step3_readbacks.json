@@ -1,0 +1,772 @@
+{
+ "ab1a": {
+  "adaptive_sampling": false,
+  "blender": "5.2.1 LTS",
+  "border": false,
+  "camera": {
+   "clip_m": [
+    0.01,
+    1000.0
+   ],
+   "dof": false,
+   "lens_mm": 68.503425598,
+   "sensor_fit": "HORIZONTAL",
+   "sensor_width_mm": 36.0,
+   "shift": [
+    0.0,
+    0.0
+   ],
+   "type": "PERSP"
+  },
+  "color_depth": "32",
+  "color_mode": "RGBA",
+  "compositing": false,
+  "cycles_device": "CPU",
+  "denoising": false,
+  "engine": "CYCLES",
+  "exposure": 0.0,
+  "exr_codec": "NONE",
+  "exr_interleave": true,
+  "file_format": "OPEN_EXR_MULTILAYER",
+  "film_transparent": false,
+  "filter_width": 1.0,
+  "frame_current": 1,
+  "gamma": 1.0,
+  "look": "None",
+  "motion_blur": false,
+  "passes": [
+   "combined",
+   "object_index",
+   "position"
+  ],
+  "persistent_data": true,
+  "pixel_aspect": [
+   1.0,
+   1.0
+  ],
+  "pixel_filter": "BOX",
+  "resolution_percentage": 100,
+  "resolution_wh": [
+   640,
+   640
+  ],
+  "samples": 256,
+  "seed": 0,
+  "sequencer": false,
+  "single_layer": true,
+  "time_limit": 0.0,
+  "view_transform": "AgX"
+ },
+ "ab1a [all passes on]": {
+  "adaptive_sampling": false,
+  "blender": "5.2.1 LTS",
+  "border": false,
+  "camera": {
+   "clip_m": [
+    0.01,
+    1000.0
+   ],
+   "dof": false,
+   "lens_mm": 68.503425598,
+   "sensor_fit": "HORIZONTAL",
+   "sensor_width_mm": 36.0,
+   "shift": [
+    0.0,
+    0.0
+   ],
+   "type": "PERSP"
+  },
+  "color_depth": "32",
+  "color_mode": "RGBA",
+  "compositing": false,
+  "cycles_device": "CPU",
+  "denoising": false,
+  "engine": "CYCLES",
+  "exposure": 0.0,
+  "exr_codec": "NONE",
+  "exr_interleave": true,
+  "file_format": "OPEN_EXR_MULTILAYER",
+  "film_transparent": false,
+  "filter_width": 1.0,
+  "frame_current": 1,
+  "gamma": 1.0,
+  "look": "None",
+  "motion_blur": false,
+  "passes": [
+   "combined",
+   "object_index",
+   "position"
+  ],
+  "persistent_data": true,
+  "pixel_aspect": [
+   1.0,
+   1.0
+  ],
+  "pixel_filter": "BOX",
+  "resolution_percentage": 100,
+  "resolution_wh": [
+   640,
+   640
+  ],
+  "samples": 256,
+  "seed": 0,
+  "sequencer": false,
+  "single_layer": true,
+  "time_limit": 0.0,
+  "view_transform": "AgX"
+ },
+ "breadth1": {
+  "adaptive_sampling": false,
+  "blender": "5.2.1 LTS",
+  "border": false,
+  "camera": {
+   "clip_m": [
+    0.01,
+    1000.0
+   ],
+   "dof": false,
+   "latitude": [
+    -1.570796371,
+    1.570796371
+   ],
+   "longitude": [
+    -3.141592741,
+    3.141592741
+   ],
+   "panorama_type": "EQUIRECTANGULAR",
+   "type": "PANO"
+  },
+  "color_depth": "32",
+  "color_mode": "RGBA",
+  "compositing": false,
+  "cycles_device": "CPU",
+  "denoising": false,
+  "engine": "CYCLES",
+  "exposure": 0.0,
+  "exr_codec": "NONE",
+  "exr_interleave": true,
+  "file_format": "OPEN_EXR_MULTILAYER",
+  "film_transparent": false,
+  "filter_width": 1.0,
+  "frame_current": 1,
+  "gamma": 1.0,
+  "look": "None",
+  "motion_blur": false,
+  "passes": [
+   "combined",
+   "object_index",
+   "position"
+  ],
+  "persistent_data": false,
+  "pixel_aspect": [
+   1.0,
+   1.0
+  ],
+  "pixel_filter": "BOX",
+  "resolution_percentage": 100,
+  "resolution_wh": [
+   720,
+   360
+  ],
+  "samples": 512,
+  "seed": 0,
+  "sequencer": false,
+  "single_layer": true,
+  "time_limit": 0.0,
+  "view_transform": "AgX"
+ },
+ "breadth1 [all passes on]": {
+  "adaptive_sampling": false,
+  "blender": "5.2.1 LTS",
+  "border": false,
+  "camera": {
+   "clip_m": [
+    0.01,
+    1000.0
+   ],
+   "dof": false,
+   "latitude": [
+    -1.570796371,
+    1.570796371
+   ],
+   "longitude": [
+    -3.141592741,
+    3.141592741
+   ],
+   "panorama_type": "EQUIRECTANGULAR",
+   "type": "PANO"
+  },
+  "color_depth": "32",
+  "color_mode": "RGBA",
+  "compositing": false,
+  "cycles_device": "CPU",
+  "denoising": false,
+  "engine": "CYCLES",
+  "exposure": 0.0,
+  "exr_codec": "NONE",
+  "exr_interleave": true,
+  "file_format": "OPEN_EXR_MULTILAYER",
+  "film_transparent": false,
+  "filter_width": 1.0,
+  "frame_current": 1,
+  "gamma": 1.0,
+  "look": "None",
+  "motion_blur": false,
+  "passes": [
+   "combined",
+   "normal",
+   "object_index",
+   "position",
+   "z"
+  ],
+  "persistent_data": false,
+  "pixel_aspect": [
+   1.0,
+   1.0
+  ],
+  "pixel_filter": "BOX",
+  "resolution_percentage": 100,
+  "resolution_wh": [
+   720,
+   360
+  ],
+  "samples": 512,
+  "seed": 0,
+  "sequencer": false,
+  "single_layer": true,
+  "time_limit": 0.0,
+  "view_transform": "AgX"
+ },
+ "fov_fixation": {
+  "adaptive_sampling": false,
+  "blender": "5.2.1 LTS",
+  "border": false,
+  "camera": {
+   "clip_m": [
+    0.001,
+    100000.0
+   ],
+   "custom": {
+    "E2": 2.0,
+    "e_max": 45.0
+   },
+   "custom_mode": "INTERNAL",
+   "dof": false,
+   "type": "CUSTOM"
+  },
+  "color_depth": "32",
+  "color_mode": "RGBA",
+  "compositing": false,
+  "cycles_device": "CPU",
+  "denoising": false,
+  "engine": "CYCLES",
+  "exposure": 0.0,
+  "exr_codec": "ZIP",
+  "exr_interleave": true,
+  "file_format": "OPEN_EXR_MULTILAYER",
+  "film_transparent": false,
+  "filter_width": 1.0,
+  "frame_current": 1,
+  "gamma": 1.0,
+  "look": "None",
+  "motion_blur": false,
+  "passes": [
+   "combined",
+   "normal",
+   "position",
+   "z"
+  ],
+  "persistent_data": true,
+  "pixel_aspect": [
+   1.0,
+   1.0
+  ],
+  "pixel_filter": "BOX",
+  "resolution_percentage": 100,
+  "resolution_wh": [
+   126,
+   126
+  ],
+  "samples": 1,
+  "seed": 0,
+  "sequencer": false,
+  "single_layer": true,
+  "time_limit": 0.0,
+  "view_transform": "AgX"
+ },
+ "fov_fixation [all passes on]": {
+  "adaptive_sampling": false,
+  "blender": "5.2.1 LTS",
+  "border": false,
+  "camera": {
+   "clip_m": [
+    0.001,
+    100000.0
+   ],
+   "custom": {
+    "E2": 2.0,
+    "e_max": 45.0
+   },
+   "custom_mode": "INTERNAL",
+   "dof": false,
+   "type": "CUSTOM"
+  },
+  "color_depth": "32",
+  "color_mode": "RGBA",
+  "compositing": false,
+  "cycles_device": "CPU",
+  "denoising": false,
+  "engine": "CYCLES",
+  "exposure": 0.0,
+  "exr_codec": "ZIP",
+  "exr_interleave": true,
+  "file_format": "OPEN_EXR_MULTILAYER",
+  "film_transparent": false,
+  "filter_width": 1.0,
+  "frame_current": 1,
+  "gamma": 1.0,
+  "look": "None",
+  "motion_blur": false,
+  "passes": [
+   "combined",
+   "normal",
+   "object_index",
+   "position",
+   "z"
+  ],
+  "persistent_data": true,
+  "pixel_aspect": [
+   1.0,
+   1.0
+  ],
+  "pixel_filter": "BOX",
+  "resolution_percentage": 100,
+  "resolution_wh": [
+   126,
+   126
+  ],
+  "samples": 1,
+  "seed": 0,
+  "sequencer": false,
+  "single_layer": true,
+  "time_limit": 0.0,
+  "view_transform": "AgX"
+ },
+ "fsg": {
+  "adaptive_sampling": false,
+  "blender": "5.2.1 LTS",
+  "border": false,
+  "camera": {
+   "clip_m": [
+    0.01,
+    100.0
+   ],
+   "dof": false,
+   "lens_mm": 68.503425598,
+   "sensor_fit": "HORIZONTAL",
+   "sensor_width_mm": 36.0,
+   "shift": [
+    0.0,
+    0.0
+   ],
+   "type": "PERSP"
+  },
+  "color_depth": "32",
+  "color_mode": "RGBA",
+  "compositing": false,
+  "cycles_device": "CPU",
+  "denoising": false,
+  "engine": "CYCLES",
+  "exposure": 0.0,
+  "exr_codec": "ZIP",
+  "exr_interleave": false,
+  "file_format": "OPEN_EXR",
+  "film_transparent": false,
+  "filter_width": 1.0,
+  "frame_current": 1,
+  "gamma": 1.0,
+  "look": "None",
+  "motion_blur": false,
+  "passes": [
+   "combined"
+  ],
+  "persistent_data": true,
+  "pixel_aspect": [
+   1.0,
+   1.0
+  ],
+  "pixel_filter": "BOX",
+  "resolution_percentage": 100,
+  "resolution_wh": [
+   320,
+   320
+  ],
+  "samples": 4,
+  "seed": 0,
+  "sequencer": false,
+  "single_layer": false,
+  "time_limit": 0.0,
+  "view_transform": "Standard"
+ },
+ "oracle1": {
+  "adaptive_sampling": false,
+  "blender": "5.2.1 LTS",
+  "border": false,
+  "camera": {
+   "clip_m": [
+    0.01,
+    1000.0
+   ],
+   "dof": false,
+   "lens_mm": 68.503425598,
+   "sensor_fit": "HORIZONTAL",
+   "sensor_width_mm": 36.0,
+   "shift": [
+    0.0,
+    0.0
+   ],
+   "type": "PERSP"
+  },
+  "color_depth": "32",
+  "color_mode": "RGBA",
+  "compositing": false,
+  "cycles_device": "CPU",
+  "denoising": false,
+  "engine": "CYCLES",
+  "exposure": 0.0,
+  "exr_codec": "NONE",
+  "exr_interleave": true,
+  "file_format": "OPEN_EXR_MULTILAYER",
+  "film_transparent": false,
+  "filter_width": 1.0,
+  "frame_current": 1,
+  "gamma": 1.0,
+  "look": "None",
+  "motion_blur": false,
+  "passes": [
+   "combined",
+   "normal",
+   "object_index",
+   "position",
+   "z"
+  ],
+  "persistent_data": true,
+  "pixel_aspect": [
+   1.0,
+   1.0
+  ],
+  "pixel_filter": "BOX",
+  "resolution_percentage": 100,
+  "resolution_wh": [
+   320,
+   320
+  ],
+  "samples": 4,
+  "seed": 0,
+  "sequencer": false,
+  "single_layer": true,
+  "time_limit": 0.0,
+  "view_transform": "AgX"
+ },
+ "oracle1 [all passes on]": {
+  "adaptive_sampling": false,
+  "blender": "5.2.1 LTS",
+  "border": false,
+  "camera": {
+   "clip_m": [
+    0.01,
+    1000.0
+   ],
+   "dof": false,
+   "lens_mm": 68.503425598,
+   "sensor_fit": "HORIZONTAL",
+   "sensor_width_mm": 36.0,
+   "shift": [
+    0.0,
+    0.0
+   ],
+   "type": "PERSP"
+  },
+  "color_depth": "32",
+  "color_mode": "RGBA",
+  "compositing": false,
+  "cycles_device": "CPU",
+  "denoising": false,
+  "engine": "CYCLES",
+  "exposure": 0.0,
+  "exr_codec": "NONE",
+  "exr_interleave": true,
+  "file_format": "OPEN_EXR_MULTILAYER",
+  "film_transparent": false,
+  "filter_width": 1.0,
+  "frame_current": 1,
+  "gamma": 1.0,
+  "look": "None",
+  "motion_blur": false,
+  "passes": [
+   "combined",
+   "normal",
+   "object_index",
+   "position",
+   "z"
+  ],
+  "persistent_data": true,
+  "pixel_aspect": [
+   1.0,
+   1.0
+  ],
+  "pixel_filter": "BOX",
+  "resolution_percentage": 100,
+  "resolution_wh": [
+   320,
+   320
+  ],
+  "samples": 4,
+  "seed": 0,
+  "sequencer": false,
+  "single_layer": true,
+  "time_limit": 0.0,
+  "view_transform": "AgX"
+ },
+ "preview360": {
+  "adaptive_sampling": false,
+  "blender": "5.2.1 LTS",
+  "border": false,
+  "camera": {
+   "clip_m": [
+    0.001,
+    100000.0
+   ],
+   "dof": false,
+   "latitude": [
+    -1.570796371,
+    1.570796371
+   ],
+   "longitude": [
+    -3.141592741,
+    3.141592741
+   ],
+   "panorama_type": "EQUIRECTANGULAR",
+   "type": "PANO"
+  },
+  "color_depth": "32",
+  "color_mode": "RGBA",
+  "compositing": false,
+  "cycles_device": "CPU",
+  "denoising": false,
+  "engine": "CYCLES",
+  "exposure": 0.0,
+  "exr_codec": "ZIP",
+  "exr_interleave": true,
+  "file_format": "OPEN_EXR_MULTILAYER",
+  "film_transparent": false,
+  "filter_width": 1.5,
+  "frame_current": 1,
+  "gamma": 1.0,
+  "look": "None",
+  "motion_blur": false,
+  "passes": [
+   "combined",
+   "normal",
+   "position",
+   "z"
+  ],
+  "persistent_data": false,
+  "pixel_aspect": [
+   1.0,
+   1.0
+  ],
+  "pixel_filter": "BLACKMAN_HARRIS",
+  "resolution_percentage": 100,
+  "resolution_wh": [
+   64,
+   32
+  ],
+  "samples": 1,
+  "seed": 0,
+  "sequencer": false,
+  "single_layer": true,
+  "time_limit": 0.0,
+  "view_transform": "AgX"
+ },
+ "preview360 [all passes on]": {
+  "adaptive_sampling": false,
+  "blender": "5.2.1 LTS",
+  "border": false,
+  "camera": {
+   "clip_m": [
+    0.001,
+    100000.0
+   ],
+   "dof": false,
+   "latitude": [
+    -1.570796371,
+    1.570796371
+   ],
+   "longitude": [
+    -3.141592741,
+    3.141592741
+   ],
+   "panorama_type": "EQUIRECTANGULAR",
+   "type": "PANO"
+  },
+  "color_depth": "32",
+  "color_mode": "RGBA",
+  "compositing": false,
+  "cycles_device": "CPU",
+  "denoising": false,
+  "engine": "CYCLES",
+  "exposure": 0.0,
+  "exr_codec": "ZIP",
+  "exr_interleave": true,
+  "file_format": "OPEN_EXR_MULTILAYER",
+  "film_transparent": false,
+  "filter_width": 1.5,
+  "frame_current": 1,
+  "gamma": 1.0,
+  "look": "None",
+  "motion_blur": false,
+  "passes": [
+   "combined",
+   "normal",
+   "object_index",
+   "position",
+   "z"
+  ],
+  "persistent_data": false,
+  "pixel_aspect": [
+   1.0,
+   1.0
+  ],
+  "pixel_filter": "BLACKMAN_HARRIS",
+  "resolution_percentage": 100,
+  "resolution_wh": [
+   64,
+   32
+  ],
+  "samples": 1,
+  "seed": 0,
+  "sequencer": false,
+  "single_layer": true,
+  "time_limit": 0.0,
+  "view_transform": "AgX"
+ },
+ "reference_view": {
+  "adaptive_sampling": false,
+  "blender": "5.2.1 LTS",
+  "border": false,
+  "camera": {
+   "clip_m": [
+    0.01,
+    1000.0
+   ],
+   "dof": false,
+   "lens_mm": 35.32698822,
+   "sensor_fit": "HORIZONTAL",
+   "sensor_width_mm": 36.0,
+   "shift": [
+    0.0,
+    0.0
+   ],
+   "type": "PERSP"
+  },
+  "color_depth": "32",
+  "color_mode": "RGBA",
+  "compositing": false,
+  "cycles_device": "CPU",
+  "denoising": false,
+  "engine": "CYCLES",
+  "exposure": 0.0,
+  "exr_codec": "NONE",
+  "exr_interleave": true,
+  "file_format": "OPEN_EXR_MULTILAYER",
+  "film_transparent": false,
+  "filter_width": 1.0,
+  "frame_current": 1,
+  "gamma": 1.0,
+  "look": "None",
+  "motion_blur": false,
+  "passes": [
+   "combined",
+   "object_index",
+   "position"
+  ],
+  "persistent_data": false,
+  "pixel_aspect": [
+   1.0,
+   1.0
+  ],
+  "pixel_filter": "BOX",
+  "resolution_percentage": 100,
+  "resolution_wh": [
+   64,
+   48
+  ],
+  "samples": 1,
+  "seed": 0,
+  "sequencer": false,
+  "single_layer": true,
+  "time_limit": 0.0,
+  "view_transform": "AgX"
+ },
+ "reference_view [all passes on]": {
+  "adaptive_sampling": false,
+  "blender": "5.2.1 LTS",
+  "border": false,
+  "camera": {
+   "clip_m": [
+    0.01,
+    1000.0
+   ],
+   "dof": false,
+   "lens_mm": 35.32698822,
+   "sensor_fit": "HORIZONTAL",
+   "sensor_width_mm": 36.0,
+   "shift": [
+    0.0,
+    0.0
+   ],
+   "type": "PERSP"
+  },
+  "color_depth": "32",
+  "color_mode": "RGBA",
+  "compositing": false,
+  "cycles_device": "CPU",
+  "denoising": false,
+  "engine": "CYCLES",
+  "exposure": 0.0,
+  "exr_codec": "NONE",
+  "exr_interleave": true,
+  "file_format": "OPEN_EXR_MULTILAYER",
+  "film_transparent": false,
+  "filter_width": 1.0,
+  "frame_current": 1,
+  "gamma": 1.0,
+  "look": "None",
+  "motion_blur": false,
+  "passes": [
+   "combined",
+   "normal",
+   "object_index",
+   "position",
+   "z"
+  ],
+  "persistent_data": false,
+  "pixel_aspect": [
+   1.0,
+   1.0
+  ],
+  "pixel_filter": "BOX",
+  "resolution_percentage": 100,
+  "resolution_wh": [
+   64,
+   48
+  ],
+  "samples": 1,
+  "seed": 0,
+  "sequencer": false,
+  "single_layer": true,
+  "time_limit": 0.0,
+  "view_transform": "AgX"
+ }
+}

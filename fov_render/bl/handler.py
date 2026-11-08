@@ -102,14 +102,7 @@ class Handler:
         out = {"schema": "fov-render-ready-v1", "pid": os.getpid(), "blender": bpy.app.version_string,
                "session": self.session, "scene": h.report(), "head": self.head.as_dict(),
                "device": self.backend, "prepared": self.session.get("prepare"),
-               "settings": None if self.cam is None else config.readback(h.scene, self.cam, h.view_layer),
-               "formats": {}}
-        if "f3d_ab1a" in self.session["formats"]:
-            from .. import compat
-            if self.cam is None:
-                raise ValueError("format f3d_ab1a needs a prepared sensor (session 'prepare')")
-            out["formats"]["f3d_ab1a"] = {"settings": compat.ab1a_readback(h.scene, self.cam, h.view_layer),
-                                          "passes": compat.gfe_passes(h.sanitised, h.view_layer)}
+               "settings": None if self.cam is None else config.readback(h.scene, self.cam, h.view_layer)}
         return out
 
     # ------------------------------------------------------------------ one look
@@ -131,24 +124,12 @@ class Handler:
         _write_atomic(out / "request.json", dumps(req))
         look_id = f"{int(req['n']):06d}"
         eyes = {}
-        fov3d = self.session.get("pose_convention", "fov_render") == "fov3d"
-        if fov3d and (gaze is None or gaze.mode != "per_eye"):
-            from ..request import RequestError
-            raise RequestError(["gaze: the fov3d pose convention takes per-eye (yaw, pitch) angles"])
         for eye in req["eyes"]:
             if gaze is None:
                 pose = rig.fixed_pose(self.head, eye, float(req["gaze"].get("yaw_offset_deg", 0.0)))
             else:
                 pose = rig.pose(self.head, gaze, eye)
-            if fov3d:                       # fov-3d-vision's own float32 composition (compat)
-                import bpy
-                from .. import compat
-                yaw, pitch = gaze.angles[eye]
-                eye_obj = bpy.data.objects.get("EYE") or h.scene.camera
-                cam.matrix_world = compat.fov3d_gaze_matrix(eye_obj, float(yaw), float(pitch), tuple(rig.centre_h(eye)))
-                bpy.context.view_layer.update()
-            else:
-                cameras.pose(cam, pose)
+            cameras.pose(cam, pose)
             exr = out / f"raw_{eye}.exr"
             secs = engine.render_once(h.scene, spp, int(seeds[eye]), str(exr))
             e = {"exr": str(exr), "seed": int(seeds[eye]), "render_seconds": float(secs), "pose": pose.as_dict(),

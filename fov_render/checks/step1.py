@@ -12,7 +12,7 @@ import numpy as np
 from .. import record
 from ..rig import Gaze, Rig
 from ..sensors import Foveated
-from .common import LEGACY, Result, call_with_argv, load_legacy, run_blender_script
+from .common import FIXTURES, KNOWN, Result, run_blender_script
 
 STEP = "1"
 GAZE = (20.0, -5.0)
@@ -22,12 +22,11 @@ SPP = 16
 def calib_room(ctx) -> str:
     out = Path(ctx["work"]) / "scenes" / "calib_room.blend"
     if not out.is_file():
-        run_blender_script(str(LEGACY["fov"] / "make_calib_room.py"), ["--out", str(out)])
+        run_blender_script(str(FIXTURES / "make_calib_room.py"), ["--out", str(out)])
     return str(out)
 
 
-def render_new_foveated(ctx, folder: Path, *, e2_shader: float = 2.0, seed: int = 0, profile: str = "small",
-                        legacy_pose: bool = False) -> dict:
+def render_new_foveated(ctx, folder: Path, *, e2_shader: float = 2.0, seed: int = 0, profile: str = "small") -> dict:
     """Render one cyclopean fixation through fov_render and write fix.exr + meta.json in the
     format the legacy check_foveated reads."""
     import bpy
@@ -41,10 +40,6 @@ def render_new_foveated(ctx, folder: Path, *, e2_shader: float = 2.0, seed: int 
         cam.data.cycles_custom["E2"] = e2_shader
     pose = Rig().pose(h.head, Gaze.per_eye(C=GAZE), "C")
     cameras.pose(cam, pose)
-    if legacy_pose:                    # the legacy float32 mathutils matrix, to isolate pose precision
-        rf = load_legacy("fov", "render_foveated.py")
-        cam.matrix_world = rf.gaze_matrix(bpy.data.objects["EYE"], GAZE[0], GAZE[1])
-        bpy.context.view_layer.update()
     folder.mkdir(parents=True, exist_ok=True)
     secs = engine.render_once(h.scene, SPP, seed, str(folder / "fix.exr"))
     meta = {"warp": {"E2_deg": model.e2, "e_max_deg": model.emax, "s0_deg": model.s0_deg, "raster": model.n},
@@ -53,15 +48,6 @@ def render_new_foveated(ctx, folder: Path, *, e2_shader: float = 2.0, seed: int 
             "settings": config.readback(h.scene, cam, h.view_layer), "eye_pose": pose.as_dict()}
     (folder / "meta.json").write_text(json.dumps(meta, indent=1))
     return meta
-
-
-def render_legacy_foveated(ctx, folder: Path, profile: str = "small") -> None:
-    from ..bl import env
-    env.prepare()                     # the legacy script assumes the Blender binary's own oslquery
-    rf = load_legacy("fov", "render_foveated.py")
-    call_with_argv(rf.main, "render_foveated.py",
-                   ["--blend", calib_room(ctx), "--out", str(folder), "--profile", profile, "--device", ctx["device"],
-                    "--spp", SPP, "--yaw", GAZE[0], "--pitch", GAZE[1], "--shader", str(LEGACY["fov"] / "foveated_camera.osl")])
 
 
 def host_python() -> str:
@@ -81,7 +67,7 @@ def host_python() -> str:
 def _check_foveated(folder: Path) -> dict:
     """Run fov-3d-vision's check_foveated (a host-side script) on a render folder; return its report."""
     import subprocess
-    p = subprocess.run([host_python(), str(LEGACY["fov"] / "check_foveated.py"), str(folder)],
+    p = subprocess.run([host_python(), str(FIXTURES / "check_foveated.py"), str(folder)],
                        capture_output=True, text=True)
     text = p.stdout
     if "{" not in text:
@@ -106,50 +92,47 @@ def _folder(_meta, folder):
 
 
 def new_equals_legacy_render(ctx) -> Result:
-    """Same scene, gaze, spp, seed and device. With the legacy pose matrix the fov_render image must
-    equal the legacy image bit for bit (builder, shader, settings identical). With fov_render's own
-    float64 pose the difference must stay at the pose-precision level, far below a seed change.
+    """Same scene, gaze, spp, seed, on CPU: fov_render's fixation against the legacy fixation, frozen in
+    known/step1_legacy_fixation.npz (issue #16). The difference must stay at the pose-precision level
+    (fov_render's float64 pose against the legacy float32 one): Position within 1e-4 m, Combined within
+    5 % of what a seed change does. Control: that seed change itself.
 
-    Always on CPU, whatever --device says (PLAN D10): OptiX is not bit-reproducible, two legacy runs
-    differ from each other on it (issue #1), and the claim is about builder, shader and settings,
-    which CPU shows bitwise. OptiX's run-to-run variation is measured separately (issue #3)."""
+    Up to v0.1.0 this gate also rendered with the legacy pose matrix and required equality bit for bit;
+    that needed the legacy code, and CPU renders are not promised bitwise across machines (the frozen
+    file comes from the Chat sandbox), so the gate keeps the tolerance part (PLAN, issue #16)."""
     try:
         import OpenEXR
     except ImportError:
         return Result(STEP, "fov_render fixation equals legacy fixation", False, None, skipped="OpenEXR not installed")
     cpu = dict(ctx, device="CPU")
     work = Path(ctx["work"]) / "step1" / "cpu"
-    render_legacy_foveated(cpu, work / "legacy")
-    render_new_foveated(cpu, work / "new_legacy_pose", legacy_pose=True)
     render_new_foveated(cpu, work / "new")
     render_new_foveated(cpu, work / "new_seed1", seed=1)
 
     def chans(p):
         with OpenEXR.File(str(p)) as f:
             return {k: np.asarray(v.pixels, dtype=np.float64) for part in f.parts for k, v in part.channels.items()}
-    leg, same, own, s1 = (chans(work / d / "fix.exr") for d in ("legacy", "new_legacy_pose", "new", "new_seed1"))
+    z = np.load(KNOWN / "step1_legacy_fixation.npz")
+    leg = {k[3:]: z[k].astype(np.float64) for k in z.files if k.startswith("ch:")}
+    own, s1 = (chans(work / d / "fix.exr") for d in ("new", "new_seed1"))
     keys = sorted(leg)
 
     def maxdiff(a, b):
         return {k: float(np.nanmax(np.abs(a[k] - b[k]))) for k in keys}
-    exact = maxdiff(leg, same)
     own_d = maxdiff(leg, own)
     seed_d = maxdiff(own, s1)
-    lm = json.loads((work / "legacy" / "meta.json").read_text())
     nm = json.loads((work / "new" / "meta.json").read_text())
-    pose_diff = max(float(np.abs(np.array(lm["camera_position_m"]) - nm["camera_position_m"]).max()),
-                    float(np.abs(np.array(lm["camera_forward"]) - nm["camera_forward"]).max()))
+    pose_diff = max(float(np.abs(z["camera_position_m"] - nm["camera_position_m"]).max()),
+                    float(np.abs(z["camera_forward"] - nm["camera_forward"]).max()))
     comb = [k for k in keys if "Combined" in k][0]
     pos = [k for k in keys if "Position" in k]
-    ok = (set(leg) == set(same) and max(exact.values()) == 0.0 and pose_diff < 1e-6
-          and max(own_d[k] for k in pos) < 1e-4 and own_d[comb] < 0.05 * seed_d[comb])
-    return Result(STEP, "fov_render fixation equals legacy fixation (bitwise with the legacy pose)", ok,
-                  seed_d[comb] > 0, {"channels": keys, "max_abs_diff_legacy_pose": exact,
-                                     "max_abs_diff_own_float64_pose": own_d, "pose_diff_float32_vs_float64": pose_diff,
-                                     "control_seed1_max_diff": seed_d, "spp": SPP, "gaze": GAZE,
-                                     "device": "CPU", "requested_device": ctx["device"],
-                                     "backends": [json.loads((work / d / "meta.json").read_text())["device"]
-                                                  for d in ("legacy", "new_legacy_pose", "new", "new_seed1")]})
+    ok = (set(leg) == set(own) and pose_diff < 1e-6 and max(own_d[k] for k in pos) < 1e-4
+          and own_d[comb] < 0.05 * seed_d[comb])
+    return Result(STEP, "fov_render fixation equals the legacy fixation (frozen, pose precision)", ok,
+                  seed_d[comb] > 0, {"channels": keys, "max_abs_diff_vs_legacy": own_d,
+                                     "pose_diff_float32_vs_float64": pose_diff, "control_seed1_max_diff": seed_d,
+                                     "spp": SPP, "gaze": GAZE, "device": "CPU", "requested_device": ctx["device"],
+                                     "backend": nm["device"]})
 
 
 def record_from_render(ctx) -> Result:

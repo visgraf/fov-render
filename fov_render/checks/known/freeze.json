@@ -1,0 +1,92 @@
+{
+ "blender": "5.2.1 LTS",
+ "files": {
+  "step1_legacy_fixation.npz": {
+   "channels": [
+    "ViewLayer.Combined",
+    "ViewLayer.Depth.Z",
+    "ViewLayer.Normal.X",
+    "ViewLayer.Normal.Y",
+    "ViewLayer.Normal.Z",
+    "ViewLayer.Position.X",
+    "ViewLayer.Position.Y",
+    "ViewLayer.Position.Z"
+   ],
+   "device": "CPU",
+   "gaze": [
+    20.0,
+    -5.0
+   ],
+   "spp": 16
+  },
+  "step2.npz": [
+   "calib_R_hc",
+   "calib_centre_h",
+   "camera_rotation_h",
+   "full_direction_cam",
+   "full_footprint",
+   "full_idx",
+   "full_inside_rc",
+   "full_mask",
+   "full_mask_size",
+   "full_n",
+   "full_rc",
+   "gaze_matrix",
+   "gaze_rotation",
+   "gazes",
+   "head_R_wh",
+   "head_origin_w",
+   "legacy_triangulate_m",
+   "small_direction_cam",
+   "small_footprint",
+   "small_idx",
+   "small_inside_rc",
+   "small_mask",
+   "small_mask_size",
+   "small_n",
+   "small_rc"
+  ],
+  "step3_readbacks.json": [
+   "ab1a",
+   "ab1a [all passes on]",
+   "breadth1",
+   "breadth1 [all passes on]",
+   "fov_fixation",
+   "fov_fixation [all passes on]",
+   "fsg",
+   "oracle1",
+   "oracle1 [all passes on]",
+   "preview360",
+   "preview360 [all passes on]",
+   "reference_view",
+   "reference_view [all passes on]"
+  ],
+  "step4.json": [
+   "audit_scene_ids_after_legacy",
+   "calib_room_ids",
+   "head_R_wh",
+   "head_origin_w"
+  ]
+ },
+ "fov_render_commit": "ca30e297c88c4037f51471e1482540704ac4d2d2",
+ "frozen_utc": "2026-11-08T02:20:14Z",
+ "legacy": {
+  "f3d-vision": {
+   "commit": "bbee8ef0ffa95c0a37f66539117f8b59842960b6",
+   "ref": "main",
+   "url": "https://github.com/visgraf/f3d-vision"
+  },
+  "fov-3d-vision": {
+   "commit": "15eedee9c691af7a3fb9108d61ff643c60b7ffaa",
+   "ref": "main",
+   "url": "https://github.com/visgraf/fov-3d-vision"
+  }
+ },
+ "machine": {
+  "platform": "Linux-6.18.44-fc-v310-x86_64-with-glibc2.39",
+  "processor": "x86_64",
+  "python": "3.13.18"
+ },
+ "note": "frozen in the Chat sandbox (bpy 5.2.1 wheel, CPU); renders are checked with tolerances, not bitwise, so other machines' CPUs agree",
+ "schema": "fov-render-known-answers-v1"
+}

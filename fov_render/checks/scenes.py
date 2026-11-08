@@ -8,7 +8,7 @@ from pathlib import Path
 
 import numpy as np
 
-from .common import LEGACY, run_blender_script
+from .common import FIXTURES, run_blender_script
 
 HDRI_W, HDRI_H = 256, 128
 
@@ -38,7 +38,7 @@ def make_hdri_scene(work: Path) -> tuple[str, np.ndarray]:
         img.filepath_raw = str(exr)
         img.file_format = "OPEN_EXR"
         img.save()
-        run_blender_script(str(LEGACY["fov"] / "make_hdri_scene.py"),
+        run_blender_script(str(FIXTURES / "make_hdri_scene.py"),
                            ["--hdri", str(exr), "--out", str(blend), "--interpolation", "Linear"])
     return str(blend), pat
 
