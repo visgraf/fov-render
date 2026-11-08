@@ -17,11 +17,11 @@
   "why": "the course playground's scene (visgraf/foveal-playground, from f3d-vision's Classroom); the file's own renderCam stands 0.46 m off the rear wall (f3d-vision manifest)"
  },
  "expect": {
-  "max_hole_fraction": null,
-  "backface_allowed": null,
+  "max_hole_fraction": 0.025,
+  "backface_allowed": [],
   "max_backface_fraction_other": 0.001,
   "min_clearance_m": 0.25,
-  "missing_images": null,
+  "missing_images": [],
   "gazes": [
    [
     0.0,
@@ -39,15 +39,11 @@
   "spp": 16,
   "panorama_width": 720
  },
- "to_measure": [
-  "max_hole_fraction",
-  "backface_allowed",
-  "missing_images"
- ],
  "notes": {
-  "how": "Code measures on the workstation with `fov-render check --blend classroom_eye.blend --device OPTIX --only S1 S2 --write-spec DRAFT`, Chat reviews, the reviewed values replace the nulls and to_measure goes (issue #18)",
-  "max_hole_fraction": "f3d-vision measured 0.0208 holes (window panes onto a featureless world; OPTIX, 2026-09-12, scenes/manifest.json), above the default limit 0.02: the draft keeps 0.02 and says it will fail. Whether the Classroom gets its own limit is Luiz's decision (issue #18)",
-  "backface_allowed": "f3d-vision measured 0.0038 back-faces from this EYE (scenes/manifest.json), above 0.001: which objects, and whether they are closed meshes, is for S2 to say",
-  "missing_images": "f3d-vision's asset manifest resolves every image (0 missing); S1 checks it in fov_render"
+  "how": "drafted by Code with `fov-render check --device OPTIX --only S1 S2 --write-spec` on the workstation at 8bfdff0 (issue #18), reviewed by Chat; the hole limit is Luiz's decision in #18",
+  "max_hole_fraction": "the Classroom's own limit (Luiz, #18): its window panes open onto a featureless world. Measured 0.020626 (Code, workstation, OPTIX, 720 px, 4 spp, 8bfdff0), f3d-vision 0.0208 (manifest, OPTIX, 2026-09-12): above the default 0.02. 0.025 leaves about a fifth of headroom; a wall or a ceiling gone would show far more",
+  "backface_allowed": "none needed: the 0.00386 back-faces (plank 0.00352, doorFrame.001 0.00026, Cylinder.057 [lib.004] 0.00008) are all on open meshes, reported and not counted (Code, #18); f3d-vision recorded 0.0038",
+  "min_clearance_m": "the default; the nearest surface measured 0.446 m (Code, #18)",
+  "missing_images": "none: 49 images used, all found (Code, #18), as f3d-vision's asset manifest says"
  }
 }

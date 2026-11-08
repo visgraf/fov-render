@@ -306,13 +306,16 @@ def _looks_from_file(path: str, out: Path, reasons: list) -> list[dict]:
     return reqs
 
 
-def _session(a, blend: Path, reasons: list):
+def _session(a, blend: Path, reasons: list, first: dict | None):
+    """The session; `first` (the first look's request) is set up when the session opens, so the ready
+    answer, and the run record, carry the device Cycles chose (issue #18)."""
     cfg, rig = _config(a, reasons), _rig(a, reasons)
     if reasons:
         raise Refused(reasons)
     from .session import Session
-    return Session(blend, cfg, rig, access=a.access, instance_ids=a.instance_ids, launcher=a.launcher,
-                   workdir=a.workdir)
+    prepare = None if first is None else sensor_from_dict(first["sensor"])
+    return Session(blend, cfg, rig, access=a.access, instance_ids=a.instance_ids, prepare=prepare,
+                   launcher=a.launcher, workdir=a.workdir)
 
 
 def _summary(resp: dict) -> str:
@@ -326,7 +329,7 @@ def cmd_look(a, panorama: bool) -> int:
     out = Path(a.out).resolve()
     look = _look_request(a, panorama, reasons)
     _validate(_full(1, look, out), "", reasons)
-    s = _session(a, blend, reasons)
+    s = _session(a, blend, reasons, _full(1, look, out))
     try:
         resp = s.request(_full(1, look, out))
         _write_cli(out, a, s, [resp])
@@ -341,7 +344,7 @@ def cmd_requests(a) -> int:
     blend = _blend(a.blend, reasons)
     out = Path(a.out).resolve()
     reqs = _looks_from_file(a.file, out, reasons)
-    s = _session(a, blend, reasons)
+    s = _session(a, blend, reasons, reqs[0] if reqs else None)
     done = []
     try:
         for req in reqs:

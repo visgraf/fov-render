@@ -178,11 +178,14 @@ def look_equals_session(ctx) -> Result:
         c = _arrays(work / "ctrl" / name)
         ctrl[name] = {"key": key, "differs": bool(key in a and key in c and a[key].tobytes() != c[key].tobytes()),
                       "all_same": _same(a, c)[0]}
+    run = json.loads((work / "cli" / "fov-render-run.json").read_text()) if rc == 0 else {}
+    ready_device = (run.get("ready") or {}).get("device")
     return Result(STEP, "cli.2 a look through the command line equals the same look through Session, bit for bit",
-                  rc == 0 and same and req_same, rc2 == 0 and all(v["differs"] for v in ctrl.values()),
+                  rc == 0 and same and req_same and ready_device == "CPU", rc2 == 0 and all(v["differs"] for v in ctrl.values()),
                   {"exit": rc, "stderr": err.strip()[-500:], "arrays": len(a), "differ": diff[:20],
                    "request_same_but_out_dir": req_same, "controls": ctrl, "controls_exit": rc2,
-                   "controls_stderr": err2.strip()[-500:], "launcher": launcher})
+                   "controls_stderr": err2.strip()[-500:], "launcher": launcher,
+                   "ready_device": ready_device})
 
 
 # ----------------------------------------------------------------------------- cli.3

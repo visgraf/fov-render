@@ -13,8 +13,8 @@ files rebuilt from a checkout (the Classroom). The scene gate for any `.blend` i
 `python -m fov_render.checks.scene`; the Barbershop's expectations are in `scenes/barbershop.json`.
 
 **Open:** #18, the `fov-render` command line of report §8.6 and the course's scene specs
-(`docs/scenes/calib_room.json`, `classroom.json`): Chat's CPU step is on `issue-18-cli`, Code's
-workstation step is next.
+(`docs/scenes/calib_room.json`, `barbershop.json`, `classroom.json`), on `issue-18-cli`: both steps
+done (Chat on CPU, Code on the workstation), waiting for Luiz's acceptance.
 
 **Known limits:**
 - **OptiX:** not bit-reproducible. Position and Object Index repeat exactly; Combined does not. CPU

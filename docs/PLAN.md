@@ -136,5 +136,12 @@ What #18 adds, in two steps (Chat on CPU, then Code on the workstation):
   the list minus its first entry, the same empty list, so S1 always FAILED on such a scene). It now
   compares against one image more when none is expected. Found by gate cli.4 on the calibration room.
 
-To decide (Luiz, in #18): the Classroom's hole limit. f3d-vision measured 2.08 % holes, its window
-panes onto a featureless world, above the default 0.02.
+- **The run record's device:** `ready.device` was null for the command line's looks (Code, #18), since
+  Cycles' device is chosen when a sensor is first set up. The command line now opens its session with
+  the first look's sensor prepared (`Session(prepare=…)`); gate cli.2 checks that `ready.device` is set
+  and that the images are still bit for bit those of a `Session` opened without it.
+
+**D18 (Luiz, #18): scenes may have their own limits.** The Classroom's window panes open onto a
+featureless world: 2.063 % holes (Code, workstation, OPTIX), above the default 0.02. Its spec sets
+`max_hole_fraction` 0.025, about a fifth above the measured value, with the reason in its notes. A
+draft never raises a limit above the default by itself; a person does, in the scene's spec.
