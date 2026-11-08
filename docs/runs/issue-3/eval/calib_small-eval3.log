@@ -1,0 +1,7 @@
+[eval] calib_small-a          coverage k  50 rays 7.995e+07 | cover any 0.997 fine 0.175 | rho err med 0.1063 (fine 0.0244) /m | depth med 0.843 (fine 0.112) m | gross 0.561 = coarse 0.408 + outlier 0.153 (outlier fine/mid/coarse 0.247/0.248/0.001; gross 0.309/0.534/0.713) | z 0.54 | verg err med 0.57 m | (s) replay ok; (u) fixation-0 cells 10820: rho err median 0.2160 -> 0.2132 -> loop_fig.png
+[eval] calib_small-b          coverage k  50 rays 7.995e+07 | cover any 0.997 fine 0.175 | rho err med 0.1064 (fine 0.0243) /m | depth med 0.844 (fine 0.112) m | gross 0.561 = coarse 0.407 + outlier 0.153 (outlier fine/mid/coarse 0.248/0.248/0.000; gross 0.309/0.534/0.714) | z 0.54 | verg err med 0.57 m | (s) replay ok; (u) fixation-0 cells 10820: rho err median 0.2160 -> 0.2135 -> loop_fig.png
+[eval] calib_small-c          coverage k  50 rays 7.995e+07 | cover any 0.997 fine 0.175 | rho err med 0.1064 (fine 0.0243) /m | depth med 0.844 (fine 0.112) m | gross 0.561 = coarse 0.407 + outlier 0.153 (outlier fine/mid/coarse 0.248/0.248/0.000; gross 0.309/0.534/0.714) | z 0.54 | verg err med 0.57 m | (s) replay ok; (u) fixation-0 cells 10820: rho err median 0.2160 -> 0.2135 -> loop_fig.png
+[eval] ranking by rho err median (all measured cells): coverage 0.1063 < coverage 0.1064 < coverage 0.1064
+[eval] ranking by coverage_fine: coverage 0.175 > coverage 0.175 > coverage 0.175
+[eval] comparison -> /home/lvelho/rd/fov-render/previews/issue-3/calib_small-compare3/compare.png
+[eval] ok (0 failures)
