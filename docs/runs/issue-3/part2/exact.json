@@ -1,0 +1,104 @@
+{
+ "active_eval_exit": 0,
+ "exr": {
+  "differ": [],
+  "files": 102
+ },
+ "files_only_in_one": [],
+ "identical": true,
+ "json": {
+  "loop.json": [],
+  "pairs.json": []
+ },
+ "npz": {
+  "differ": [],
+  "files": 153
+ },
+ "phase_c": {
+  "a": {
+   "coarse_frac": 0.41256386625274866,
+   "coverage_any": 0.999486903373887,
+   "coverage_fine": 0.17640695922560531,
+   "depth_err_median_m": 0.8720264807578367,
+   "fine_depth_err_median_m": 0.1117502310542342,
+   "fine_gross_frac": 0.31121883355433344,
+   "fine_rho_err_median": 0.024489664047171344,
+   "fixations": 50,
+   "gated": 28118,
+   "gross_by_band": [
+    0.31121883355433344,
+    0.5438049784765113,
+    0.7178643590855716
+   ],
+   "gross_frac": 0.5670636075540034,
+   "learning": "(u) fixation-0 cells 10824: rho err median 0.2160 -> 0.2144",
+   "level_sigma": [
+    0.018028951712874955,
+    0.03909524166672432,
+    0.07705626297818752,
+    0.1524919618671805,
+    0.3263641063138609
+   ],
+   "outlier_by_band": [
+    0.25037497554507315,
+    0.24976604903612204,
+    0.00014810269864274457
+   ],
+   "outlier_frac": 0.15449974130125468,
+   "policy": "coverage",
+   "rays": 79948800,
+   "replay": "(s) replay ok",
+   "rho_err_median": 0.10990240313750096,
+   "u_end": 0.21436662658216976,
+   "u_fixed_cells": 10824,
+   "u_start": 0.21600553396055444,
+   "vergence_err_median_m": 0.5874816194668354,
+   "visited_fine_unmeasured": 2.6052352610998712e-05,
+   "z_rms": 0.5362158651290162
+  },
+  "b": {
+   "coarse_frac": 0.41256386625274866,
+   "coverage_any": 0.999486903373887,
+   "coverage_fine": 0.17640695922560531,
+   "depth_err_median_m": 0.8720264807578367,
+   "fine_depth_err_median_m": 0.1117502310542342,
+   "fine_gross_frac": 0.31121883355433344,
+   "fine_rho_err_median": 0.024489664047171344,
+   "fixations": 50,
+   "gated": 28118,
+   "gross_by_band": [
+    0.31121883355433344,
+    0.5438049784765113,
+    0.7178643590855716
+   ],
+   "gross_frac": 0.5670636075540034,
+   "learning": "(u) fixation-0 cells 10824: rho err median 0.2160 -> 0.2144",
+   "level_sigma": [
+    0.018028951712874955,
+    0.03909524166672432,
+    0.07705626297818752,
+    0.1524919618671805,
+    0.3263641063138609
+   ],
+   "outlier_by_band": [
+    0.25037497554507315,
+    0.24976604903612204,
+    0.00014810269864274457
+   ],
+   "outlier_frac": 0.15449974130125468,
+   "policy": "coverage",
+   "rays": 79948800,
+   "replay": "(s) replay ok",
+   "rho_err_median": 0.10990240313750096,
+   "u_end": 0.21436662658216976,
+   "u_fixed_cells": 10824,
+   "u_start": 0.21600553396055444,
+   "vergence_err_median_m": 0.5874816194668354,
+   "visited_fine_unmeasured": 2.6052352610998712e-05,
+   "z_rms": 0.5362158651290162
+  },
+  "differences": []
+ },
+ "run_a": "/home/lvelho/rd/fov-render/previews/issue-3b/calib-cpu-legacy",
+ "run_b": "/home/lvelho/rd/fov-render/previews/issue-3b/calib-cpu-exact"
+}

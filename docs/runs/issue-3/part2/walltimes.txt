@@ -1,0 +1,17 @@
+calib-cpu-legacy exit=0 wall_s=31.659357673 start=22:12:42
+calib-cpu-exact exit=0 wall_s=31.811584986 start=22:13:13
+calib-cpu-ctrl exit=0 wall_s=32.290518804 start=22:13:45
+[compare-loop] IDENTICAL: loop.json 0 and pairs.json 0 differences; npz 0/153 and exr 0/102 files differ; only in one: 0; Phase C differences: 0
+compare exact exit=0
+[compare-loop] DIFFERENT: loop.json 20 and pairs.json 20 differences; npz 119/153 and exr 50/102 files differ; only in one: 0; Phase C differences: 20
+compare control exit=1
+class_small-native-1 exit=0 wall_s=35.276965424 start=22:14:40
+class_full-native-1 exit=0 wall_s=90.931205574 start=22:15:15
+class_small-native-2 exit=0 wall_s=36.703236572 start=22:16:46
+class_full-native-2 exit=0 wall_s=86.444260827 start=22:17:23
+class_small-native-3 exit=0 wall_s=34.434953790 start=22:18:49
+class_full-native-3 exit=0 wall_s=86.639403725 start=22:19:24
+[loop-gate] class_small: FAIL; 6/17 numbers within the legacy range (worst u_fixed_cells: inf of the range); fixation-0 RGB max 4.52e-06; active_eval fails []
+gate class_small exit=1
+[loop-gate] class_full: FAIL; 7/17 numbers within the legacy range (worst u_fixed_cells: inf of the range); fixation-0 RGB max 5.01e-06; active_eval fails []
+gate class_full exit=1

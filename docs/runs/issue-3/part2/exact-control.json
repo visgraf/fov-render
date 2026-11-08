@@ -1,0 +1,2128 @@
+{
+ "active_eval_exit": 0,
+ "exr": {
+  "differ": [
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f012/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f014/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f015/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f020/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f021/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f022/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f026/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f028/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f029/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f031/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f032/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f034/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f035/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f036/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f037/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f038/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f039/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f040/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f041/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f042/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f043/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f045/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f046/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f047/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f048/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "L/f049/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f012/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f020/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f021/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f022/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f026/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f028/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f029/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f031/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f032/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f034/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f035/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f036/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f037/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f038/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f039/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f040/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f041/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f042/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f043/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f045/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f046/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f047/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f048/fix.exr"
+   },
+   {
+    "channels": [
+     "ViewLayer.Combined.B",
+     "ViewLayer.Combined.G",
+     "ViewLayer.Combined.R",
+     "ViewLayer.Depth.Z",
+     "ViewLayer.Normal.X",
+     "ViewLayer.Normal.Y",
+     "ViewLayer.Normal.Z",
+     "ViewLayer.Position.X"
+    ],
+    "file": "R/f049/fix.exr"
+   }
+  ],
+  "files": 102
+ },
+ "files_only_in_one": [],
+ "identical": false,
+ "json": {
+  "loop.json": [
+   ".level_sigma_final[0]: 0.018028951712874955 vs 0.01802884489831205",
+   ".level_sigma_final[1]: 0.03909524166672432 vs 0.03909524146461925",
+   ".level_sigma_final[3]: 0.1524919618671805 vs 0.1525060841577766",
+   ".level_sigma_final[4]: 0.3263641063138609 vs 0.32636412075858895",
+   ".level_sigma_floor_final[1]: 0.03614562350055599 vs 0.036145206129095726",
+   ".level_sigma_floor_final[2]: 0.07088288282759606 vs 0.07088289821937704",
+   ".level_sigma_floor_final[3]: 0.1392253137303521 vs 0.13922530217617857",
+   ".level_sigma_floor_final[4]: 0.29946508117102644 vs 0.2994464277639289",
+   ".level_sigma_noise_final[0]: 0.0024229047851911777 vs 0.002423646439037307",
+   ".level_sigma_noise_final[1]: 0.013289330776723746 vs 0.013271259561360042",
+   ".level_sigma_noise_final[2]: 0.02841533547261451 vs 0.028434564061217703",
+   ".level_sigma_noise_final[3]: 0.05400378493388073 vs 0.05400378493799153",
+   ".level_sigma_noise_final[4]: 0.09143922092077705 vs 0.09150023239748474",
+   ".settings.ipd: 0.063 vs 0.06300000000000001",
+   ".steps[0].coarse_rho_err_median: 0.2304994306229588 vs 0.23049943062295875",
+   ".steps[0].depth_err_median_m: 2.3293954402687094 vs 2.3293954402687085",
+   ".steps[0].fine_depth_err_median_m: 2.902149025745024 vs 2.902149025745023",
+   ".steps[0].fine_rho_err_median: 0.2734526371620425 vs 0.27345263716204243",
+   ".steps[0].level_sigma[0]: 0.018166844218275052 vs 0.01816684421827505",
+   ".steps[0].level_sigma[1]: 0.035645767644804385 vs 0.03564576764480437"
+  ],
+  "pairs.json": [
+   ".pairs[0].eyes[0].centre_m[0]: -0.0315 vs -0.03150000000000001",
+   ".pairs[0].eyes[0].yaw: 0.9023340280787272 vs 0.9023340280787274",
+   ".pairs[0].eyes[1].centre_m[0]: 0.0315 vs 0.03150000000000001",
+   ".pairs[0].eyes[1].yaw: -0.9023340280787272 vs -0.9023340280787274",
+   ".pairs[1].eyes[0].centre_m[0]: -0.0315 vs -0.03150000000000001",
+   ".pairs[1].eyes[1].centre_m[0]: 0.0315 vs 0.03150000000000001",
+   ".pairs[2].cyclopean_distance_m: 2.2159640239589624 vs 2.2159640239589637",
+   ".pairs[2].cyclopean_yaw: -22.000002372324186 vs -22.000002372324193",
+   ".pairs[2].eyes[0].centre_m[0]: -0.0315 vs -0.03150000000000001",
+   ".pairs[2].eyes[0].measured_in_session.miss_m: 0.1745261263138226 vs 0.17452612631382128",
+   ".pairs[2].eyes[0].predicted_distance_m: 2.207402181022223 vs 2.2074021810222244",
+   ".pairs[2].eyes[1].centre_m[0]: 0.0315 vs 0.03150000000000001",
+   ".pairs[2].eyes[1].measured_in_session.miss_m: 0.17591333826249214 vs 0.1759133382624908",
+   ".pairs[2].eyes[1].pitch: -41.79223561943449 vs -41.7922356194345",
+   ".pairs[2].eyes[1].predicted_distance_m: 2.2249389254941647 vs 2.2249389254941656",
+   ".pairs[2].eyes[1].predicted_miss_m: 0.0 vs 5.087681048627601e-16",
+   ".pairs[2].eyes[1].yaw: -23.00883042110974 vs -23.008830421109742",
+   ".pairs[2].point_m[0]: -0.6168955031544455 vs -0.616895503154446",
+   ".pairs[2].point_m[1]: 1.5268698080276228 vs 1.5268698080276237",
+   ".pairs[2].point_m[2]: 0.11723062740763446 vs 0.11723062740763357"
+  ]
+ },
+ "npz": {
+  "differ": [
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f012/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f014/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f015/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction"
+    ],
+    "file": "L/f019/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f020/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f021/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f022/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction"
+    ],
+    "file": "L/f023/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction"
+    ],
+    "file": "L/f024/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction"
+    ],
+    "file": "L/f025/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f026/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction"
+    ],
+    "file": "L/f027/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f028/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f029/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction"
+    ],
+    "file": "L/f030/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f031/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f032/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction"
+    ],
+    "file": "L/f033/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f034/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f035/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f036/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f037/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f038/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f039/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f040/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f041/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f042/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f043/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction"
+    ],
+    "file": "L/f044/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f045/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f046/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f047/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f048/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "L/f049/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f012/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction"
+    ],
+    "file": "R/f014/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction"
+    ],
+    "file": "R/f015/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction"
+    ],
+    "file": "R/f019/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f020/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f021/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f022/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction"
+    ],
+    "file": "R/f023/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction"
+    ],
+    "file": "R/f024/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction"
+    ],
+    "file": "R/f025/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f026/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction"
+    ],
+    "file": "R/f027/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f028/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f029/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction"
+    ],
+    "file": "R/f030/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f031/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f032/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction"
+    ],
+    "file": "R/f033/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f034/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f035/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f036/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f037/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f038/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f039/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f040/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f041/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f042/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f043/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction"
+    ],
+    "file": "R/f044/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f045/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f046/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f047/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f048/samples.npz"
+   },
+   {
+    "arrays": [
+     "direction",
+     "distance",
+     "value"
+    ],
+    "file": "R/f049/samples.npz"
+   },
+   {
+    "arrays": [
+     "best_level",
+     "mean",
+     "n",
+     "sigma",
+     "truth",
+     "truth_n"
+    ],
+    "file": "belief.npz"
+   },
+   {
+    "arrays": [
+     "ecc_deg",
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise"
+    ],
+    "file": "field/p000.npz"
+   },
+   {
+    "arrays": [
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise"
+    ],
+    "file": "field/p001.npz"
+   },
+   {
+    "arrays": [
+     "dir",
+     "ecc_deg",
+     "phi",
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise"
+    ],
+    "file": "field/p002.npz"
+   },
+   {
+    "arrays": [
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise"
+    ],
+    "file": "field/p003.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "cell_deg",
+     "col",
+     "consistent",
+     "dir",
+     "ecc_deg",
+     "level",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "row",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p004.npz"
+   },
+   {
+    "arrays": [
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise"
+    ],
+    "file": "field/p005.npz"
+   },
+   {
+    "arrays": [
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise"
+    ],
+    "file": "field/p006.npz"
+   },
+   {
+    "arrays": [
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise"
+    ],
+    "file": "field/p007.npz"
+   },
+   {
+    "arrays": [
+     "dir",
+     "ecc_deg",
+     "phi",
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise"
+    ],
+    "file": "field/p008.npz"
+   },
+   {
+    "arrays": [
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise"
+    ],
+    "file": "field/p009.npz"
+   },
+   {
+    "arrays": [
+     "dir",
+     "ecc_deg",
+     "phi",
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise"
+    ],
+    "file": "field/p010.npz"
+   },
+   {
+    "arrays": [
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p011.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p012.npz"
+   },
+   {
+    "arrays": [
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p013.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p014.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "cell_deg",
+     "col",
+     "consistent",
+     "dir",
+     "ecc_deg",
+     "level",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "row",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p015.npz"
+   },
+   {
+    "arrays": [
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p016.npz"
+   },
+   {
+    "arrays": [
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise"
+    ],
+    "file": "field/p017.npz"
+   },
+   {
+    "arrays": [
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p018.npz"
+   },
+   {
+    "arrays": [
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p019.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "consistent",
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p020.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "consistent",
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p021.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p022.npz"
+   },
+   {
+    "arrays": [
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p023.npz"
+   },
+   {
+    "arrays": [
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p024.npz"
+   },
+   {
+    "arrays": [
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p025.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "cell_deg",
+     "col",
+     "consistent",
+     "dir",
+     "ecc_deg",
+     "level",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "row",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p026.npz"
+   },
+   {
+    "arrays": [
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p027.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p028.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p029.npz"
+   },
+   {
+    "arrays": [
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p030.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p031.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "cell_deg",
+     "col",
+     "consistent",
+     "dir",
+     "ecc_deg",
+     "level",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "row",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p032.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p033.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p034.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p035.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "consistent",
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p036.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p037.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "cell_deg",
+     "col",
+     "consistent",
+     "dir",
+     "ecc_deg",
+     "level",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "row",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p038.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "consistent",
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p039.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "cell_deg",
+     "col",
+     "consistent",
+     "dir",
+     "ecc_deg",
+     "level",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "row",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p040.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "cell_deg",
+     "col",
+     "consistent",
+     "dir",
+     "ecc_deg",
+     "level",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "row",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p041.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "cell_deg",
+     "col",
+     "consistent",
+     "dir",
+     "ecc_deg",
+     "level",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "row",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p042.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "cell_deg",
+     "col",
+     "consistent",
+     "dir",
+     "ecc_deg",
+     "level",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "row",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p043.npz"
+   },
+   {
+    "arrays": [
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p044.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "cell_deg",
+     "col",
+     "consistent",
+     "dir",
+     "ecc_deg",
+     "level",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "row",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p045.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "consistent",
+     "dir",
+     "ecc_deg",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p046.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "cell_deg",
+     "col",
+     "consistent",
+     "dir",
+     "ecc_deg",
+     "level",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "row",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p047.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "cell_deg",
+     "col",
+     "consistent",
+     "dir",
+     "ecc_deg",
+     "level",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "row",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p048.npz"
+   },
+   {
+    "arrays": [
+     "bound_deg",
+     "cell_deg",
+     "col",
+     "consistent",
+     "dir",
+     "ecc_deg",
+     "level",
+     "parallax_deg",
+     "phi",
+     "rho",
+     "row",
+     "sigma_p_deg",
+     "sigma_rho",
+     "sigma_rho_floor",
+     "sigma_rho_noise",
+     "theta_L"
+    ],
+    "file": "field/p049.npz"
+   }
+  ],
+  "files": 153
+ },
+ "phase_c": {
+  "a": {
+   "coarse_frac": 0.41256386625274866,
+   "coverage_any": 0.999486903373887,
+   "coverage_fine": 0.17640695922560531,
+   "depth_err_median_m": 0.8720264807578367,
+   "fine_depth_err_median_m": 0.1117502310542342,
+   "fine_gross_frac": 0.31121883355433344,
+   "fine_rho_err_median": 0.024489664047171344,
+   "fixations": 50,
+   "gated": 28118,
+   "gross_by_band": [
+    0.31121883355433344,
+    0.5438049784765113,
+    0.7178643590855716
+   ],
+   "gross_frac": 0.5670636075540034,
+   "learning": "(u) fixation-0 cells 10824: rho err median 0.2160 -> 0.2144",
+   "level_sigma": [
+    0.018028951712874955,
+    0.03909524166672432,
+    0.07705626297818752,
+    0.1524919618671805,
+    0.3263641063138609
+   ],
+   "outlier_by_band": [
+    0.25037497554507315,
+    0.24976604903612204,
+    0.00014810269864274457
+   ],
+   "outlier_frac": 0.15449974130125468,
+   "policy": "coverage",
+   "rays": 79948800,
+   "replay": "(s) replay ok",
+   "rho_err_median": 0.10990240313750096,
+   "u_end": 0.21436662658216976,
+   "u_fixed_cells": 10824,
+   "u_start": 0.21600553396055444,
+   "vergence_err_median_m": 0.5874816194668354,
+   "visited_fine_unmeasured": 2.6052352610998712e-05,
+   "z_rms": 0.5362158651290162
+  },
+  "b": {
+   "coarse_frac": 0.4128335415125534,
+   "coverage_any": 0.999486903373887,
+   "coverage_fine": 0.17643273179127658,
+   "depth_err_median_m": 0.8715504083858847,
+   "fine_depth_err_median_m": 0.11207033277157197,
+   "fine_gross_frac": 0.3112420119114898,
+   "fine_rho_err_median": 0.024567627410309656,
+   "fixations": 50,
+   "gated": 28345,
+   "gross_by_band": [
+    0.3112420119114898,
+    0.5433327403967683,
+    0.7188782200414534
+   ],
+   "gross_frac": 0.5672742266040917,
+   "learning": "(u) fixation-0 cells 10824: rho err median 0.2160 -> 0.2143",
+   "level_sigma": [
+    0.01802884489831205,
+    0.03909524146461925,
+    0.07705626297818752,
+    0.1525060841577766,
+    0.32636412075858895
+   ],
+   "outlier_by_band": [
+    0.2502499673955571,
+    0.2497636055536311,
+    0.00015862273169493676
+   ],
+   "outlier_frac": 0.15444068509153822,
+   "policy": "coverage",
+   "rays": 79948800,
+   "replay": "(s) replay ok",
+   "rho_err_median": 0.11016769605492432,
+   "u_end": 0.21432068900715828,
+   "u_fixed_cells": 10824,
+   "u_start": 0.21600553396055439,
+   "vergence_err_median_m": 0.5874816194668367,
+   "visited_fine_unmeasured": 2.6052352610998712e-05,
+   "z_rms": 0.5361153861396677
+  },
+  "differences": [
+   ".coarse_frac: 0.41256386625274866 vs 0.4128335415125534",
+   ".coverage_fine: 0.17640695922560531 vs 0.17643273179127658",
+   ".depth_err_median_m: 0.8720264807578367 vs 0.8715504083858847",
+   ".fine_depth_err_median_m: 0.1117502310542342 vs 0.11207033277157197",
+   ".fine_gross_frac: 0.31121883355433344 vs 0.3112420119114898",
+   ".fine_rho_err_median: 0.024489664047171344 vs 0.024567627410309656",
+   ".gated: 28118 vs 28345",
+   ".gross_by_band[0]: 0.31121883355433344 vs 0.3112420119114898",
+   ".gross_by_band[1]: 0.5438049784765113 vs 0.5433327403967683",
+   ".gross_by_band[2]: 0.7178643590855716 vs 0.7188782200414534",
+   ".gross_frac: 0.5670636075540034 vs 0.5672742266040917",
+   ".learning: '(u) fixation-0 cells 10824: rho err median 0.2160 -> 0.2144' vs '(u) fixation-0 cells 10824: rho err median 0.2160 -> 0.2143'",
+   ".level_sigma[0]: 0.018028951712874955 vs 0.01802884489831205",
+   ".level_sigma[1]: 0.03909524166672432 vs 0.03909524146461925",
+   ".level_sigma[3]: 0.1524919618671805 vs 0.1525060841577766",
+   ".level_sigma[4]: 0.3263641063138609 vs 0.32636412075858895",
+   ".outlier_by_band[0]: 0.25037497554507315 vs 0.2502499673955571",
+   ".outlier_by_band[1]: 0.24976604903612204 vs 0.2497636055536311",
+   ".outlier_by_band[2]: 0.00014810269864274457 vs 0.00015862273169493676",
+   ".outlier_frac: 0.15449974130125468 vs 0.15444068509153822"
+  ]
+ },
+ "run_a": "/home/lvelho/rd/fov-render/previews/issue-3b/calib-cpu-legacy",
+ "run_b": "/home/lvelho/rd/fov-render/previews/issue-3b/calib-cpu-ctrl"
+}
