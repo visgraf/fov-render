@@ -1,0 +1,53 @@
+{
+ "schema": "fov-render-scene-spec-v1",
+ "name": "classroom",
+ "source": {
+  "title": "Classroom (Blender demo file classroom.zip)",
+  "author": "Christophe Seux",
+  "licence": "CC0",
+  "url": "https://download.blender.org/demo/test/classroom.zip",
+  "zip_bytes": 70279690,
+  "zip_md5": "3adbb7114b514bfc6fc724ce20f86b4e",
+  "provenance": "f3d-vision scenes/manifest.json and scenes/classroom/ASSET_MANIFEST.json (48 required files, 11 linked libraries, 36 linked textures, 0 missing references)"
+ },
+ "derived": {
+  "file": "classroom_eye.blend (f3d-vision scenes/classroom/, on the workstation; not committed)",
+  "sha256": "dca66a3257b909aef00b0331652c55f62a93a8dff0665d070fba7efa436953cc",
+  "tool": "f3d-vision tools/place_eye.py: EYE at (-0.6, -1.0, 1.2) m, yaw 0, pitch 0 (f3d-vision manifest)",
+  "why": "the course playground's scene (visgraf/foveal-playground, from f3d-vision's Classroom); the file's own renderCam stands 0.46 m off the rear wall (f3d-vision manifest)"
+ },
+ "expect": {
+  "max_hole_fraction": null,
+  "backface_allowed": null,
+  "max_backface_fraction_other": 0.001,
+  "min_clearance_m": 0.25,
+  "missing_images": null,
+  "gazes": [
+   [
+    0.0,
+    0.0
+   ],
+   [
+    35.0,
+    -10.0
+   ],
+   [
+    -70.0,
+    8.0
+   ]
+  ],
+  "spp": 16,
+  "panorama_width": 720
+ },
+ "to_measure": [
+  "max_hole_fraction",
+  "backface_allowed",
+  "missing_images"
+ ],
+ "notes": {
+  "how": "Code measures on the workstation with `fov-render check --blend classroom_eye.blend --device OPTIX --only S1 S2 --write-spec DRAFT`, Chat reviews, the reviewed values replace the nulls and to_measure goes (issue #18)",
+  "max_hole_fraction": "f3d-vision measured 0.0208 holes (window panes onto a featureless world; OPTIX, 2026-09-12, scenes/manifest.json), above the default limit 0.02: the draft keeps 0.02 and says it will fail. Whether the Classroom gets its own limit is Luiz's decision (issue #18)",
+  "backface_allowed": "f3d-vision measured 0.0038 back-faces from this EYE (scenes/manifest.json), above 0.001: which objects, and whether they are closed meshes, is for S2 to say",
+  "missing_images": "f3d-vision's asset manifest resolves every image (0 missing); S1 checks it in fov_render"
+ }
+}

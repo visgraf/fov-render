@@ -12,8 +12,9 @@ runs: against known answers in `fov_render/checks/known/` (steps 1–4), or agai
 files rebuilt from a checkout (the Classroom). The scene gate for any `.blend` is
 `python -m fov_render.checks.scene`; the Barbershop's expectations are in `scenes/barbershop.json`.
 
-**Open:** nothing in the plan. Possible next steps: the `fov-render` command line of report §8.6;
-`docs/scenes/` for the course's own scenes.
+**Open:** #18, the `fov-render` command line of report §8.6 and the course's scene specs
+(`docs/scenes/calib_room.json`, `classroom.json`): Chat's CPU step is on `issue-18-cli`, Code's
+workstation step is next.
 
 **Known limits:**
 - **OptiX:** not bit-reproducible. Position and Object Index repeat exactly; Combined does not. CPU

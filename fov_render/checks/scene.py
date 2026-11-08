@@ -1,9 +1,9 @@
 """The scene gate: every fov_render check that a new .blend can run (issue #4, step 7; report §8.6's
 `fov-render check --blend`).
 
-    python -m fov_render.checks.scene --blend SCENE_eye.blend [--spec docs/scenes/NAME.json] \
-        [--device OPTIX] [--work previews/scene-NAME] [--json OUT]
-    blender -b --python-exit-code 1 -P tools/run_checks.py -- ... (not this module; see README)
+    fov-render check --blend SCENE_eye.blend [--spec docs/scenes/NAME.json] [--device OPTIX] \
+        [--work previews/scene-NAME] [--json OUT] [--only S1 S2 ...] [--write-spec DRAFT.json]
+    python -m fov_render.checks.scene (same options)                        (the bpy wheel, by hand)
 
 The spec (optional) states what is expected of this scene: hole fraction, the objects allowed to
 show back-faces, the nearest surface, the images known to be missing, the gazes. Without a spec the
@@ -17,6 +17,12 @@ defaults below apply and nothing is known in advance.
     S6  the material and image audits, by solid angle from the head (reported for review, not gated)
 
 Exit status 1 if any gate fails.
+
+--write-spec DRAFT writes a draft spec from what S1 and S2 measured (issue #18), for a person to
+review before it becomes docs/scenes/NAME.json: the missing images as found, the closed meshes
+whose back-faces exceed the limit as allowed, a hole limit of twice the measured fraction (at
+least 0.001, never above the default 0.02), the default clearance. A draft accepts the scene as it
+is; what it records is what a later change of the scene must keep.
 """
 from __future__ import annotations
 
@@ -39,10 +45,35 @@ DEFAULTS = {"max_hole_fraction": 0.02, "backface_allowed": [], "max_backface_fra
             "spp": 16, "panorama_width": 720}
 
 
+SPEC_SCHEMA = "fov-render-scene-spec-v1"
+
+
+def spec_problems(d) -> list[str]:
+    """Why a spec cannot be used as it is (numpy only; `fov-render check` refuses it with these)."""
+    if not isinstance(d, dict) or d.get("schema") != SPEC_SCHEMA:
+        return [f"schema must be {SPEC_SCHEMA!r}"]
+    out = []
+    expect = d.get("expect", {})
+    extra = sorted(set(expect) - set(DEFAULTS))
+    if extra:
+        out.append(f"unknown expectation(s) {extra}; known: {sorted(DEFAULTS)}")
+    nulls = sorted(k for k, v in expect.items() if v is None and k != "missing_images")
+    if nulls:
+        out.append(f"expectation(s) {nulls} are null")
+    if d.get("to_measure"):
+        out.append(f"expectation(s) {sorted(d['to_measure'])} are still to be measured "
+                   f"(`fov-render check --write-spec`, then review)")
+    return out
+
+
 def _spec(path) -> dict:
     s = dict(DEFAULTS)
     if path:
-        s.update(json.loads(Path(path).read_text()).get("expect", {}))
+        d = json.loads(Path(path).read_text())
+        bad = spec_problems(d)
+        if bad:
+            raise SystemExit(f"[fov-render scene] {path}: " + "; ".join(bad))
+        s.update(d.get("expect", {}))
     return s
 
 
@@ -60,7 +91,10 @@ def opens(ctx) -> Result:
     expected_missing = sp["missing_images"]
     ok = (h.eye_note.startswith("EYE object") and cat["count"] < 32767
           and (expected_missing is None or miss == sorted(expected_missing)))
-    ctrl = None if expected_missing is None else (miss != sorted(expected_missing)[1:])
+    # control: the same scene against an expectation one image off (one fewer, or one more when none
+    # is expected) fails
+    ctrl = None if expected_missing is None else (
+        miss != (sorted(expected_missing)[1:] if expected_missing else ["<an image expected missing>"]))
     return Result(STEP, "S1 the scene opens: head from EYE, rendering view layer, catalogue, audits", ok, ctrl,
                   {"file": {k: h.info.get(k) for k in ("path", "sha256", "saved_with", "blender", "unit_system",
                                                        "scale_length", "view_layer")},
@@ -258,6 +292,47 @@ def audit_coverage(ctx) -> Result:
 
 
 CHECKS = [opens, sanity, check_foveated, records_agree, ids_vs_raycast, audit_coverage]
+NAMES = {f"S{k + 1}": fn for k, fn in enumerate(CHECKS)}
+
+
+def _round_up(x: float, digits: int = 1) -> float:
+    """x rounded up to `digits` significant figures."""
+    if x <= 0:
+        return 0.0
+    e = math.floor(math.log10(x)) - (digits - 1)
+    return math.ceil(x / 10 ** e - 1e-9) * 10 ** e
+
+
+def draft_spec(blend: str, s1: Result, s2: Result, base: dict) -> dict:
+    """A spec that this scene passes on S1 and S2 as it is now (see the module docstring)."""
+    san = s2.detail["sanity"]
+    limit = base["max_backface_fraction_other"]
+    closed = dict(sorted(s2.detail["backface_verdict"]["closed_not_allowed"].items(), key=lambda kv: -kv[1]))
+    allowed, rest = list(base["backface_allowed"]), sum(closed.values())
+    for name, f in closed.items():
+        if rest <= limit:
+            break
+        allowed.append(name)
+        rest -= f
+    h = float(san["hole_fraction"])
+    hole = min(DEFAULTS["max_hole_fraction"], max(0.001, _round_up(2.0 * h)))
+    expect = dict(base, missing_images=sorted(s1.detail["missing_images"]), backface_allowed=allowed,
+                  max_hole_fraction=hole)
+    near = san.get("nearest_surface_m")
+    notes = {"how": "written by `fov-render check --write-spec` from S1 and S2; review every line before it becomes "
+                    "docs/scenes/NAME.json",
+             "measured": {"hole_fraction": h, "nearest_surface_m": near,
+                          "backface_by_object": san.get("backface_by_object", {}),
+                          "backface_closed": san.get("backface_closed", {}),
+                          "missing_images": s1.detail["missing_images"]},
+             "backface_allowed": {n: closed[n] for n in allowed if n in closed},
+             "will_fail": [m for m, bad in (
+                 (f"holes {h:.4g} above the default limit {DEFAULTS['max_hole_fraction']}", h > hole),
+                 (f"nearest surface {near} m nearer than {base['min_clearance_m']} m",
+                  near is not None and near < base["min_clearance_m"])) if bad]}
+    return {"schema": "fov-render-scene-spec-v1", "name": Path(blend).stem, "draft": True,
+            "derived": {"file": Path(blend).name, "sha256": s1.detail["file"]["sha256"]},
+            "expect": expect, "notes": notes}
 
 
 def main(argv=None) -> int:
@@ -267,25 +342,39 @@ def main(argv=None) -> int:
     ap.add_argument("--device", default="OPTIX", choices=["CPU", "OPTIX", "CUDA"])
     ap.add_argument("--work", default=None)
     ap.add_argument("--json", default=None)
+    ap.add_argument("--only", nargs="+", choices=sorted(NAMES), default=None, help="run only these gates")
+    ap.add_argument("--write-spec", default=None, metavar="DRAFT", help="write a draft spec from S1 and S2")
     a = ap.parse_args(argv)
+    only = a.only or sorted(NAMES)
+    if a.write_spec and not {"S1", "S2"} <= set(only):
+        ap.error("--write-spec needs S1 and S2")
     work = Path(a.work or Path("previews") / f"scene-{Path(a.blend).stem}").resolve()
     work.mkdir(parents=True, exist_ok=True)
     ctx = {"blend": str(Path(a.blend).resolve()), "spec": _spec(a.spec), "device": a.device, "work": work}
     out = []
-    for fn in CHECKS:
+    for key in sorted(only):
+        fn = NAMES[key]
         t0 = time.perf_counter()
         try:
             r = fn(ctx)
         except Exception as e:  # noqa: BLE001
-            r = Result(STEP, fn.__name__, False, None, {"error": f"{type(e).__name__}: {e}",
+            r = Result(STEP, f"{key} {fn.__name__}", False, None, {"error": f"{type(e).__name__}: {e}",
                                                         "traceback": traceback.format_exc()[-3000:]})
         r.detail["seconds"] = round(time.perf_counter() - t0, 2)
         out.append(r)
         print(f"[fov-render scene] {r.status:4}  {r.name}  ({r.detail['seconds']} s)", flush=True)
+    if a.write_spec:
+        by = {r.name[:2]: r for r in out}
+        if "error" in by["S1"].detail or "error" in by["S2"].detail:
+            print("[fov-render scene] no draft spec: S1 or S2 raised", flush=True)
+            return 1
+        write_json(Path(a.write_spec), draft_spec(ctx["blend"], by["S1"], by["S2"], ctx["spec"]))
+        print(f"[fov-render scene] wrote the draft spec {a.write_spec}", flush=True)
     from . import _git_head
     import bpy
     write_json(Path(a.json) if a.json else work / "results.json",
                {"schema": "fov-render-scene-gate-v1", "blend": ctx["blend"], "spec": a.spec, "spec_values": ctx["spec"],
+                "only": only,
                 "device": a.device, "commit": _git_head(), "blender": bpy.app.version_string,
                 "created_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                 "passed": sum(r.status == "PASS" for r in out), "failed": sum(r.status == "FAIL" for r in out),

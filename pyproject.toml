@@ -15,6 +15,9 @@ dependencies = ["numpy>=1.26"]
 bpy = ["bpy==5.2.1"]
 checks = ["OpenEXR==3.4.15", "pillow==12.3.0"]   # pillow: gate 5.5 imports f3d-vision's run.py (#2)
 
+[project.scripts]
+fov-render = "fov_render.cli:entry"
+
 [tool.setuptools.packages.find]
 include = ["fov_render*"]
 
