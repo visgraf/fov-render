@@ -3,6 +3,8 @@
 Observation fields (an observer may read them):
     origin (3,) eye centre, world m · direction (K, 3) world unit · value (K, 3) linear RGB ·
     footprint_sr (K,) · raster_index (K,) flat row-major index into raster_shape
+The look's head: head_R_wh (3, 3) and head_origin_w (3,) (issue #20; None in a record written
+before it, when the head was the session's and its origin was not stored).
 Oracle fields (only with access="oracle"):
     position_w (K, 3) · distance_m (K,) inf on a miss · instance_id (K,) 0 on a miss ·
     normal_w (K, 3) when the Normal pass was rendered
@@ -44,6 +46,7 @@ class SampleRecord:
     access: str = "observation"
     meta: dict = field(default_factory=dict)
     _oracle: dict = field(default_factory=dict, repr=False)
+    head_origin_w: np.ndarray | None = None
 
     def __post_init__(self):
         if self.access not in ACCESS:
@@ -92,6 +95,8 @@ class SampleRecord:
         arrays = {k: getattr(self, k) for k in OBSERVATION_FIELDS}
         arrays.update({f"oracle__{k}": v for k, v in self._oracle.items()})
         arrays["head_R_wh"] = np.asarray(self.head_R_wh)
+        if self.head_origin_w is not None:
+            arrays["head_origin_w"] = np.asarray(self.head_origin_w, dtype=np.float64)
         header = {"schema": SCHEMA, "eye": self.eye, "look_id": self.look_id, "sensor": self.sensor,
                   "raster_shape": list(self.raster_shape), "meta": self.meta}
         np.savez_compressed(path, __header__=np.frombuffer(json.dumps(header).encode(), dtype=np.uint8), **arrays)
@@ -104,11 +109,12 @@ class SampleRecord:
             raise ValueError(f"not a {SCHEMA} file: {path}")
         oracle = {k[len("oracle__"):]: z[k] for k in z.files if k.startswith("oracle__")} if access == "oracle" else {}
         return cls(header["eye"], header["look_id"], header["sensor"], tuple(header["raster_shape"]),
-                   *(z[k] for k in OBSERVATION_FIELDS), z["head_R_wh"], access, header["meta"], oracle)
+                   *(z[k] for k in OBSERVATION_FIELDS), z["head_R_wh"], access, header["meta"], oracle,
+                   z["head_origin_w"] if "head_origin_w" in z.files else None)
 
 
 def build(model, passes: dict, origin_w, R_wb, head_R_wh, *, eye: str, look_id: str, access: str = "observation",
-          meta: dict | None = None) -> SampleRecord:
+          meta: dict | None = None, head_origin_w=None) -> SampleRecord:
     """Make a record from rendered passes (each (H, W, ...) arrays, rows top-down).
 
     passes keys: "combined" (H, W, 3+), and optionally "position" (H, W, 3), "object_index" (H, W),
@@ -138,7 +144,8 @@ def build(model, passes: dict, origin_w, R_wb, head_R_wh, *, eye: str, look_id: 
         oracle["normal_w"] = np.asarray(passes["normal"], dtype=np.float32).reshape(-1, 3)[idx]
     rec = SampleRecord(eye, look_id, model.name, model.shape, origin_w, d_w, rgb,
                        rays.footprint_sr.reshape(-1)[idx], idx.astype(np.int64),
-                       np.asarray(head_R_wh, dtype=np.float64), "oracle", dict(meta or {}), oracle)
+                       np.asarray(head_R_wh, dtype=np.float64), "oracle", dict(meta or {}), oracle,
+                       None if head_origin_w is None else np.asarray(head_origin_w, dtype=np.float64).reshape(3))
     if access != "oracle":
         rec.access = "observation"
     return rec

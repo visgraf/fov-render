@@ -1,7 +1,7 @@
 # fov-render
 
-Blender Cycles rendering for gaze-directed binocular observers. Two eyes on a fixed head, four
-sensors behind one rig, and one sample record whatever the sensor:
+Blender Cycles rendering for gaze-directed binocular observers. Two eyes on a head that may move
+between looks, four sensors behind one rig, and one sample record whatever the sensor:
 
 | Sensor | Camera | Used for |
 |---|---|---|
@@ -68,6 +68,24 @@ with Session("room.blend", RenderConfig(profile="small", device="OPTIX"), rig=Ri
 s = Session.in_process(RenderConfig(...), rig=Rig(), blend=None)   # inside Blender: the loaded scene
 ```
 
+**The head moves between looks** (issue #20). A look may carry its own head pose; without one it
+uses the session's (the scene's `EYE`). The server keeps no head state: the head is a field of each
+request. `move_head` is a client-side convenience that fills it in:
+
+```python
+s.move_head(translate_h=(0, 0, -0.10), yaw_deg=15)      # 10 cm forward in the head frame, then turn 15 deg right
+s.look(sensors.Foveated(), gaze=Gaze.yaw_pitch(0, 0, vergence_m=2.1))   # the request carries the moved head
+s.look(sensors.Foveated(), gaze=Gaze.verged_point(P), head=s.session_head.translated([0.2, 0, 0]))  # this look only
+s.reset_head()                                          # back to the session's head
+```
+
+`HeadPose.moved(translate_h, yaw_deg, pitch_deg, roll_deg)` moves in the head's own frame (+X right,
++Y up, −Z forward; +yaw right, +pitch up, +roll lowers the right ear); `HeadPose.translated(dt_w)`
+moves in world metres. A `yaw_pitch` or `per_eye` gaze is head-relative and turns with the head; a
+`verged_point` gaze is a world point and the eyes stay on it. Both eyes of a look share its head
+(nothing moves within a look), and each record stores it (`head_R_wh`, `head_origin_w`). There is
+no body frame: a caller with a body or neck model composes it into the head pose (PLAN D20).
+
 Each look is a `fov-render-request-v1` JSON request (`fov_render/request.py`); its folder holds
 `request.json`, `raw_<eye>.exr`, `record_<eye>.npz` when asked, and `meta.json` (poses, the
 settings Cycles used, timings). A malformed request is refused with every reason, before anything
@@ -87,6 +105,8 @@ fov-render look     --blend scene_eye.blend --sensor foveated --eyes L R --point
                     --profile full --records --out runs/demo/f0000
 fov-render look     --blend scene_eye.blend --sensor perspective --gaze 10 -5 --vergence 2.1 \
                     --seeds L=2111 R=2112 --out runs/demo/p0000
+fov-render look     --blend scene_eye.blend --sensor foveated --gaze 0 0 --vergence 2.1 \
+                    --head-move 0 0 -0.5 --head-turn 20 0 0 --out runs/demo/moved    # the head moved for this look
 fov-render panorama --blend scene_eye.blend --preset preview360 --eye C --out previews/ref_C
 fov-render requests --blend scene_eye.blend looks.json --out runs/demo     # many looks, one session
 fov-render selftest --device OPTIX                                         # the gates below
@@ -96,8 +116,10 @@ fov-render selftest --device OPTIX                                         # the
 bit for bit); every folder also gets `fov-render-run.json` (the command, the session, the answers).
 Sensor fields go in `--param` (`E2_deg=2.0 e_max_deg=45`), the gaze is one of `--point`,
 `--gaze YAW PITCH [--vergence M]`, `--per-eye L=YAW,PITCH R=…`, or none (a fixed look). A
-`requests` file is a JSON list of looks, `{sensor, eyes, gaze, spp, seeds, rig, out_dir, outputs}`,
-with `out_dir` relative to `--out`.
+`requests` file is a JSON list of looks, `{sensor, eyes, gaze, spp, seeds, rig, head, out_dir, outputs}`,
+with `out_dir` relative to `--out` and `head` an absolute pose `{head_R_wh, head_origin_w_m}` (omitted:
+the session's). `--head-move DX DY DZ` and `--head-turn YAW PITCH ROLL` move the session's head for
+one look, in its own frame (`HeadPose.moved`).
 
 Exit status: **0** done, **1** a render, a gate or Blender failed, **2** the arguments, a request or a
 spec were refused: every reason is printed, and Blender is not started.

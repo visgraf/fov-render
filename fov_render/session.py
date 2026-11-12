@@ -10,6 +10,14 @@ Session(...) runs Blender as a persistent server in the background (fov_render.s
 one JSON request per look through a queue folder; Session.in_process(...) inside a Blender script
 calls the same handler directly. Both return the same Look.
 
+The head (issue #20): each look may carry its own head pose (look(..., head=HeadPose)); without one
+it uses the session's. move_head() is a client-side convenience: it keeps a current head here, in
+the Session object, and puts it in every later look's request; the server keeps no head state.
+
+    s.move_head(translate_h=(0, 0, -0.10), yaw_deg=15)    # 10 cm forward, then turn 15 deg right
+    s.look(...)                                           # the request carries the moved head
+    s.reset_head()                                        # back to the session's head (no field)
+
 Which Blender: launcher="auto" uses $FOVRENDER_BLENDER, else `blender` on PATH, else this Python
 if it has the bpy wheel; "blender", "python" or an executable path choose explicitly. With the
 Blender binary the scene is loaded on its command line, as f3d-vision's server does.
@@ -23,11 +31,13 @@ import tempfile
 import time
 from pathlib import Path
 
+import numpy as np
+
 from . import launch
 from .bl.config import RenderConfig
 from .record import SampleRecord
 from .request import RequestError, dumps, make_request, make_session
-from .rig import Rig
+from .rig import HeadPose, Rig
 
 PACKAGE_ROOT = launch.PACKAGE_ROOT
 SERVER_SCRIPT = Path(__file__).resolve().parent / "server.py"
@@ -65,6 +75,37 @@ class Look:
 
 class _Base:
     access = "observation"
+    _head_now: HeadPose | None = None
+
+    # ------------------------------------------------------------------ the head (client side)
+    @property
+    def session_head(self) -> HeadPose:
+        """The session's head, as the handler resolved it when the scene opened."""
+        return HeadPose.from_dict(self.ready["head"])
+
+    @property
+    def head(self) -> HeadPose:
+        """The head the next look uses unless it is given one."""
+        return self._head_now if self._head_now is not None else self.session_head
+
+    def move_head(self, head: HeadPose | None = None, *, translate_h=(0.0, 0.0, 0.0), yaw_deg: float = 0.0,
+                  pitch_deg: float = 0.0, roll_deg: float = 0.0) -> HeadPose:
+        """Set the current head: to `head` when given, else to the current head moved in its own frame
+        (HeadPose.moved: translate, then turn). Later looks carry it in their requests."""
+        if head is not None:
+            if any(np.any(np.asarray(v) != 0) for v in (translate_h, yaw_deg, pitch_deg, roll_deg)):
+                raise ValueError("move_head: give either a head or a relative move, not both")
+            if not isinstance(head, HeadPose):
+                raise TypeError("move_head: head must be a fov_render.HeadPose")
+            self._head_now = head
+        else:
+            self._head_now = self.head.moved(translate_h, yaw_deg, pitch_deg, roll_deg)
+        return self._head_now
+
+    def reset_head(self) -> HeadPose:
+        """Back to the session's head: later requests carry no head field."""
+        self._head_now = None
+        return self.session_head
 
     def _next_out(self, out_dir):
         if out_dir is not None:
@@ -72,9 +113,11 @@ class _Base:
         return self.workdir / "looks" / f"look-{self.n + 1:04d}"
 
     def look(self, sensor, eyes=("L", "R"), gaze=None, *, spp=None, seeds=None, out_dir=None,
-             outputs=("exr",), rig: Rig | None = None, yaw_offset_deg=None) -> Look:
+             outputs=("exr",), rig: Rig | None = None, yaw_offset_deg=None, head: HeadPose | None = None) -> Look:
+        """head: this look's head; else the current head of move_head(); else none (the session's)."""
         req = make_request(self.n + 1, sensor, eyes, gaze, self._next_out(out_dir), spp=spp, seeds=seeds,
-                           rig=rig, outputs=outputs, yaw_offset_deg=yaw_offset_deg)
+                           rig=rig, outputs=outputs, yaw_offset_deg=yaw_offset_deg,
+                           head=head if head is not None else self._head_now)
         return Look(req, self.request(req), self.access)
 
     def __enter__(self):

@@ -64,7 +64,10 @@ def refusals(ctx) -> Result:
     blend.write_bytes(b"not read: nothing starts")
     bad_file = work / "looks.json"
     bad_file.write_text(json.dumps([{"sensor": {"type": "fisheye"}, "eyes": ["L"]},
-                                    {"sensor": {"type": "panorama", "width": 721}, "eyes": ["C", "C"]}]))
+                                    {"sensor": {"type": "panorama", "width": 721}, "eyes": ["C", "C"]},
+                                    {"sensor": {"type": "panorama"}, "eyes": ["C"],        # issue #20
+                                     "head": {"head_R_wh": [[2, 0, 0], [0, 1, 0], [0, 0, 1]],
+                                              "head_origin_w_m": [0, 0, 1.6]}}]))
     spec = work / "spec.json"
     spec.write_text(json.dumps({"schema": "fov-render-scene-spec-v1", "expect": {"max_hole_fraction": None,
                                                                                  "max_holes": 0.1}}))
@@ -92,7 +95,10 @@ def refusals(ctx) -> Result:
         "odd panorama": (["panorama", "--blend", blend, "--width", 721, "--out", work / "o", *L], ["even"]),
         "bad config": (look + ["--sensor", "perspective", "--gaze", 0, 0, "--profile", "huge"], ["render config"]),
         "requests file": (["requests", "--blend", blend, bad_file, "--out", work / "o", *L],
-                          ["looks[0].sensor.type", "looks[1].sensor.width", "looks[1].eyes"]),
+                          ["looks[0].sensor.type", "looks[1].sensor.width", "looks[1].eyes",
+                           "looks[2].head.head_R_wh"]),
+        "head move not finite": (look + ["--sensor", "perspective", "--gaze", 0, 0, "--head-move", 0, "nan", 0,
+                                         "--head-turn", "inf", 0, 0], ["--head-move", "--head-turn"]),
         "eye without yaw": (["eye", "--blend", blend, "--out", work / "e.blend", "--position", 0, 0, 1, *L],
                             ["--position needs --yaw"]),
         "eye overwrites": (["eye", "--blend", blend, "--out", blend, "--from-camera", *L], ["must not overwrite"]),

@@ -1,6 +1,7 @@
 """The `fov-render` command line (report section 8.6; issue #18).
 
     fov-render look      --blend B --sensor foveated --eyes L R --point X Y Z --out DIR [--device CPU]
+                         [--head-move DX DY DZ] [--head-turn YAW PITCH ROLL]   the head moved for this look
     fov-render panorama  --blend B [--preset preview360 | --width W] [--eye C] --out DIR
     fov-render requests  --blend B FILE.json --out DIR       many looks, the scene opened once
     fov-render info      --blend B [--json OUT]               the scene report: head, view layer, catalogue, audits
@@ -20,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import subprocess
 import sys
 import time
@@ -172,6 +174,10 @@ def _look_options(p, *, panorama: bool):
         g.add_argument("--backface", action="store_true", help="also write the back-face pass")
         g.add_argument("--eye", nargs="+", dest="eyes", default=["C"], choices=list(EYES))
     g.add_argument("--yaw-offset", type=float, default=None, help="a fixed look's yaw offset (deg)")
+    g.add_argument("--head-move", nargs=3, type=float, default=None, metavar=("DX", "DY", "DZ"),
+                   help="move the head from the session's, in its own frame (m; +X right, +Y up, -Z forward)")
+    g.add_argument("--head-turn", nargs=3, type=float, default=None, metavar=("YAW", "PITCH", "ROLL"),
+                   help="then turn it (deg; +yaw right, +pitch up, +roll right ear down)")
     g.add_argument("--spp", type=int, default=None, help="samples per pixel (default: the profile's)")
     g.add_argument("--seeds", nargs="+", default=None, metavar="EYE=N")
     g.add_argument("--records", action="store_true", help="also write the sample records (.npz)")
@@ -194,7 +200,7 @@ def parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser("requests", help="many looks from a JSON file through one session")
     _session_options(p)
-    p.add_argument("file", help="a JSON list of looks: {sensor, eyes, gaze, spp, seeds, rig, out_dir, outputs}")
+    p.add_argument("file", help="a JSON list of looks: {sensor, eyes, gaze, spp, seeds, rig, head, out_dir, outputs}")
     p.add_argument("--out", required=True, help="the folder relative out_dirs are taken from")
 
     p = sub.add_parser("info", help="the scene report as JSON")
@@ -252,6 +258,10 @@ def _look_request(a, panorama: bool, reasons: list) -> dict:
     else:
         sensor = {"type": SENSOR_NAMES[a.sensor], **_pairs(a.param, "--param", reasons)}
     reasons += check_sensor(sensor)
+    for opt in ("head_move", "head_turn"):
+        v = getattr(a, opt, None)
+        if v is not None and not all(math.isfinite(x) for x in v):
+            reasons.append(f"--{opt.replace('_', '-')}: must be finite numbers")
     gaze = _gaze(a, reasons)
     seeds = None if a.seeds is None else _pairs(a.seeds, "--seeds", reasons)
     return {"sensor": sensor, "eyes": list(a.eyes), "gaze": gaze, "spp": a.spp, "seeds": seeds, "rig": None,
@@ -323,6 +333,14 @@ def _summary(resp: dict) -> str:
     return f"look {resp['n']} done in {resp.get('wall_seconds', 0):.2f} s -> {eyes}"
 
 
+def _moved_head(a, s) -> dict | None:
+    """--head-move / --head-turn: the session's head moved, for this look (issue #20)."""
+    if a.head_move is None and a.head_turn is None:
+        return None
+    yaw, pitch, roll = a.head_turn or (0.0, 0.0, 0.0)
+    return s.session_head.moved(a.head_move or (0.0, 0.0, 0.0), yaw, pitch, roll).as_dict()
+
+
 def cmd_look(a, panorama: bool) -> int:
     reasons: list = []
     blend = _blend(a.blend, reasons)
@@ -331,6 +349,9 @@ def cmd_look(a, panorama: bool) -> int:
     _validate(_full(1, look, out), "", reasons)
     s = _session(a, blend, reasons, _full(1, look, out))
     try:
+        head = _moved_head(a, s)
+        if head is not None:
+            look["head"] = head
         resp = s.request(_full(1, look, out))
         _write_cli(out, a, s, [resp])
         print(f"{PREFIX}: {_summary(resp)}", flush=True)
