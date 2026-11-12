@@ -6,7 +6,10 @@ in an issue: the method serves the work.
 
 ## Who does what
 
-- **Luiz** decides: direction, what gets built, what is accepted. Only Luiz changes this file.
+- **Luiz** decides: direction, what gets built, what is accepted. This file changes only with his
+  approval: Chat may edit it when Luiz asks for a change or approves one Chat proposed, and the
+  commit says where he approved it (the conversation's date, or the issue or PR). Code proposes
+  changes to it in an issue, `for-luiz`.
 - **Chat** (Claude in claude.ai) plans, writes code that runs without a GPU, runs what its sandbox
   can, opens issues for Code and reviews what comes back. The sandbox has the `bpy` 5.2.1 wheel, so
   it can render on CPU, but it has no GPU and no Classroom assets.
