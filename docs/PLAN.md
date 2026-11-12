@@ -165,7 +165,9 @@ What #20 adds (Chat, on CPU):
 - `record.py`: `SampleRecord.head_origin_w`, for translational flow; `None` in a record written before.
 - `session.py`: `look(head=)`, `move_head`, `reset_head`, `head`, `session_head`.
 - `cli.py`: `--head-move`, `--head-turn` on `look` and `panorama`; `head` in a `requests` file.
-- Gates head.1–head.5 (step `head`, in the default set); cli.1 gained two refusal cases.
+- Gates head.1–head.5 (step `head`, in the default set); cli.1 gained two refusal cases. head.4 (bit for
+  bit) renders on CPU whatever `--device` says, as cli.2 and gate 1.2 (D10): Code found that two identical
+  looks on OPTIX differ in Combined by 1–2 float32 ULP in about 13 % of values, on `main` too (#20).
 
 Not in #20: motion within a look (motion blur, rolling shutter); a body frame (D20); the scene gate's
 S2 (holes, back-faces) still runs from the session's head only, so a moved head inside geometry is

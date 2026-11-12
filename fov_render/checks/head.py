@@ -6,9 +6,11 @@ numpy only:
     head.2  HeadPose.moved / translated against their definitions; the rig places and aims the eyes
             of a moved head
     head.3  Session.move_head fills in exactly the requests it should (client side, no Blender)
-needs bpy (calibration room, CPU):
-    head.4  a look whose head is the session's renders bit for bit as a look without a head
-    head.5  from moved heads, every sensor's record sits on the requested head: origins, the sample
+needs bpy (calibration room):
+    head.4  a look whose head is the session's renders bit for bit as a look without a head. Always on
+            CPU, whatever --device says, as cli.2 and gate 1.2 (D10): OPTIX's Combined is not
+            bit-reproducible between two identical looks, with or without a head (Code, #20)
+    head.5  (on --device) from moved heads, every sensor's record sits on the requested head: origins, the sample
             nearest the expected gaze, and agreement with Position. Control: a handler that ignores
             the request's head fails it
 """
@@ -217,12 +219,12 @@ def move_head_requests(_ctx=None) -> Result:
 
 # ----------------------------------------------------------------------------- bpy gates
 
-def _session(ctx, work: Path, ignore_head: bool = False):
+def _session(ctx, work: Path, ignore_head: bool = False, device: str | None = None):
     from .. import Session
     from ..bl.config import RenderConfig
     from .step1 import calib_room
-    s = Session.in_process(RenderConfig(profile="small", device=ctx["device"]), Rig(roll="baseline_projected"),
-                           blend=calib_room(ctx), access="oracle", workdir=work)
+    s = Session.in_process(RenderConfig(profile="small", device=device or ctx["device"]),
+                           Rig(roll="baseline_projected"), blend=calib_room(ctx), access="oracle", workdir=work)
     if ignore_head:      # the control: a handler that never reads the request's head
         s.handler.look_head = lambda req: s.handler.head
     return s
@@ -233,7 +235,7 @@ def same_head_same_look(ctx) -> Result:
     from .cli import _arrays, _same
     work = Path(ctx["work"]) / "head" / "4"
     shutil.rmtree(work, ignore_errors=True)
-    s = _session(ctx, work / "q")
+    s = _session(ctx, work / "q", device="CPU")         # bit for bit: CPU whatever --device says (#20)
     g, seeds = Gaze.verged_point(POINT), {"L": 11, "R": 12}
     kw = dict(spp=4, seeds=seeds, outputs=("exr", "records"))
     a = s.look(S.Foveated(), ("L", "R"), g, out_dir=work / "none", **kw)
@@ -255,7 +257,7 @@ def same_head_same_look(ctx) -> Result:
     ctrl = bool(key in A and key in C and A[key].tobytes() != C[key].tobytes())
     return Result(STEP, "head.4 a look with the session's head as its own renders bit for bit as one without a head",
                   ok, ctrl, {"arrays": len(A), "differ": diff[:20], "head_source": sources,
-                             "look_ids": {k: sorted(v) for k, v in looks_ids.items()},
+                             "look_ids": {k: sorted(v) for k, v in looks_ids.items()}, "device": a.response["device"],
                              "control_1mm_position_differs": ctrl})
 
 
