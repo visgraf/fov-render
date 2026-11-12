@@ -16,7 +16,13 @@ files rebuilt from a checkout (the Classroom). The scene gate for any `.blend` i
 (`docs/scenes/calib_room.json`, `barbershop.json`, `classroom.json`), on `issue-18-cli`: both steps
 done (Chat on CPU, Code on the workstation), waiting for Luiz's acceptance.
 
+**Open:** #20, head motion: a per-look head pose in the request, with a client-side
+`Session.move_head` (D19; no body frame, D20), on `issue-20-head-motion`. Chat's part is done on CPU;
+next, Code on the workstation.
+
 **Known limits:**
+- **A moved head is not checked against the scene:** S2 (holes, back-faces) runs from the session's
+  head only, so a head moved inside geometry renders without a warning (#20).
 - **OptiX:** not bit-reproducible. Position and Object Index repeat exactly; Combined does not. CPU
   repeats bit for bit on the calibration room, but not on the Classroom (#9).
 - **Known answers come from one machine** (the Chat sandbox's CPU). Renders are compared with

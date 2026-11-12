@@ -145,3 +145,30 @@ What #18 adds, in two steps (Chat on CPU, then Code on the workstation):
 featureless world: 2.063 % holes (Code, workstation, OPTIX), above the default 0.02. Its spec sets
 `max_hole_fraction` 0.025, about a fifth above the measured value, with the reason in its notes. A
 draft never raises a limit above the default by itself; a person does, in the scene's spec.
+
+## Head motion (#20)
+
+The head may move between looks; it was fixed per session until now.
+
+| # | Question | Decision |
+|---|---|---|
+| D19 | How a moving head is expressed (Luiz, 2026-11-12, in Chat, recorded in #20) | a **per-look field of the request** (`head`, `HeadPose.as_dict()`'s shape; absent = the session's head, and the request is then byte for byte what it was before). The server keeps no head state. `Session.move_head` is a client-side convenience that fills in the field; an explicit `look(..., head=)` wins |
+| D20 | A body frame (Luiz, 2026-11-12, #20) | not now. fov-render takes a head pose per look; a caller composes a body or neck model into it. Added to the package when it is needed |
+
+What #20 adds (Chat, on CPU):
+- `request.py`: the optional `head` field, checked (`check_head`: a 3x3 proper rotation within `HeadPose`'s
+  1e-7, a finite origin). The schema stays `fov-render-request-v1`; an older server refuses the field.
+- `rig.py`: `HeadPose.moved` (head frame: translate, then turn by `turn_rotation` = Ry(−yaw) Rx(pitch)
+  Rz(−roll), the gaze's signs), `translated` (world), `from_dict`, `matrix`.
+- `bl/handler.py`: the look's head (`Handler.look_head`) drives the poses, the records, the response
+  (`head`, `head_source`) and `meta.json` (`head` is the look's, `session_head` added).
+- `record.py`: `SampleRecord.head_origin_w`, for translational flow; `None` in a record written before.
+- `session.py`: `look(head=)`, `move_head`, `reset_head`, `head`, `session_head`.
+- `cli.py`: `--head-move`, `--head-turn` on `look` and `panorama`; `head` in a `requests` file.
+- Gates head.1–head.5 (step `head`, in the default set); cli.1 gained two refusal cases. head.4 (bit for
+  bit) renders on CPU whatever `--device` says, as cli.2 and gate 1.2 (D10): Code found that two identical
+  looks on OPTIX differ in Combined by 1–2 float32 ULP in about 13 % of values, on `main` too (#20).
+
+Not in #20: motion within a look (motion blur, rolling shutter); a body frame (D20); the scene gate's
+S2 (holes, back-faces) still runs from the session's head only, so a moved head inside geometry is
+not detected.

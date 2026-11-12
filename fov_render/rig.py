@@ -1,4 +1,5 @@
-"""The binocular rig: a fixed head, two eyes on its X axis, a gaze per look, a roll convention.
+"""The binocular rig: a head (the session's, or a look's own, issue #20), two eyes on its X axis, a gaze
+per look, a roll convention.
 
 numpy only; both interpreters import it. Report section 3.
 
@@ -66,6 +67,18 @@ def rot_y(deg: float) -> np.ndarray:
     return np.array([[math.cos(a), 0.0, math.sin(a)], [0.0, 1.0, 0.0], [-math.sin(a), 0.0, math.cos(a)]])
 
 
+def rot_z(deg: float) -> np.ndarray:
+    a = math.radians(deg)
+    return np.array([[math.cos(a), -math.sin(a), 0.0], [math.sin(a), math.cos(a), 0.0], [0.0, 0.0, 1.0]])
+
+
+def turn_rotation(yaw_deg: float = 0.0, pitch_deg: float = 0.0, roll_deg: float = 0.0) -> np.ndarray:
+    """A head turn in the head frame, with the gaze's signs: +yaw right, +pitch up, +roll lowers the
+    right ear (head +Y toward +X). Composed as Ry(-yaw) Rx(pitch) Rz(-roll): yaw, then pitch about
+    the turned head's X, then roll about its forward axis."""
+    return rot_y(-yaw_deg) @ rot_x(pitch_deg) @ rot_z(-roll_deg)
+
+
 def gaze_rotation(yaw_deg: float, pitch_deg: float) -> np.ndarray:
     """R_HB for the upright convention, composed as Ry(-yaw) @ Rx(pitch)."""
     return rot_y(-yaw_deg) @ rot_x(pitch_deg)
@@ -99,7 +112,10 @@ def camera_rotation(direction_h, roll: str = "upright", baseline_h=(1.0, 0.0, 0.
 
 @dataclass(frozen=True)
 class HeadPose:
-    """The fixed head: R_wh maps head vectors to world, origin_w is the cyclopean point (metres)."""
+    """The head: R_wh maps head vectors to world, origin_w is the cyclopean point (metres).
+
+    A session has one (from the EYE object); a look may carry its own (issue #20), so the head moves
+    between looks. moved() and translated() make relative moves."""
     R_wh: np.ndarray
     origin_w: np.ndarray
 
@@ -134,8 +150,28 @@ class HeadPose:
         m = np.asarray(m4, dtype=np.float64)
         return cls(m[:3, :3], m[:3, 3])
 
+    @classmethod
+    def from_dict(cls, d: dict) -> "HeadPose":
+        return cls(np.asarray(d["head_R_wh"], dtype=np.float64), np.asarray(d["head_origin_w_m"], dtype=np.float64))
+
     def as_dict(self) -> dict:
         return {"head_R_wh": self.R_wh.tolist(), "head_origin_w_m": self.origin_w.tolist()}
+
+    @property
+    def matrix(self) -> np.ndarray:
+        m = np.eye(4)
+        m[:3, :3], m[:3, 3] = self.R_wh, self.origin_w
+        return m
+
+    def moved(self, translate_h=(0.0, 0.0, 0.0), yaw_deg: float = 0.0, pitch_deg: float = 0.0,
+              roll_deg: float = 0.0) -> "HeadPose":
+        """The head after a move in its own frame: the origin goes to translate_h (metres, head axes:
+        +X right, +Y up, -Z forward), then the head turns about its new origin (turn_rotation)."""
+        return HeadPose(self.R_wh @ turn_rotation(yaw_deg, pitch_deg, roll_deg), self.to_world(translate_h))
+
+    def translated(self, dt_w) -> "HeadPose":
+        """The head moved by dt_w in world metres, not turned."""
+        return HeadPose(self.R_wh, self.origin_w + np.asarray(dt_w, dtype=np.float64).reshape(3))
 
 
 @dataclass(frozen=True)

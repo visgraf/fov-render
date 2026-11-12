@@ -6,7 +6,8 @@ answers. Two schemas:
     fov-render-session-v1   once per session: the scene, the RenderConfig, the rig, access,
                             the head, the Object Index numbering
     fov-render-request-v1   once per look: the sensor and its parameters, the eyes, the gaze,
-                            optional rig override, spp, seeds, the output folder, what to write
+                            optional rig override, optional head (issue #20; absent = the
+                            session's head), spp, seeds, the output folder, what to write
 
 Every field is checked and a malformed request is refused with all its reasons at once
 (RequestError), before anything is rendered. JSON keeps float repr precision, so a request
@@ -53,6 +54,23 @@ def _int(x) -> bool:
 
 def _vec(x, n) -> bool:
     return isinstance(x, (list, tuple)) and len(x) == n and all(_num(v) for v in x)
+
+
+def check_head(h, where: str = "head") -> list[str]:
+    """A head pose as HeadPose.as_dict() writes it: {head_R_wh: 3x3, head_origin_w_m: 3}, the
+    rotation proper orthonormal (HeadPose's tolerance)."""
+    if not isinstance(h, dict):
+        return [f"{where}: must be {{head_R_wh: 3x3, head_origin_w_m: 3}}"]
+    out = []
+    _unknown(h, ("head_R_wh", "head_origin_w_m"), where, out)
+    r = h.get("head_R_wh")
+    if not (isinstance(r, (list, tuple)) and len(r) == 3 and all(_vec(row, 3) for row in r)):
+        out.append(f"{where}.head_R_wh: must be a 3x3 matrix of finite numbers")
+    elif not HeadPose.valid_rotation(r):
+        out.append(f"{where}.head_R_wh: must be a proper rotation (orthonormal, determinant +1)")
+    if not _vec(h.get("head_origin_w_m"), 3):
+        out.append(f"{where}.head_origin_w_m: must be three finite numbers (world metres)")
+    return out
 
 
 def _unknown(d: dict, allowed, where: str, out: list) -> None:
@@ -171,7 +189,10 @@ def check_gaze(d) -> list[str]:
 # ----------------------------------------------------------------------------- the request
 
 def make_request(n: int, sensor, eyes, gaze: Gaze | None, out_dir, *, spp=None, seeds=None,
-                 rig: Rig | None = None, outputs=("exr",), yaw_offset_deg: float | None = None) -> dict:
+                 rig: Rig | None = None, outputs=("exr",), yaw_offset_deg: float | None = None,
+                 head: HeadPose | None = None) -> dict:
+    """head: the look's own head pose; None leaves the field out (the session's head), so a request
+    without a head is the same, byte for byte, as before issue #20."""
     g = gaze_to_dict(gaze)
     if gaze is None and yaw_offset_deg is not None:
         g["yaw_offset_deg"] = float(yaw_offset_deg)
@@ -179,6 +200,8 @@ def make_request(n: int, sensor, eyes, gaze: Gaze | None, out_dir, *, spp=None, 
            "eyes": list(eyes), "gaze": g, "spp": spp, "seeds": None if seeds is None else dict(seeds),
            "rig": None if rig is None else {"ipd_m": rig.ipd_m, "roll": rig.roll}, "out_dir": str(out_dir),
            "outputs": list(outputs)}
+    if head is not None:
+        req["head"] = head.as_dict()
     validate_request(req)
     return req
 
@@ -188,8 +211,8 @@ def validate_request(req) -> dict:
     out = []
     if not isinstance(req, dict):
         raise RequestError(["request: must be a JSON object"])
-    _unknown(req, ("schema", "n", "kind", "sensor", "eyes", "gaze", "spp", "seeds", "rig", "out_dir", "outputs"),
-             "request", out)
+    _unknown(req, ("schema", "n", "kind", "sensor", "eyes", "gaze", "spp", "seeds", "rig", "head", "out_dir",
+                   "outputs"), "request", out)
     if req.get("schema") != REQUEST_SCHEMA:
         out.append(f"schema: expected {REQUEST_SCHEMA!r}, got {req.get('schema')!r}")
     if not (_int(req.get("n")) and req["n"] >= 1):
@@ -234,6 +257,8 @@ def validate_request(req) -> dict:
                 out.append("rig.ipd_m: must be positive")
             if "roll" in rig and rig["roll"] not in ROLLS:
                 out.append(f"rig.roll: {rig['roll']!r} is not one of {list(ROLLS)}")
+    if req.get("head") is not None:
+        out += check_head(req["head"])
     if not (isinstance(req.get("out_dir"), str) and req["out_dir"]):
         out.append("out_dir: must be a non-empty path")
     outs = req.get("outputs")

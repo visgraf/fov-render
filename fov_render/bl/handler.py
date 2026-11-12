@@ -9,7 +9,8 @@ a queue folder, and Session.in_process calls it directly inside a Blender script
 
 A look's folder holds request.json, raw_<eye>.exr per eye, record_<eye>.npz when asked, and
 meta.json (poses, the settings Cycles used, timings). Only the cameras move between looks; a
-change of sensor re-applies the resolution.
+change of sensor re-applies the resolution. A request may carry its own head (issue #20); without
+one the look uses the session's head. The head is never stored between looks.
 """
 from __future__ import annotations
 
@@ -106,6 +107,11 @@ class Handler:
         return out
 
     # ------------------------------------------------------------------ one look
+    def look_head(self, req: dict) -> HeadPose:
+        """The look's head: the request's own, else the session's (the handler keeps no head state)."""
+        h = req.get("head")
+        return self.head if h is None else HeadPose.from_dict(h)
+
     def handle(self, req: dict) -> dict:
         from . import cameras, config, engine
         t0 = time.perf_counter()
@@ -117,6 +123,7 @@ class Handler:
             rig = Rig(ipd_m=req["rig"].get("ipd_m", rig.ipd_m), roll=req["rig"].get("roll", rig.roll),
                       baseline_h=rig.baseline_h)
         gaze = gaze_from_dict(req["gaze"])
+        head = self.look_head(req)
         spp = int(req["spp"]) if req.get("spp") is not None else self.cfg.resolved_spp(self.cfg.extra.get("kind", "fixation"))
         seeds = req.get("seeds") or {e: DEFAULT_SEEDS[e] for e in req["eyes"]}
         out = Path(req["out_dir"])
@@ -126,9 +133,9 @@ class Handler:
         eyes = {}
         for eye in req["eyes"]:
             if gaze is None:
-                pose = rig.fixed_pose(self.head, eye, float(req["gaze"].get("yaw_offset_deg", 0.0)))
+                pose = rig.fixed_pose(head, eye, float(req["gaze"].get("yaw_offset_deg", 0.0)))
             else:
-                pose = rig.pose(self.head, gaze, eye)
+                pose = rig.pose(head, gaze, eye)
             cameras.pose(cam, pose)
             exr = out / f"raw_{eye}.exr"
             secs = engine.render_once(h.scene, spp, int(seeds[eye]), str(exr))
@@ -136,9 +143,10 @@ class Handler:
                  "matrix_world_blender": [[float(cam.matrix_world[i][j]) for j in range(4)] for i in range(4)]}
             if "records" in req["outputs"]:
                 passes = engine.read_passes(str(exr))
-                rec = record.build(model, passes, pose.centre_w, pose.R_wb, self.head.R_wh, eye=eye,
+                rec = record.build(model, passes, pose.centre_w, pose.R_wb, head.R_wh, eye=eye,
                                    look_id=look_id, access=self.access,
-                                   meta={"spp": spp, "seed": int(seeds[eye]), "access": self.access})
+                                   meta={"spp": spp, "seed": int(seeds[eye]), "access": self.access},
+                                   head_origin_w=head.origin_w)
                 rec.save(str(out / f"record_{eye}.npz"))
                 e["record"] = str(out / f"record_{eye}.npz")
             eyes[eye] = e
@@ -146,8 +154,11 @@ class Handler:
         self.n_handled += 1
         resp = {"schema": RESPONSE_SCHEMA, "n": int(req["n"]), "ok": True, "out_dir": str(out), "eyes": eyes,
                 "spp": spp, "device": self.backend, "settings": settings, "sensor_params": model.params(),
-                "rig": rig.as_dict(), "access": self.access, "wall_seconds": time.perf_counter() - t0}
-        meta = {"schema": "fov-render-look-meta-v1", "request": req, "response": resp, "head": self.head.as_dict(),
+                "rig": rig.as_dict(), "head": head.as_dict(),
+                "head_source": "session" if req.get("head") is None else "request", "access": self.access,
+                "wall_seconds": time.perf_counter() - t0}
+        meta = {"schema": "fov-render-look-meta-v1", "request": req, "response": resp, "head": head.as_dict(),
+                "session_head": self.head.as_dict(),
                 "scene": {k: h.info[k] for k in ("path", "sha256", "blender", "opened") if k in h.info},
                 "instance_ids": h.catalog["mode"]}
         _write_atomic(out / "meta.json", json.dumps(meta, indent=1, sort_keys=True, default=float) + "\n")
