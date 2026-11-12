@@ -50,7 +50,8 @@ you start, push before you hand over, and put the commit in your issue comment.
 
 ## Project facts
 
-- Metres. The head is fixed; eyes rotate about their own centres. `EYE` is a camera object: local
+- Metres. The head moves between looks, never within one: a look's head is its request's `head`,
+  else the session's (`EYE`). Eyes rotate about their own centres. `EYE` is a camera object: local
   −Z is the gaze, local +Y is up.
 - Equirect `(u, v)` → direction: `lon = (u − 0.5)·2π`, `lat = (0.5 − v)·π`, `v = 0` at the top.
 - Epipolar `(θ, φ)`: θ from +X (the baseline), `φ = atan2(d_y, −d_z)`.
